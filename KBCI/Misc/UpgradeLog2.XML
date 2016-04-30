@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="KBCI">
+</Property><Property Name="Solution File" Value="C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\KBCI.sln">
+</Property><Property Name="User Options File" Value="C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\KBCI.suo">
+</Property><Property Name="Date" Value="Monday, August 10, 2009">
+</Property><Property Name="Time" Value="16:09 PM">
+</Property><Property Name="Log Number" Value="2">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="KBCI.sln" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\KBCI.sln">
+</Event><Event ErrorLevel="0" Project="" Source="KBCI.suo" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\KBCI.suo">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="KBCI.vbproj" Description="Project file successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\KBCI.vbproj">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="KBCI.vbproj.user" Description="Project user file successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\KBCI.vbproj.user">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="AssemblyInfo.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\AssemblyInfo.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Crypt.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Crypt.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Dataset\dstFD_Member.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Dataset\dstFD_Member.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmDIVPAT.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmDIVPAT.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_DVoucher.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_DVoucher.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_Arrange.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_Arrange.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_DEntry.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_DEntry.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_DEntry_Tran.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_DEntry_Tran.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_DEntry_Tran_Add.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_DEntry_Tran_Add.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_DIVPATMain.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_DIVPATMain.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_DIVREFOpt.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_DIVREFOpt.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_Log.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_Log.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_NMem.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_NMem.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_Opt.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_Opt.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_PrntFDL.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_PrntFDL.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_PrntFDL_Srch.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_PrntFDL_Srch.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFD_Member.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFD_Member.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Modules\frmFDS_Mod1.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Modules\frmFDS_Mod1.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\Passbook.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\Passbook.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptCASHDIVR.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptCASHDIVR.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptCASHDIVREG.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptCASHDIVREG.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptDIVREFREG.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptDIVREFREG.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptDTran_Reg.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptDTran_Reg.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptFD_Member.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptFD_Member.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptFD_Runup.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptFD_Runup.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptMem_List.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptMem_List.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptPATREFDET.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptPATREFDET.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptPATREFSUM.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptPATREFSUM.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptPRVOUCHER.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptPRVOUCHER.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptRMem_List.vb" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptRMem_List.vb">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="App.config" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\App.config">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Dataset\dstFD_Member.xsx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Dataset\dstFD_Member.xsx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Dataset\dstFD_Member.xsd" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Dataset\dstFD_Member.xsd">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="KBCI.ico" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\KBCI.ico">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmDIVPAT.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmDIVPAT.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_DVoucher.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_DVoucher.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_Arrange.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_Arrange.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_DEntry.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_DEntry.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_DEntry_Tran.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_DEntry_Tran.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_DEntry_Tran_Add.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_DEntry_Tran_Add.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_DIVPATMain.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_DIVPATMain.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_DIVREFOpt.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_DIVREFOpt.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_Log.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_Log.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_NMem.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_NMem.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_Opt.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_Opt.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_PrntFDL.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_PrntFDL.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFDS_Main_PrntFDL_Srch.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFDS_Main_PrntFDL_Srch.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Forms\frmFD_Member.resx" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Forms\frmFD_Member.resx">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\Passbook.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\Passbook.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptCASHDIVR.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptCASHDIVR.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptCASHDIVREG.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptCASHDIVREG.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptDIVREFREG.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptDIVREFREG.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptDTran_Reg.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptDTran_Reg.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptFD_Member.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptFD_Member.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptFD_Runup.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptFD_Runup.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptMem_List.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptMem_List.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptPATREFDET.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptPATREFDET.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptPATREFSUM.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptPATREFSUM.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptPRVOUCHER.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptPRVOUCHER.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="Reports\rptRMem_List.rpt" Description="File successfully backed up as C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys\KBCI\Backup1\Reports\rptRMem_List.rpt">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="KBCI.vbproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="KBCI" Source="KBCI.vbproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="KBCI.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="KBCI.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="KBCI" Source="KBCI.vbproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

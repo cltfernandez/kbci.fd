@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9B92C364-EC8A-42FF-98CC-81F7800B9962}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>FD.DataAccessObject</RootNamespace>
+    <AssemblyName>FD.DataAccessObject</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Windows</MyType>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>FD.DataAccessObject.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>FD.DataAccessObject.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LunaEngine\ClassBase\LunaBaseClasses.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Cashdiv.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_CashdivDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Ctrl.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_CtrlDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Div.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_DivDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Divref.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_DivrefDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Divrefh.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_DivrefhDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Divrefph.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_DivrefphDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Fd.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_FdDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Interest.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_InterestDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Ledger.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_LedgerDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Members.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_MembersDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Pat_ref.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Pat_refDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Ref.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_RefDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Rnterest.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_RnterestDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Snterest.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_SnterestDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Trancode.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_TrancodeDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_User.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_UserDAO.vb" />
+    <Compile Include="LunaUserClass\ClassBase\LunaContext.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\CashdivDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\CtrlDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\DivDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\DivrefDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\DivrefhDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\DivrefphDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\FdDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\InterestDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\LedgerDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\MembersDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\Pat_refDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\RefDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\RnterestDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\SnterestDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\TrancodeDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\UserDAO.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Cashdiv.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Ctrl.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Div.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Divref.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Divrefh.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Divrefph.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Fd.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Interest.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Ledger.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Members.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Pat_ref.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Ref.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Rnterest.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Snterest.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Trancode.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\User.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FD.Common\FD.Common.vbproj">
+      <Project>{62750E89-7FA9-4DF7-841E-F596F0E1B4A9}</Project>
+      <Name>FD.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

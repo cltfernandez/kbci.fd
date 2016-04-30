@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="FDConfig">
+</Property><Property Name="Solution File" Value="C:\Documents and Settings\cltfernandez\Desktop\KBCI Sys 2008\FDConfig\FDConfig.sln">
+</Property><Property Name="Date" Value="Thursday, August 20, 2009">
+</Property><Property Name="Time" Value="16:31 PM">
+</Property></Properties><Event ErrorLevel="0" Project="FDConfig" Source="FDConfig.vbproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="FDConfig" Source="FDConfig.vbproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="FDConfig.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="FDConfig.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="FDConfig" Source="FDConfig.vbproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

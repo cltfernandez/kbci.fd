@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "KBCIFDSetup", "KBCIFDSetup.vdproj", "{53B87792-4E05-4C39-9EAF-BEDA99D6560D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{53B87792-4E05-4C39-9EAF-BEDA99D6560D}.Debug.ActiveCfg = Release
+		{53B87792-4E05-4C39-9EAF-BEDA99D6560D}.Debug.Build.0 = Release
+		{53B87792-4E05-4C39-9EAF-BEDA99D6560D}.Release.ActiveCfg = Release
+		{53B87792-4E05-4C39-9EAF-BEDA99D6560D}.Release.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
