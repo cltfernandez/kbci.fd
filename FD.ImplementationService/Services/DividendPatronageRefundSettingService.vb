@@ -73,7 +73,7 @@ Public Class DividendPatronageRefundSettingService : Implements IDividendPatrona
     End Function
 
 
-    Public Function Save(ByVal kbciNo As String, ByVal dividendAmount As Decimal, ByVal refundAmount As Decimal, ByVal ViewOption As ViewOptions) As RecordUpdateResult Implements IDividendPatronageRefundSettingService.Save
+    Public Function Save(ByVal saveParameter As DivrefSaveParameters, ByVal dividendAmount As Decimal, ByVal refundAmount As Decimal, ByVal ViewOption As ViewOptions) As RecordUpdateResult Implements IDividendPatronageRefundSettingService.Save
 
         'TODO: CREATE A SAVE METHOD FOR HISTORY RECORDS SINCE KBCI_NO PARAMETER IS ONLY APPLICABLE FOR DIVREF TABLE
         'TODO: CREATE A SAVE METHOD FOR HISTORY RECORDS SINCE KBCI_NO PARAMETER IS ONLY APPLICABLE FOR DIVREF TABLE
@@ -84,7 +84,7 @@ Public Class DividendPatronageRefundSettingService : Implements IDividendPatrona
         If ViewOption = ViewOptions.Current Then
             Using rsDivRefDao As New DivrefDAO
                 Dim rsDIV As New Divref
-                Dim param1 As New LUNA.LunaSearchParameter("KBCI_NO", kbciNo)
+                Dim param1 As New LUNA.LunaSearchParameter("KBCI_NO", saveParameter.KbciNo)
 
                 rsDIV = rsDivRefDao.Find(param1)
 
@@ -99,7 +99,7 @@ Public Class DividendPatronageRefundSettingService : Implements IDividendPatrona
                 Else
                     Using rsMember As New MembersDAO
 
-                        Dim param2 As New LUNA.LunaSearchParameter("KBCI_NO", kbciNo)
+                        Dim param2 As New LUNA.LunaSearchParameter("KBCI_NO", saveParameter.KbciNo)
                         Dim MemberRecord As Members = rsMember.Find(param2)
                         If Not MemberRecord Is Nothing Then
                             With MemberRecord
@@ -111,7 +111,7 @@ Public Class DividendPatronageRefundSettingService : Implements IDividendPatrona
                                 rsDIV.MI = .MI
                                 rsDIV.REFUND = refundAmount
                             End With
-                            If rsDivRefDao.Save(rsDIV) = 1 Then
+                            If rsDivRefDao.Save(rsDIV) > 0 Then
                                 result = RecordUpdateResult.AddSuccessful
                             Else
                                 result = RecordUpdateResult.Unsuccessful
@@ -125,11 +125,13 @@ Public Class DividendPatronageRefundSettingService : Implements IDividendPatrona
         Else
             Using rsDivRefhDao As New DivrefhDAO
                 Dim rsDIV As New Divrefh
-                Dim param1 As New LUNA.LunaSearchParameter("KBCI_NO", kbciNo)
+                Dim param1 As New LUNA.LunaSearchParameter("KBCI_NO", saveParameter.KbciNo)
+                Dim param2 As New LUNA.LunaSearchParameter("YEAR", saveParameter.Year)
+                Dim param3 As New LUNA.LunaSearchParameter("QUARTER", saveParameter.Quarter)
 
-                rsDIV = rsDivRefhDao.Find(param1)
+                rsDIV = rsDivRefhDao.Find(param1, param2, param3)
 
-                If Not rsDIV Is Nothing Then
+                If Not rsDIV Is Nothing Then                    
                     rsDIV.DIVIDEND = dividendAmount
                     rsDIV.REFUND = refundAmount
                     If rsDivRefhDao.Save(rsDIV) = 1 Then
@@ -140,8 +142,8 @@ Public Class DividendPatronageRefundSettingService : Implements IDividendPatrona
                 Else
                     Using rsMember As New MembersDAO
 
-                        Dim param2 As New LUNA.LunaSearchParameter("KBCI_NO", kbciNo)
-                        Dim MemberRecord As Members = rsMember.Find(param2)
+                        Dim param4 As New LUNA.LunaSearchParameter("KBCI_NO", saveParameter.KbciNo)
+                        Dim MemberRecord As Members = rsMember.Find(param4)
                         If Not MemberRecord Is Nothing Then
                             With MemberRecord
                                 rsDIV.DIVIDEND = dividendAmount
@@ -152,7 +154,7 @@ Public Class DividendPatronageRefundSettingService : Implements IDividendPatrona
                                 rsDIV.MI = .MI
                                 rsDIV.REFUND = refundAmount
                             End With
-                            If rsDivRefhDao.Save(rsDIV) = 1 Then
+                            If rsDivRefhDao.Save(rsDIV) > 0 Then
                                 result = RecordUpdateResult.AddSuccessful
                             Else
                                 result = RecordUpdateResult.Unsuccessful
@@ -166,24 +168,49 @@ Public Class DividendPatronageRefundSettingService : Implements IDividendPatrona
         End If
         Return result
     End Function
-    Public Function GetDivRefByKbciNo(ByVal kbciNo As String) As DivRefSettingsViewModel Implements IDividendPatronageRefundSettingService.GetDivRefByKbciNo
-        Using rsDivRefDao As New DivrefDAO
-            Dim rsDIV As New Divref
-            Dim result As New DivRefSettingsViewModel
-            Dim param1 As New LUNA.LunaSearchParameter("KBCI_NO", kbciNo)
+    Public Function GetDivRefByKbciNo(ByVal saveParameter As DivrefSaveParameters, ByVal ViewOption As ViewOptions) As DivRefSettingsViewModel Implements IDividendPatronageRefundSettingService.GetDivRefByKbciNo
 
-            rsDIV = rsDivRefDao.Find(param1)
-            With rsDIV
-                result.DIVIDEND = .DIVIDEND
-                result.FEBTC_SA = .FEBTC_SA
-                result.FNAME = .FNAME
-                result.KBCI_NO = .KBCI_NO
-                result.LNAME = .LNAME
-                result.MI = .MI
-                result.REFUND = .REFUND
-            End With
-            Return result
-        End Using
+        If ViewOption = ViewOptions.Current Then
+            Using rsDivRefDao As New DivrefDAO
+                Dim rsDIV As New Divref
+                Dim result As New DivRefSettingsViewModel
+                Dim param1 As New LUNA.LunaSearchParameter("KBCI_NO", saveParameter.KbciNo)
+
+                rsDIV = rsDivRefDao.Find(param1)
+                With rsDIV
+                    result.DIVIDEND = .DIVIDEND
+                    result.FEBTC_SA = .FEBTC_SA
+                    result.FNAME = .FNAME
+                    result.KBCI_NO = .KBCI_NO
+                    result.LNAME = .LNAME
+                    result.MI = .MI
+                    result.REFUND = .REFUND
+                End With
+                Return result
+            End Using
+
+        Else
+            Using rsDivRefhDao As New DivrefhDAO
+                Dim rsDIV As New Divrefh
+                Dim result As New DivRefSettingsViewModel
+                Dim param1 As New LUNA.LunaSearchParameter("KBCI_NO", saveParameter.KbciNo)
+                Dim param2 As New LUNA.LunaSearchParameter("YEAR", saveParameter.Year)
+                Dim param3 As New LUNA.LunaSearchParameter("QUARTER", saveParameter.Quarter)
+
+                rsDIV = rsDivRefhDao.Find(param1, param2, param3)
+                With rsDIV
+                    result.DIVIDEND = .DIVIDEND
+                    result.FEBTC_SA = .FEBTC_SA
+                    result.FNAME = .FNAME
+                    result.KBCI_NO = .KBCI_NO
+                    result.LNAME = .LNAME
+                    result.MI = .MI
+                    result.REFUND = .REFUND
+                End With
+                Return result
+            End Using
+
+        End If
     End Function
 
 End Class

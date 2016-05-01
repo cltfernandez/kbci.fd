@@ -362,6 +362,7 @@ Public Class frmDividendPatronageSettings
         Dim IDX As Integer = Val(ToolBar1.Buttons.IndexOf(e.Button).ToString)
         Dim DividendAmount As Decimal = Round(CDbl(TextBox5.Text), 2)
         Dim RefundAmount As Decimal = Round(CDbl(TextBox1.Text), 2)
+        Dim SaveParameter As New DivrefSaveParameters With {.KbciNo = SelectedDivRefRecord.KBCI_NO, .Quarter = SELQTR, .Year = SELYR}
         With ToolBar1
             Select Case IDX
                 Case DivRefToolbarButtons.Add
@@ -380,8 +381,7 @@ Public Class frmDividendPatronageSettings
                         End If
                     Else
                         If Not SelectedMemberData Is Nothing Then
-
-                            Dim result As RecordUpdateResult = IDivPatRefSettingsService.Save(SelectedDivRefRecord.KBCI_NO, DividendAmount, RefundAmount, ViewOption)
+                            Dim result As RecordUpdateResult = IDivPatRefSettingsService.Save(SaveParameter, DividendAmount, RefundAmount, ViewOption)
                             IMessageService.GetMessageFromRecordUpdateResult(result)
                             If Not result = RecordUpdateResult.Unsuccessful Then
                                 .Buttons(DivRefToolbarButtons.Exit).Text = GetGlobalResourceString("ExitButton")
@@ -400,7 +400,7 @@ Public Class frmDividendPatronageSettings
                         GroupBox1.Enabled = True
                         TextBox5.Focus()
                     Else
-                        Dim result As RecordUpdateResult = IDivPatRefSettingsService.Save(SelectedDivRefRecord.KBCI_NO, DividendAmount, RefundAmount, ViewOption)
+                        Dim result As RecordUpdateResult = IDivPatRefSettingsService.Save(SaveParameter, DividendAmount, RefundAmount, ViewOption)
                         IMessageService.GetMessageFromRecordUpdateResult(result)
                         e.Button.Text = GetGlobalResourceString("EditButton")
                         .Buttons(DivRefToolbarButtons.Exit).Text = GetGlobalResourceString("ExitButton")
@@ -414,7 +414,7 @@ Public Class frmDividendPatronageSettings
                     Dim frmFDS_Main_PrntFDL_Srch As New frmFDS_Main_PrntFDL_Srch
                     frmFDS_Main_PrntFDL_Srch.ShowDialog()
                     If SW = True Then
-                        SelectedDivRefRecord = IDivPatRefSettingsService.GetDivRefByKbciNo(SelectedMemberData.KBCI_NO)
+                        SelectedDivRefRecord = IDivPatRefSettingsService.GetDivRefByKbciNo(SaveParameter, ViewOption)
                         PopulateFields(SelectedDivRefRecord)
                     End If
                 Case DivRefToolbarButtons.Exit

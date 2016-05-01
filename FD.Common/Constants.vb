@@ -94,6 +94,11 @@ Public Class MemberStatusEnum
     Public Const Staff As String = "S"
 End Class
 
+Public Structure DivrefSaveParameters
+    Public KbciNo As String
+    Public Year As Integer
+    Public Quarter As Integer
+End Structure
 
 Public Class InterestPostinSqlStringEnum
     Public Const MembersPostingCommand As String = "INSERT INTO {0}([ACCTNO],[APLINT],[EDLINT],[EMLINT],[RGLINT],[RSLINT],[SPLINT],[LHLINT],[STLINT],[CMLINT],[MPLINT],[FALINT]) " & _
