@@ -1,5 +1,0 @@
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.SQL\bin\FD.SQL.dll
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.SQL\bin\FD.SQL.pdb
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.SQL\obj\Debug\ResolveAssemblyReference.cache
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.SQL\obj\Debug\FD.SQL.dll
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.SQL\obj\Debug\FD.SQL.pdb

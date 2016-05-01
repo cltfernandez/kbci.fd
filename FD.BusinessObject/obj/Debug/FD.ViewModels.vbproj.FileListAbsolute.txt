@@ -14,19 +14,3 @@ C:\BackUps\Development\FD KBCI Sys 2008\FD.BusinessObject\obj\Debug\FD.ViewModel
 C:\BackUps\Development\FD KBCI Sys 2008\FD.BusinessObject\obj\Debug\FD.ViewModels.dll
 C:\BackUps\Development\FD KBCI Sys 2008\FD.BusinessObject\obj\Debug\FD.ViewModels.xml
 C:\BackUps\Development\FD KBCI Sys 2008\FD.BusinessObject\obj\Debug\FD.ViewModels.pdb
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\bin\Debug\FD.ViewModels.dll
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\bin\Debug\FD.ViewModels.pdb
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\bin\Debug\FD.ViewModels.xml
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\bin\Debug\FD.Common.dll
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\bin\Debug\FD.DataAccessObject.dll
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\bin\Debug\Jc.Scripts.dll
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\bin\Debug\FD.DataAccessObject.pdb
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\bin\Debug\FD.DataAccessObject.xml
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\bin\Debug\FD.Common.pdb
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\bin\Debug\FD.Common.xml
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\obj\Debug\ResolveAssemblyReference.cache
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\obj\Debug\FD.ViewModels.Resources.resources
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\obj\Debug\FD.ViewModels.vbproj.GenerateResource.Cache
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\obj\Debug\FD.ViewModels.dll
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\obj\Debug\FD.ViewModels.xml
-C:\BackUps\Development\KBCI Fixed Deposit System VS2008\FD.BusinessObject\obj\Debug\FD.ViewModels.pdb
