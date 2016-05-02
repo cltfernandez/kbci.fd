@@ -6,7 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.vbproj.[Ff]ile[Ll]ist[Aa]bsoulte.txt
+*.vbproj.[Ff]ile[Ll]ist[Aa]bsolute.txt
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
