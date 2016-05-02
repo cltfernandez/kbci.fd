@@ -1,7 +1,0 @@
-\\dsemainserver\Programs\CHRIS\KBCI\FD KBCI Sys 2008\FDConfig\bin\FDConfig.exe
-\\dsemainserver\Programs\CHRIS\KBCI\FD KBCI Sys 2008\FDConfig\bin\FDConfig.xml
-\\dsemainserver\Programs\CHRIS\KBCI\FD KBCI Sys 2008\FDConfig\obj\Release\ResolveAssemblyReference.cache
-\\dsemainserver\Programs\CHRIS\KBCI\FD KBCI Sys 2008\FDConfig\obj\Release\FDConfig.Form1.resources
-\\dsemainserver\Programs\CHRIS\KBCI\FD KBCI Sys 2008\FDConfig\obj\Release\FDConfig.vbproj.GenerateResource.Cache
-\\dsemainserver\Programs\CHRIS\KBCI\FD KBCI Sys 2008\FDConfig\obj\Release\FDConfig.exe
-\\dsemainserver\Programs\CHRIS\KBCI\FD KBCI Sys 2008\FDConfig\obj\Release\FDConfig.xml
