@@ -475,11 +475,10 @@ Public Class frmFixedDepositMain
     Public frmFDS_Main_PrntFDL_Srch As frmFDS_Main_PrntFDL_Srch
     Public frmFDS_Main_DEntry As frmMembersList
     Public MembersMaintenanceForm As frmMembersMaintenance
-    Public SystemConfigurationForm As frmAppConfiguration
-    Public frmFDS_Main_PrntFDL As frmFDS_Main_PrntFDL
+    Public SystemConfigurationForm As frmAppConfiguration    
     Public LoginForm As frmFixedDepositLogin
     Public frmFD_Member As frmReportViewer
-    Public frmFDS_Main_Arrange As frmFDS_Main_Arrange
+    Public frmFDS_Main_Arrange As frmSortOptionDialog
     Public frmDIVPAT As frmDividendPatronageRefundProcessing
     Public DividendPatronageSettingsForm As frmDividendPatronageSettings
     Public frmFDS_Main_Opt As frmFDS_Main_Opt
@@ -546,7 +545,7 @@ Public Class frmFixedDepositMain
             rsCTL = rsCtrlDAO.Find(param)
         End Using
 
-        Using rsTrancodeDAO As New TrancodeDAO            
+        Using rsTrancodeDAO As New TrancodeDAO
             LoginPrompt()
             If CurrentUser Is Nothing Then End : Exit Sub
             cn.ConnectionString = "Provider=SQLOLEDB.1;Password=" & Utilities.GetConfig("WP") & ";Persist Security Info=True;User ID=" & Utilities.GetConfig("CL") & ";Initial Catalog=" & Utilities.GetConfig("DB") & ";Data Source=" & Utilities.GetConfig("SV")
@@ -604,29 +603,35 @@ Public Class frmFixedDepositMain
         Dim txtFLNAME As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("txtFLNAME")
 
         frmFD_Member = New frmReportViewer
-        frmFDS_Main_PrntFDL = New frmFDS_Main_PrntFDL
+
+
+
+
+
+
         frmFDS_Main_PrntFDL_Srch = New frmFDS_Main_PrntFDL_Srch
         frmFD_Member.MdiParent = Me
-        Dim sQRY As String
-        frmFDS_Main_PrntFDL.ShowDialog()
-        If SW = True Then
-            frmFDS_Main_PrntFDL_Srch.ShowDialog()
-            If SW = True Then
-                sQRY = "SELECT FD.DATE,TC.TR_CODE AS CODE,FD.AMOUNT AS DEBIT,FD.AMOUNT AS CREDIT,FD.BALANCE,FD.REF,FD.RMK AS REMARKS, FD.DRCR FROM FD INNER JOIN TRANCODE AS TC ON FD.TRAN_CODE=TC.TR_ID WHERE DATE BETWEEN '" & sDate & "' and KBCI_NO = '" & SEL_KBCI_NO & "' ORDER BY FD.[DATE], FD.FD_ID"
-                rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-                txtKBCI.Text = Mid(SEL_KBCI_NO, 1, 2) & "-" & Mid(SEL_KBCI_NO, 3, 4) & "-" & Mid(SEL_KBCI_NO, 7, 1)
-                txtFLNAME.Text = SEL_FNAME
-                If rsRPT.RecordCount > 0 Then
-                    GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "1:3:2:2:2:3:3")
-                    frmFD_Member.Text = "[" & SEL_FNAME & "] : FD LEDGER"
-                    frmFD_Member.Show()
-                Else
-                    MsgBox("No transactions found between the specified dates.", MsgBoxStyle.Information, "Fixed Deposit Ledger")
+        Dim sQRY As String        
+        Using DateRangePicker As New frmDateRangePickerDialog
+            Dim result As DialogResult = DateRangePicker.ShowDialog
+            If result = Windows.Forms.DialogResult.OK Then
+                frmFDS_Main_PrntFDL_Srch.ShowDialog()
+                If SW = True Then
+                    sQRY = "SELECT FD.DATE,TC.TR_CODE AS CODE,FD.AMOUNT AS DEBIT,FD.AMOUNT AS CREDIT,FD.BALANCE,FD.REF,FD.RMK AS REMARKS, FD.DRCR FROM FD INNER JOIN TRANCODE AS TC ON FD.TRAN_CODE=TC.TR_ID WHERE DATE BETWEEN '" & DateRangePicker.DateRange & "' and KBCI_NO = '" & SEL_KBCI_NO & "' ORDER BY FD.[DATE], FD.FD_ID"
+                    rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
+                    txtKBCI.Text = Mid(SEL_KBCI_NO, 1, 2) & "-" & Mid(SEL_KBCI_NO, 3, 4) & "-" & Mid(SEL_KBCI_NO, 7, 1)
+                    txtFLNAME.Text = SEL_FNAME
+                    If rsRPT.RecordCount > 0 Then
+                        GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "1:3:2:2:2:3:3")
+                        frmFD_Member.Text = "[" & SEL_FNAME & "] : FD LEDGER"
+                        frmFD_Member.Show()
+                    Else
+                        MsgBox("No transactions found between the specified dates.", MsgBoxStyle.Information, "Fixed Deposit Ledger")
+                    End If
+                    SW = False
                 End If
-                SW = False
             End If
-
-        End If
+        End Using
         If rsRPT.State = 1 Then rsRPT.Close()
     End Sub
 
@@ -677,30 +682,31 @@ errHand:
         Dim ds As New DataSet
         Dim sQRY As String
 
-        frmFDS_Main_PrntFDL = New frmFDS_Main_PrntFDL
         frmFD_Member = New frmReportViewer
         frmFD_Member.MdiParent = Me
+        Using DatePicker As New frmDateRangePickerDialog
 
-        frmFDS_Main_PrntFDL.DateTimePicker2.Visible = False
-        frmFDS_Main_PrntFDL.Label2.Visible = False
-        frmFDS_Main_PrntFDL.ShowDialog()
+            DatePicker.DateTimePicker2.Visible = False
+            DatePicker.Label2.Visible = False
+            Dim result As DialogResult = DatePicker.ShowDialog
+            If result = Windows.Forms.DialogResult.OK Then
+                sQRY = "SELECT MM.KBCI_NO,MM.LNAME + ', ' + MM.FNAME + ' ' NAME,TC.TR_CODE AS CODE,FD.AMOUNT AS DEBIT,FD.AMOUNT AS CREDIT," & _
+                       "FD.BALANCE,FD.REF,FD.RMK, FD.DRCR FROM FD INNER JOIN MEMBERS AS MM ON FD.KBCI_NO= MM.KBCI_NO INNER JOIN TRANCODE AS TC ON FD.TRAN_CODE=TC.TR_ID " & _
+                       "WHERE DATE BETWEEN '" & DatePicker.DateRange & "' ORDER BY MM.LNAME,MM.FNAME"
+                rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
+                If rsRPT.RecordCount > 0 Then
+                    Dim DDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text9")
+                    DDATE.Text = DatePicker.StartDate.ToString("MMM dd, yyyy")
+                    GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:3:2:2:2:3:3")
+                    frmFD_Member.Text = "[" & DatePicker.EndDate.ToString("MMM dd, yyyy") & "] TRANSACTION DETAILS"
+                    frmFD_Member.Show()
+                Else
+                    MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "Daily Transaction Register")
+                End If
+                SW = False
 
-        If SW = True Then
-            sQRY = "SELECT MM.KBCI_NO,MM.LNAME + ', ' + MM.FNAME + ' ' NAME,TC.TR_CODE AS CODE,FD.AMOUNT AS DEBIT,FD.AMOUNT AS CREDIT," & _
-                   "FD.BALANCE,FD.REF,FD.RMK, FD.DRCR FROM FD INNER JOIN MEMBERS AS MM ON FD.KBCI_NO= MM.KBCI_NO INNER JOIN TRANCODE AS TC ON FD.TRAN_CODE=TC.TR_ID " & _
-                   "WHERE DATE BETWEEN '" & sDate & "' ORDER BY MM.LNAME,MM.FNAME"
-            rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-            If rsRPT.RecordCount > 0 Then
-                Dim DDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text9")
-                DDATE.Text = DateValue(frmFDS_Main_PrntFDL.DateTimePicker1.Value).ToString("MMM dd, yyyy")
-                GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:3:2:2:2:3:3")
-                frmFD_Member.Text = "[" & DateValue(frmFDS_Main_PrntFDL.DateTimePicker2.Value).ToString("MMM dd, yyyy") & "] TRANSACTION DETAILS"
-                frmFD_Member.Show()
-            Else
-                MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "Daily Transaction Register")
             End If
-            SW = False
-        End If
+        End Using
         If rsRPT.State = 1 Then rsRPT.Close()
 errHand:
         If Err.Number <> 0 Then
@@ -750,30 +756,31 @@ errHand:
         Dim rpt As New rptRMem_List
         Dim ds As New DataSet
         Dim sQRY As String
-
-        frmFDS_Main_PrntFDL = New frmFDS_Main_PrntFDL
         frmFD_Member = New frmReportViewer
         frmFD_Member.MdiParent = Me
 
-        frmFDS_Main_PrntFDL.ShowDialog()
-        If SW = True Then
-            sQRY = "SELECT M.[KBCI_NO],M.[LNAME]+', '+M.[FNAME]+' '+COALESCE(M.[MI]+'.','') AS NAME,M.[MEM_STAT]," & _
-                    "FDA.[DATE] CHG_DATE,FDA.AMOUNT FD_AMOUNT FROM MEMBERS M LEFT JOIN(SELECT*from FD WHERE FD_ID IN(" & _
-                    "select MAX(FD_ID)from fd group by KBCI_NO))FDA ON M.KBCI_NO=FDA.KBCI_NO WHERE M.MEM_STAT=" & _
-                    "'R'AND CHG_DATE BETWEEN'" & sDate & "' ORDER BY M.KBCI_NO"
-            rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-            If rsRPT.RecordCount > 0 Then
-                Dim RDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text13")
-                RDATE.Text = FRDATE & " TO " & TODATE
+        Using DatePicker As New frmDateRangePickerDialog
+            Dim result As DialogResult = DatePicker.ShowDialog
+            If result = Windows.Forms.DialogResult.OK Then
+                sQRY = "SELECT M.[KBCI_NO],M.[LNAME]+', '+M.[FNAME]+' '+COALESCE(M.[MI]+'.','') AS NAME,M.[MEM_STAT]," & _
+                        "FDA.[DATE] CHG_DATE,FDA.AMOUNT FD_AMOUNT FROM MEMBERS M LEFT JOIN(SELECT*from FD WHERE FD_ID IN(" & _
+                        "select MAX(FD_ID)from fd group by KBCI_NO))FDA ON M.KBCI_NO=FDA.KBCI_NO WHERE M.MEM_STAT=" & _
+                        "'R'AND CHG_DATE BETWEEN'" & DatePicker.DateRange & "' ORDER BY M.KBCI_NO"
+                rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
+                If rsRPT.RecordCount > 0 Then
+                    Dim RDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text13")
+                    RDATE.Text = DatePicker.StartDate & " TO " & DatePicker.EndDate
 
-                GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:3:1:2")
-                frmFD_Member.Text = "LIST OF RESIGNED MEMBERS / INVESTORS FROM " & FRDATE & " TO " & TODATE
-                frmFD_Member.Show()
-            Else
-                MsgBox("No resigned member(s) found between the specified date.", MsgBoxStyle.Information, "Resigned Member/Investor")
+                    GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:3:1:2")
+                    frmFD_Member.Text = "LIST OF RESIGNED MEMBERS / INVESTORS FROM " & DatePicker.StartDate & " TO " & DatePicker.EndDate
+                    frmFD_Member.Show()
+                Else
+                    MsgBox("No resigned member(s) found between the specified date.", MsgBoxStyle.Information, "Resigned Member/Investor")
+                End If
+                SW = False
             End If
-            SW = False
-        End If
+        End Using
+
         If rsRPT.State = 1 Then rsRPT.Close()
 errHand:
         If Err.Number <> 0 Then
@@ -790,41 +797,44 @@ errHand:
         Dim ds As New DataSet
         Dim sQRY As String
 
-        frmFDS_Main_PrntFDL = New frmFDS_Main_PrntFDL
         frmFD_Member = New frmReportViewer
         frmFD_Member.MdiParent = Me
         Dim txtDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("txtDATE")
 
         msg = MsgBox("Last FD Runup is " & DateValue(rsCTL.RUN_DATE).ToString("MM/dd/yyyy") & ". Would you like to continue?", MsgBoxStyle.Information + MsgBoxStyle.YesNo, "Print FD Runup")
         If msg = vbYes Then
-            frmFDS_Main_PrntFDL.DateTimePicker2.Visible = False
-            frmFDS_Main_PrntFDL.Label1.Text = "AS OF : "
-            frmFDS_Main_PrntFDL.Label2.Visible = False
-            frmFDS_Main_PrntFDL.ShowDialog()
+            Using DatePicker As New frmDateRangePickerDialog
 
-            If SW = True Then
-                sQRY = "SELECT A.KBCI_NO,CASE WHEN A.MI IS NULL THEN A.LNAME+', '+A.FNAME ELSE A.LNAME+', '+A." & _
-                       "FNAME+' '+ISNULL(A.MI,'')+'.'END NAME,B.BALANCE FROM MEMBERS A JOIN(SELECT X.KBCI_NO," & _
-                       "isnull(SUM(X.CREDIT),0)-isnull(SUM(X.DEBIT),0)BALANCE FROM(select KBCI_NO,CASE WHEN " & _
-                       "DRCR='DR'THEN AMOUNT END DEBIT,CASE WHEN DRCR='CR'THEN AMOUNT END CREDIT from FD WHERE" & _
-                       "[DATE]<='" & frmFDS_Main_PrntFDL.DateTimePicker1.Value & "')X GROUP BY KBCI_NO)B ON A.KBCI_NO=B.KBCI_NO WHERE B.BALANCE IS NOT " & _
-                       "NULL AND B.BALANCE>1"
-                rsRPT.CursorLocation = CursorLocationEnum.adUseClient
-                rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
-                MsgBox("Successfully processed [" & rsRPT.RecordCount & "] records.", MsgBoxStyle.Information, "FD Runup report")
-                If rsRPT.RecordCount > 0 Then
-                    GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:2")
-                    cn.Execute("UPDATE CTRL SET RUN_DATE='" & frmFDS_Main_PrntFDL.DateTimePicker2.Value & "'")
-                    rsCTL.Read(1)
-                    frmFD_Member.Text = "FIXED DEPOSIT RUNUP"
-                    txtDATE.Text = Format(frmFDS_Main_PrntFDL.DateTimePicker1.Value, "MMM dd, yyyy")
-                    frmFD_Member.Show()
+                DatePicker.DateTimePicker2.Visible = False
+                DatePicker.Label1.Text = "AS OF : "
+                DatePicker.Label2.Visible = False
 
-                Else
-                    MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
+                Dim result As DialogResult = DatePicker.ShowDialog
+                If result = Windows.Forms.DialogResult.OK Then
+                    sQRY = "SELECT A.KBCI_NO,CASE WHEN A.MI IS NULL THEN A.LNAME+', '+A.FNAME ELSE A.LNAME+', '+A." & _
+                           "FNAME+' '+ISNULL(A.MI,'')+'.'END NAME,B.BALANCE FROM MEMBERS A JOIN(SELECT X.KBCI_NO," & _
+                           "isnull(SUM(X.CREDIT),0)-isnull(SUM(X.DEBIT),0)BALANCE FROM(select KBCI_NO,CASE WHEN " & _
+                           "DRCR='DR'THEN AMOUNT END DEBIT,CASE WHEN DRCR='CR'THEN AMOUNT END CREDIT from FD WHERE" & _
+                           "[DATE]<='" & DatePicker.StartDate & "')X GROUP BY KBCI_NO)B ON A.KBCI_NO=B.KBCI_NO WHERE B.BALANCE IS NOT " & _
+                           "NULL AND B.BALANCE>1"
+                    rsRPT.CursorLocation = CursorLocationEnum.adUseClient
+                    rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
+                    MsgBox("Successfully processed [" & rsRPT.RecordCount & "] records.", MsgBoxStyle.Information, "FD Runup report")
+                    If rsRPT.RecordCount > 0 Then
+                        GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:2")
+                        cn.Execute("UPDATE CTRL SET RUN_DATE='" & DatePicker.EndDate & "'")
+                        rsCTL.Read(1)
+                        frmFD_Member.Text = "FIXED DEPOSIT RUNUP"
+                        txtDATE.Text = Format(DatePicker.StartDate, "MMM dd, yyyy")
+                        frmFD_Member.Show()
+
+                    Else
+                        MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
+                    End If
+                    SW = False
                 End If
-                SW = False
-            End If
+            End Using
+
             If rsRPT.State = 1 Then rsRPT.Close()
         End If
 errHand:
@@ -865,7 +875,6 @@ errHand:
         Dim ds As New DataSet
         Dim sQRY As String
 
-        frmFDS_Main_Arrange = New frmFDS_Main_Arrange
         frmFD_Member = New frmReportViewer
         frmFD_Member.MdiParent = Me
         With frmFDS_Main_Arrange.ComboBox3
@@ -875,50 +884,53 @@ errHand:
             .Items.Add("REGION")
         End With
 
-        frmFDS_Main_Arrange.ShowDialog()
-        If SW = True Then
-            If SELFIELD = "REGION" Then
-                Dim rpt As New rptCASHDIVREG
-                Dim ASOFDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section6.ReportObjects("Text11")
-                rsRPT.Open("SELECT TOP 1 DIV.DATE FROM DIV", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
-                ASOFDATE.Text = DateValue(rsRPT.Fields("DATE").Value)
-                rsRPT.Close()
-                If SELREGION.Trim = "" Then
+        Using ArrangeForm As New frmSortOptionDialog
+            Dim result As DialogResult = ArrangeForm.ShowDialog()
+
+            If result = Windows.Forms.DialogResult.OK Then
+                If ArrangeForm.SelectedField = "REGION" Then
+                    Dim rpt As New rptCASHDIVREG
+                    Dim ASOFDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section6.ReportObjects("Text11")
+                    rsRPT.Open("SELECT TOP 1 DIV.DATE FROM DIV", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
+                    ASOFDATE.Text = DateValue(rsRPT.Fields("DATE").Value)
+                    rsRPT.Close()
+                    If ArrangeForm.SelectedRegion.Trim = "" Then
+                        sQRY = "SELECT DIV.KBCI_NO, MEM.LNAME + ' ' + MEM.FNAME + ', ' + ISNULL(MEM.MI,'X') + '.' AS NAME, DIV.FD_AMT, " & _
+                               "DIV.DIV_AMT, DIV.DEDNS,MEM.REGION FROM DIV INNER JOIN MEMBERS MEM ON  MEM.KBCI_NO= div.KBCI_NO WHERE DIV.FD_AMT>0"
+                    Else
+                        sQRY = "SELECT DIV.KBCI_NO, MEM.LNAME + ' ' + MEM.FNAME + ', ' + ISNULL(MEM.MI,'X') + '.' AS NAME, DIV.FD_AMT, " & _
+                               "DIV.DIV_AMT, DIV.DEDNS,MEM.REGION FROM DIV INNER JOIN MEMBERS MEM ON  MEM.KBCI_NO= div.KBCI_NO WHERE MEM.REGION='" & ArrangeForm.SelectedRegion & "' AND DIV.FD_AMT>0"
+                    End If
+                    rsRPT.CursorLocation = CursorLocationEnum.adUseClient
+                    rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
+                    If rsRPT.RecordCount > 0 Then
+                        GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:2:2:2:3")
+                        frmFD_Member.Text = "CASH DIVIDEND REGISTER"
+                        frmFD_Member.Show()
+                    Else
+                        MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
+                    End If
+                Else
+                    Dim rpt2 As New rptCASHDIVR
+                    Dim ASOFDATE2 As CrystalDecisions.CrystalReports.Engine.TextObject = rpt2.Section2.ReportObjects("Text11")
+                    rsRPT.Open("SELECT TOP 1 DIV.DATE FROM DIV", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
+                    ASOFDATE2.Text = DateValue(rsRPT.Fields("DATE").Value)
+                    rsRPT.Close()
                     sQRY = "SELECT DIV.KBCI_NO, MEM.LNAME + ' ' + MEM.FNAME + ', ' + ISNULL(MEM.MI,'X') + '.' AS NAME, DIV.FD_AMT, " & _
-                           "DIV.DIV_AMT, DIV.DEDNS,MEM.REGION FROM DIV INNER JOIN MEMBERS MEM ON  MEM.KBCI_NO= div.KBCI_NO WHERE DIV.FD_AMT>0"
-                Else
-                    sQRY = "SELECT DIV.KBCI_NO, MEM.LNAME + ' ' + MEM.FNAME + ', ' + ISNULL(MEM.MI,'X') + '.' AS NAME, DIV.FD_AMT, " & _
-                           "DIV.DIV_AMT, DIV.DEDNS,MEM.REGION FROM DIV INNER JOIN MEMBERS MEM ON  MEM.KBCI_NO= div.KBCI_NO WHERE MEM.REGION='" & SELREGION & "' AND DIV.FD_AMT>0"
-                End If
-                rsRPT.CursorLocation = CursorLocationEnum.adUseClient
-                rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-                If rsRPT.RecordCount > 0 Then
-                    GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:2:2:2:3")
-                    frmFD_Member.Text = "CASH DIVIDEND REGISTER"
-                    frmFD_Member.Show()
-                Else
-                    MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
-                End If
-            Else
-                Dim rpt2 As New rptCASHDIVR
-                Dim ASOFDATE2 As CrystalDecisions.CrystalReports.Engine.TextObject = rpt2.Section2.ReportObjects("Text11")
-                rsRPT.Open("SELECT TOP 1 DIV.DATE FROM DIV", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
-                ASOFDATE2.Text = DateValue(rsRPT.Fields("DATE").Value)
-                rsRPT.Close()
-                sQRY = "SELECT DIV.KBCI_NO, MEM.LNAME + ' ' + MEM.FNAME + ', ' + ISNULL(MEM.MI,'X') + '.' AS NAME, DIV.FD_AMT, " & _
-                       "DIV.DIV_AMT, DIV.DEDNS FROM DIV INNER JOIN MEMBERS MEM ON  MEM.KBCI_NO= div.KBCI_NO WHERE DIV.FD_AMT>0 ORDER BY " & SELFIELD
-                rsRPT.CursorLocation = CursorLocationEnum.adUseClient
-                rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
-                If rsRPT.RecordCount > 0 Then
-                    GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt2, 0, "5:3:2:2:2")
-                    frmFD_Member.Text = "CASH DIVIDEND REGISTER"
-                    frmFD_Member.Show()
-                Else
-                    MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
+                           "DIV.DIV_AMT, DIV.DEDNS FROM DIV INNER JOIN MEMBERS MEM ON  MEM.KBCI_NO= div.KBCI_NO WHERE DIV.FD_AMT>0 ORDER BY " & ArrangeForm.SelectedField
+                    rsRPT.CursorLocation = CursorLocationEnum.adUseClient
+                    rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
+                    If rsRPT.RecordCount > 0 Then
+                        GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt2, 0, "5:3:2:2:2")
+                        frmFD_Member.Text = "CASH DIVIDEND REGISTER"
+                        frmFD_Member.Show()
+                    Else
+                        MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
+                    End If
                 End If
             End If
-            SW = False
-        End If
+
+        End Using
         If rsRPT.State = 1 Then rsRPT.Close()
 errHand:
         If Err.Number <> 0 Then
@@ -1013,33 +1025,38 @@ errHand:
 
     Private Sub MenuItem33_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem33.Click
         frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
-        frmFDS_Main_Arrange = New frmFDS_Main_Arrange
+        frmFDS_Main_Arrange = New frmSortOptionDialog
         With frmFDS_Main_Arrange.ComboBox3
             .Items.Clear()
             .Items.Add("KBCI_NO")
             .Items.Add("LNAME")
             .Items.Add("REGION")
         End With
-        frmFDS_Main_Arrange.ShowDialog()
-        If SW = True Then
-            frmFDS_Main_DIVREFOpt.ShowDialog()
-            If SW = True Then
-                If SELFIELD <> "REGION" Then
-                    If ViewOption = ViewOptions.Current Then
-                        genDIVREFREG("MM.MEM_STAT='A' AND", "ORDER BY DR." & SELFIELD, "DIVREF")
-                    Else
-                        genDIVREFREG("MM.MEM_STAT='A' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & SELFIELD, "DIVREFH")
-                    End If
-                Else
-                    If ViewOption = ViewOptions.Current Then
-                        genDIVREFREG("MM.MEM_STAT='A' AND", "AND MM.REGION='" & SELREGION & "'", "DIVREF")
+        Using ArrangeForm As New frmSortOptionDialog
 
+            Dim result As DialogResult = ArrangeForm.ShowDialog()
+            If result = Windows.Forms.DialogResult.OK Then
+                frmFDS_Main_DIVREFOpt.ShowDialog()
+                If SW = True Then
+                    If ArrangeForm.SelectedField <> "REGION" Then
+                        If ViewOption = ViewOptions.Current Then
+                            genDIVREFREG("MM.MEM_STAT='A' AND", "ORDER BY DR." & ArrangeForm.SelectedField, "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        Else
+                            genDIVREFREG("MM.MEM_STAT='A' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & ArrangeForm.SelectedField, "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        End If
                     Else
-                        genDIVREFREG("MM.MEM_STAT='A' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & SELREGION & "' ORDER BY DR.KBCI_NO", "DIVREFH")
+                        If ViewOption = ViewOptions.Current Then
+                            genDIVREFREG("MM.MEM_STAT='A' AND", "AND MM.REGION='" & ArrangeForm.SelectedRegion & "'", "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+
+                        Else
+                            genDIVREFREG("MM.MEM_STAT='A' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & ArrangeForm.SelectedRegion & "' ORDER BY DR.KBCI_NO", "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        End If
                     End If
                 End If
             End If
-        End If
+        End Using
+
+
         SW = False
 errHand:
         If Err.Number <> 0 Then
@@ -1050,32 +1067,36 @@ errHand:
 
     Private Sub MenuItem34_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem34.Click
         frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
-        frmFDS_Main_Arrange = New frmFDS_Main_Arrange
-        With frmFDS_Main_Arrange.ComboBox3
-            .Items.Clear()
-            .Items.Add("KBCI_NO")
-            .Items.Add("LNAME")
-            .Items.Add("REGION")
-        End With
-        frmFDS_Main_Arrange.ShowDialog()
-        If SW = True Then
-            frmFDS_Main_DIVREFOpt.ShowDialog()
-            If SW = True Then
-                If SELFIELD <> "REGION" Then
-                    If ViewOption = ViewOptions.Current Then
-                        genDIVREFREG("MM.MEM_STAT='R' AND", "ORDER BY DR." & SELFIELD, "DIVREF")
+
+        Using ArrangeForm As New frmSortOptionDialog
+            With ArrangeForm.ComboBox3
+                .Items.Clear()
+                .Items.Add("KBCI_NO")
+                .Items.Add("LNAME")
+                .Items.Add("REGION")
+            End With
+
+            Dim result As DialogResult = ArrangeForm.ShowDialog()
+            If result = Windows.Forms.DialogResult.OK Then
+                frmFDS_Main_DIVREFOpt.ShowDialog()
+                If SW = True Then
+                    If ArrangeForm.SelectedField <> "REGION" Then
+                        If ViewOption = ViewOptions.Current Then
+                            genDIVREFREG("MM.MEM_STAT='R' AND", "ORDER BY DR." & ArrangeForm.SelectedField, "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        Else
+                            genDIVREFREG("MM.MEM_STAT='R' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & ArrangeForm.SelectedField, "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        End If
                     Else
-                        genDIVREFREG("MM.MEM_STAT='R' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & SELFIELD, "DIVREFH")
-                    End If
-                Else
-                    If ViewOption = ViewOptions.Current Then
-                        genDIVREFREG("MM.MEM_STAT='R' AND", "AND MM.REGION='" & SELREGION & "'", "DIVREF")
-                    Else
-                        genDIVREFREG("MM.MEM_STAT='R' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & SELREGION & "' ORDER BY DR.KBCI_NO", "DIVREFH")
+                        If ViewOption = ViewOptions.Current Then
+                            genDIVREFREG("MM.MEM_STAT='R' AND", "AND MM.REGION='" & ArrangeForm.SelectedRegion & "'", "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        Else
+                            genDIVREFREG("MM.MEM_STAT='R' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & ArrangeForm.SelectedRegion & "' ORDER BY DR.KBCI_NO", "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        End If
                     End If
                 End If
+
             End If
-        End If
+        End Using
         SW = False
 errHand:
         If Err.Number <> 0 Then
@@ -1086,32 +1107,36 @@ errHand:
 
     Private Sub MenuItem35_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem35.Click
         frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
-        frmFDS_Main_Arrange = New frmFDS_Main_Arrange
-        With frmFDS_Main_Arrange.ComboBox3
-            .Items.Clear()
-            .Items.Add("KBCI_NO")
-            .Items.Add("LNAME")
-            .Items.Add("REGION")
-        End With
-        frmFDS_Main_Arrange.ShowDialog()
-        If SW = True Then
-            frmFDS_Main_DIVREFOpt.ShowDialog()
-            If SW = True Then
-                If SELFIELD <> "REGION" Then
-                    If ViewOption = ViewOptions.Current Then
-                        genDIVREFREG("MM.MEM_STAT='S' AND", "ORDER BY DR." & SELFIELD, "DIVREF")
+
+        Using ArrangeForm As New frmSortOptionDialog
+            With ArrangeForm.ComboBox3
+                .Items.Clear()
+                .Items.Add("KBCI_NO")
+                .Items.Add("LNAME")
+                .Items.Add("REGION")
+            End With
+
+            Dim result As DialogResult = ArrangeForm.ShowDialog()
+            If result = Windows.Forms.DialogResult.OK Then
+                frmFDS_Main_DIVREFOpt.ShowDialog()
+                If SW = True Then
+                    If ArrangeForm.SelectedField <> "REGION" Then
+                        If ViewOption = ViewOptions.Current Then
+                            genDIVREFREG("MM.MEM_STAT='S' AND", "ORDER BY DR." & ArrangeForm.SelectedField, "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        Else
+                            genDIVREFREG("MM.MEM_STAT='S' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & ArrangeForm.SelectedField, "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        End If
                     Else
-                        genDIVREFREG("MM.MEM_STAT='S' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & SELFIELD, "DIVREFH")
-                    End If
-                Else
-                    If ViewOption = ViewOptions.Current Then
-                        genDIVREFREG("MM.MEM_STAT='S' AND", "AND MM.REGION='" & SELREGION & "'", "DIVREF")
-                    Else
-                        genDIVREFREG("MM.MEM_STAT='S' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & SELREGION & "' ORDER BY DR.KBCI_NO", "DIVREFH")
+                        If ViewOption = ViewOptions.Current Then
+                            genDIVREFREG("MM.MEM_STAT='S' AND", "AND MM.REGION='" & ArrangeForm.SelectedRegion & "'", "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        Else
+                            genDIVREFREG("MM.MEM_STAT='S' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & ArrangeForm.SelectedRegion & "' ORDER BY DR.KBCI_NO", "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        End If
                     End If
                 End If
+
             End If
-        End If
+        End Using
         SW = False
 errHand:
         If Err.Number <> 0 Then
@@ -1122,32 +1147,36 @@ errHand:
 
     Private Sub MenuItem36_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem36.Click
         frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
-        frmFDS_Main_Arrange = New frmFDS_Main_Arrange
-        With frmFDS_Main_Arrange.ComboBox3
-            .Items.Clear()
-            .Items.Add("KBCI_NO")
-            .Items.Add("LNAME")
-            .Items.Add("REGION")
-        End With
-        frmFDS_Main_Arrange.ShowDialog()
-        If SW = True Then
-            frmFDS_Main_DIVREFOpt.ShowDialog()
-            If SW = True Then
-                If SELFIELD <> "REGION" Then
-                    If ViewOption = ViewOptions.Current Then
-                        genDIVREFREG("", "ORDER BY DR." & SELFIELD, "DIVREF")
+
+        Using ArrangeForm As New frmSortOptionDialog
+            With ArrangeForm.ComboBox3
+                .Items.Clear()
+                .Items.Add("KBCI_NO")
+                .Items.Add("LNAME")
+                .Items.Add("REGION")
+            End With
+
+            Dim result As DialogResult = ArrangeForm.ShowDialog()
+            If result = Windows.Forms.DialogResult.OK Then
+                frmFDS_Main_DIVREFOpt.ShowDialog()
+                If SW = True Then
+                    If ArrangeForm.SelectedField <> "REGION" Then
+                        If ViewOption = ViewOptions.Current Then
+                            genDIVREFREG("", "ORDER BY DR." & ArrangeForm.SelectedField, "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        Else
+                            genDIVREFREG("", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & ArrangeForm.SelectedField, "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        End If
                     Else
-                        genDIVREFREG("", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & SELFIELD, "DIVREFH")
-                    End If
-                Else
-                    If ViewOption = ViewOptions.Current Then
-                        genDIVREFREG("", "AND MM.REGION='" & SELREGION & "'", "DIVREF")
-                    Else
-                        genDIVREFREG("", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & SELREGION & "' ORDER BY DR.KBCI_NO", "DIVREFH")
+                        If ViewOption = ViewOptions.Current Then
+                            genDIVREFREG("", "AND MM.REGION='" & ArrangeForm.SelectedRegion & "'", "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        Else
+                            genDIVREFREG("", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & ArrangeForm.SelectedRegion & "' ORDER BY DR.KBCI_NO", "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                        End If
                     End If
                 End If
+
             End If
-        End If
+        End Using
         SW = False
 errHand:
         If Err.Number <> 0 Then
@@ -1390,7 +1419,7 @@ errHand:
         End If
     End Sub
 
-    Friend Sub genDIVREFREG(ByVal MSTAT As String, ByVal ORDR As String, ByVal TBL As String)
+    Friend Sub genDIVREFREG(ByVal MSTAT As String, ByVal ORDR As String, ByVal TBL As String, ByVal SelectedField As String, ByVal SelectedRegion As String)
         Dim rsRPT As New ADODB.Recordset
         Dim dst As New DataTable("dstFD_Member")
         Dim ds As New DataSet
@@ -1417,8 +1446,8 @@ errHand:
             'Dim YYEAR As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text6")
 
             CAT.Text = "FOR QUARTER " & SELQTR & " YEAR " & SELYR
-            If SELFIELD = "REGION" Then
-                REG.Text = "REGION : " & SELREGION.ToUpper
+            If SelectedField = "REGION" Then
+                REG.Text = "REGION : " & SelectedRegion.ToUpper
             Else
                 REG.Text = ""
             End If

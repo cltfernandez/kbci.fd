@@ -1,4 +1,4 @@
-Public Class frmFDS_Main_Arrange
+Public Class frmSortOptionDialog
     Inherits System.Windows.Forms.Form
 
 #Region " Windows Form Designer generated code "
@@ -35,7 +35,7 @@ Public Class frmFDS_Main_Arrange
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents TextBox6 As System.Windows.Forms.TextBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmFDS_Main_Arrange))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmSortOptionDialog))
         Me.ComboBox3 = New System.Windows.Forms.ComboBox
         Me.Button2 = New System.Windows.Forms.Button
         Me.Button1 = New System.Windows.Forms.Button
@@ -115,11 +115,33 @@ Public Class frmFDS_Main_Arrange
 
 #End Region
 
+    Private _SelectedField As String
+    Public Property SelectedField() As String
+        Get
+            Return _SelectedField
+        End Get
+        Set(ByVal value As String)
+            _SelectedField = value
+        End Set
+    End Property
+
+
+    Private _SelectedRegion As String
+    Public Property SelectedRegion() As String
+        Get
+            Return _SelectedRegion
+        End Get
+        Set(ByVal value As String)
+            _SelectedRegion = value
+        End Set
+    End Property
+
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         If ComboBox3.Text <> "" Then
-            SELFIELD = ComboBox3.Text
-            SELREGION = TextBox6.Text
-            SW = True
+
+            SelectedField = ComboBox3.Text
+            SelectedRegion = TextBox6.Text
+            Me.DialogResult = Windows.Forms.DialogResult.OK
             Me.Close()
         Else
             MsgBox("Please select a Field to use for Sorting/Grouping")
@@ -135,6 +157,7 @@ Public Class frmFDS_Main_Arrange
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Me.DialogResult = Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub
 End Class

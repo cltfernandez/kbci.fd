@@ -1,5 +1,5 @@
 Imports FD.Common.Utilities
-Public Class frmFDS_Main_PrntFDL
+Public Class frmDateRangePickerDialog
     Inherits System.Windows.Forms.Form
 
 #Region " Windows Form Designer generated code "
@@ -38,7 +38,7 @@ Public Class frmFDS_Main_PrntFDL
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmFDS_Main_PrntFDL))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmDateRangePickerDialog))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
         Me.Button1 = New System.Windows.Forms.Button
         Me.Button2 = New System.Windows.Forms.Button
@@ -145,24 +145,55 @@ Public Class frmFDS_Main_PrntFDL
 
 #End Region
 
+
+    Private _StartDate As Date
+    Public Property StartDate() As Date
+        Get
+            Return _StartDate
+        End Get
+        Set(ByVal value As Date)
+            _StartDate = value
+        End Set
+    End Property
+
+
+    Private _EndDate As Date
+    Public Property EndDate() As Date
+        Get
+            Return _EndDate
+        End Get
+        Set(ByVal value As Date)
+            _EndDate = value
+        End Set
+    End Property
+
+
+    Private _DateRange As String
+    Public Property DateRange() As String
+        Get
+            Return _DateRange
+        End Get
+        Set(ByVal value As String)
+            _DateRange = value
+        End Set
+    End Property
+
     Private Sub frmFDS_Main_PrntFDL_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         DateTimePicker1.Value = DateValue(SYSDATE)
         DateTimePicker2.Value = DateValue(SYSDATE)
-    End Sub
-
-    Private Sub Label4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
     End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         If DateTimePicker1.Value <= DateTimePicker2.Value And DateTimePicker1.Value <= DateValue(SYSDATE) And DateTimePicker2.Value <= DateValue(SYSDATE) Then
             SW = True
             If DateTimePicker2.Visible = False Then
-                sDate = DateTimePicker1.Value.ToString("MM/dd/yyyy") & "' and '" & DateTimePicker1.Value.ToString("MM/dd/yyyy")
+                DateRange = DateTimePicker1.Value.ToString("MM/dd/yyyy") & "' and '" & DateTimePicker1.Value.ToString("MM/dd/yyyy")
             Else
-                FRDATE = DateTimePicker1.Value.ToString("MM/dd/yyyy") : TODATE = DateTimePicker2.Value.ToString("MM/dd/yyyy")
-                sDate = DateTimePicker1.Value.ToString("MM/dd/yyyy") & "' and '" & DateTimePicker2.Value.ToString("MM/dd/yyyy")
+                DateRange = DateTimePicker1.Value.ToString("MM/dd/yyyy") & "' and '" & DateTimePicker2.Value.ToString("MM/dd/yyyy")
+                StartDate = DateTimePicker1.Value
+                EndDate = DateTimePicker2.Value
             End If
+            Me.DialogResult = Windows.Forms.DialogResult.OK
             Me.Close()
         Else
             MsgBox(GetGlobalResourceString("InvalidDateRange"), MsgBoxStyle.Information, "Date Range")
@@ -170,7 +201,7 @@ Public Class frmFDS_Main_PrntFDL
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        SW = False
+        Me.DialogResult = Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub
 End Class

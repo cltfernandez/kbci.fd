@@ -31,8 +31,7 @@ Module CommonUtilities
     Public rsPASSBOOK As New ADODB.Recordset
     Public Const adFilterNone As ADODB.FilterGroupEnum = ADODB.FilterGroupEnum.adFilterNone
     Public DEFPRINTER As String
-    Public SEL_KBCI_NO, SEL_FNAME, SELFIELD, SELREGION, SEL_FEBTC As String
-    Public sDate, FRDATE, TODATE As String
+    Public SEL_KBCI_NO, SEL_FNAME, SEL_FEBTC As String    
     Public SYSDATE, SELYR, SELQTR, rCN As String
     Public SUMMRY As Boolean
 
