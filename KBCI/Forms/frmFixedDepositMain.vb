@@ -480,8 +480,7 @@ Public Class frmFixedDepositMain
     Public frmFD_Member As frmReportViewer
     Public frmFDS_Main_Arrange As frmSortOptionDialog
     Public frmDIVPAT As frmDividendPatronageRefundProcessing
-    Public DividendPatronageSettingsForm As frmDividendPatronageSettings
-    Public frmFDS_Main_Opt As frmFDS_Main_Opt
+    Public DividendPatronageSettingsForm As frmDividendPatronageSettings    
     Public frmFDS_Main_DIVREFOpt As frmFDS_Main_DIVREFOpt
     Public frmFDS_DVoucher As frmVoucherProcessing
 
@@ -611,7 +610,7 @@ Public Class frmFixedDepositMain
 
         frmFDS_Main_PrntFDL_Srch = New frmFDS_Main_PrntFDL_Srch
         frmFD_Member.MdiParent = Me
-        Dim sQRY As String        
+        Dim sQRY As String
         Using DateRangePicker As New frmDateRangePickerDialog
             Dim result As DialogResult = DateRangePicker.ShowDialog
             If result = Windows.Forms.DialogResult.OK Then
@@ -957,70 +956,60 @@ errHand:
     End Sub
 
     Private Sub MenuItem29_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem29.Click
-        frmFDS_Main_Opt = New frmFDS_Main_Opt
-        frmFDS_Main_Opt.ShowDialog()
-        If SW = True Then
-            If SUMMRY = True Then
-                genPATREFS("WHERE MM.MEM_STAT='A'", "ACTIVE MEMBERS")
-            Else
-                genPATREFD("INTEREST", "A", ",NULL AS PTLINT", "ACTIVE MEMBERS")
+
+
+        Using SummaryViewOptionForm As New frmSummaryViewOptionDialog
+            Dim result As DialogResult = SummaryViewOptionForm.ShowDialog
+            If result = Windows.Forms.DialogResult.OK Then
+                If SummaryViewOptionForm.IsSummarized = True Then
+                    genPATREFS("WHERE MM.MEM_STAT='A'", "ACTIVE MEMBERS")
+                Else
+                    genPATREFD("INTEREST", "A", ",NULL AS PTLINT", "ACTIVE MEMBERS")
+                End If
             End If
-        End If
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
+
+        End Using
     End Sub
 
     Private Sub MenuItem30_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem30.Click
-        frmFDS_Main_Opt = New frmFDS_Main_Opt
-        frmFDS_Main_Opt.ShowDialog()
-        If SW = True Then
-            If SUMMRY = True Then
-                genPATREFS("WHERE MM.MEM_STAT='R'", "RESIGNED MEMBERS")
-            Else
-                genPATREFD("RNTEREST", "R", ",NULL AS PTLINT", "RESIGNED MEMBERS")
-            End If
-        End If
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
 
+        Using SummaryViewOptionForm As New frmSummaryViewOptionDialog
+            Dim result As DialogResult = SummaryViewOptionForm.ShowDialog
+            If result = Windows.Forms.DialogResult.OK Then
+                If SummaryViewOptionForm.IsSummarized = True Then
+                    genPATREFS("WHERE MM.MEM_STAT='R'", "RESIGNED MEMBERS")
+                Else
+                    genPATREFD("RNTEREST", "R", ",NULL AS PTLINT", "RESIGNED MEMBERS")
+                End If
+            End If
+        End Using
     End Sub
 
     Private Sub MenuItem31_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem31.Click
-        frmFDS_Main_Opt = New frmFDS_Main_Opt
-        frmFDS_Main_Opt.ShowDialog()
-        If SW = True Then
-            If SUMMRY = True Then
-                genPATREFS("WHERE MM.MEM_STAT='S'", "KBCI STAFF")
-            Else
-                genPATREFD("SNTEREST", "S", ",ISNULL(SN.PTLINT,0) PTLINT", "KBCI STAFF")
+        Using SummaryViewOptionForm As New frmSummaryViewOptionDialog
+            Dim result As DialogResult = SummaryViewOptionForm.ShowDialog
+            If result = Windows.Forms.DialogResult.OK Then
+                If SummaryViewOptionForm.IsSummarized = True Then
+                    genPATREFS("WHERE MM.MEM_STAT='S'", "KBCI STAFF")
+                Else
+                    genPATREFD("SNTEREST", "S", ",ISNULL(SN.PTLINT,0) PTLINT", "KBCI STAFF")
+                End If
             End If
-        End If
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
+        End Using
 
     End Sub
 
     Private Sub MenuItem32_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem32.Click
-        frmFDS_Main_Opt = New frmFDS_Main_Opt
-        frmFDS_Main_Opt.ShowDialog()
-        If SW = True Then
-            If SUMMRY = True Then
-                genPATREFS("", "ALL MEMBERS")
-            Else
-                genPATREFD("", "", "", "ALL MEMBERS")
+        Using SummaryViewOptionForm As New frmSummaryViewOptionDialog
+            Dim result As DialogResult = SummaryViewOptionForm.ShowDialog
+            If result = Windows.Forms.DialogResult.OK Then
+                If SummaryViewOptionForm.IsSummarized = True Then
+                    genPATREFS("", "ALL MEMBERS")
+                Else
+                    genPATREFD("", "", "", "ALL MEMBERS")
+                End If
             End If
-        End If
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
-
+        End Using
     End Sub
 
     Private Sub MenuItem33_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem33.Click

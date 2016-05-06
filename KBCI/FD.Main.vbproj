@@ -263,7 +263,7 @@
     <Compile Include="Forms\frmMembersMaintenance.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmFDS_Main_Opt.vb">
+    <Compile Include="Forms\frmSummaryViewOptionDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmDateRangePickerDialog.vb">
@@ -418,8 +418,8 @@
       <DependentUpon>frmMembersMaintenance.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmFDS_Main_Opt.resx">
-      <DependentUpon>frmFDS_Main_Opt.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmSummaryViewOptionDialog.resx">
+      <DependentUpon>frmSummaryViewOptionDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmDateRangePickerDialog.resx">

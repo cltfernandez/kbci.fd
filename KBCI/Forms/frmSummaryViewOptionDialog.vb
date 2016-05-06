@@ -1,4 +1,4 @@
-Public Class frmFDS_Main_Opt
+Public Class frmSummaryViewOptionDialog
     Inherits System.Windows.Forms.Form
 
 #Region " Windows Form Designer generated code "
@@ -35,7 +35,7 @@ Public Class frmFDS_Main_Opt
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmFDS_Main_Opt))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmSummaryViewOptionDialog))
         Me.Label4 = New System.Windows.Forms.Label
         Me.Button1 = New System.Windows.Forms.Button
         Me.Button2 = New System.Windows.Forms.Button
@@ -76,11 +76,13 @@ Public Class frmFDS_Main_Opt
         '
         'RadioButton1
         '
+        Me.RadioButton1.Checked = True
         Me.RadioButton1.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RadioButton1.Location = New System.Drawing.Point(12, 41)
         Me.RadioButton1.Name = "RadioButton1"
         Me.RadioButton1.Size = New System.Drawing.Size(134, 17)
         Me.RadioButton1.TabIndex = 19
+        Me.RadioButton1.TabStop = True
         Me.RadioButton1.Text = "Detailed"
         '
         'RadioButton2
@@ -92,7 +94,7 @@ Public Class frmFDS_Main_Opt
         Me.RadioButton2.TabIndex = 18
         Me.RadioButton2.Text = "Summarized"
         '
-        'frmFDS_Main_Opt
+        'frmSummaryViewOptionDialog
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 14)
         Me.ClientSize = New System.Drawing.Size(244, 98)
@@ -103,21 +105,35 @@ Public Class frmFDS_Main_Opt
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Button2)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Name = "frmFDS_Main_Opt"
+        Me.Name = "frmSummaryViewOptionDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.ResumeLayout(False)
 
     End Sub
 
 #End Region
+
+
+    Private _IsSummarized As Boolean
+    Public Property IsSummarized() As Boolean
+        Get
+            Return _IsSummarized
+        End Get
+        Set(ByVal value As Boolean)
+            _IsSummarized = value
+        End Set
+    End Property
+
+
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         If RadioButton1.Checked = True Then
-            SUMMRY = False
+            IsSummarized = False
         ElseIf RadioButton2.Checked = True Then
-            SUMMRY = True
+            IsSummarized = True
         End If
-        SW = True
+        Me.DialogResult = Windows.Forms.DialogResult.OK
         Me.Close()
+
     End Sub
     Private Sub frmFDS_Main_Opt_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         RadioButton1.Checked = True
