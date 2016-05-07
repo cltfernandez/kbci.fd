@@ -1,5 +1,6 @@
 Imports FD.Common
 Imports FD.ViewModels
+Imports FD.BusinessLogic
 Public Class frmMembersTransactionList
     Inherits System.Windows.Forms.Form
 
@@ -91,9 +92,9 @@ Public Class frmMembersTransactionList
         Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.Button6)
         Me.GroupBox1.Controls.Add(Me.Button3)
-        Me.GroupBox1.Location = New System.Drawing.Point(4, 94)
+        Me.GroupBox1.Location = New System.Drawing.Point(94, 106)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1073, 402)
+        Me.GroupBox1.Size = New System.Drawing.Size(894, 374)
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = False
         '
@@ -101,9 +102,9 @@ Public Class frmMembersTransactionList
         '
         Me.CheckBox1.BackColor = System.Drawing.Color.Transparent
         Me.CheckBox1.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBox1.Location = New System.Drawing.Point(931, 24)
+        Me.CheckBox1.Location = New System.Drawing.Point(776, 22)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(135, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(112, 16)
         Me.CheckBox1.TabIndex = 2
         Me.CheckBox1.Text = "Show History"
         Me.CheckBox1.UseVisualStyleBackColor = False
@@ -113,10 +114,10 @@ Public Class frmMembersTransactionList
         Me.ListView1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ListView1.FullRowSelect = True
         Me.ListView1.GridLines = True
-        Me.ListView1.Location = New System.Drawing.Point(10, 47)
+        Me.ListView1.Location = New System.Drawing.Point(8, 44)
         Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(1056, 315)
+        Me.ListView1.Size = New System.Drawing.Size(880, 292)
         Me.ListView1.TabIndex = 1
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -125,9 +126,9 @@ Public Class frmMembersTransactionList
         '
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.Font = New System.Drawing.Font("Verdana", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(10, 373)
+        Me.Label5.Location = New System.Drawing.Point(8, 346)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(172, 18)
+        Me.Label5.Size = New System.Drawing.Size(144, 17)
         Me.Label5.TabIndex = 14
         Me.Label5.Text = "Loading..."
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -137,9 +138,9 @@ Public Class frmMembersTransactionList
         '
         Me.Button2.BackgroundImage = CType(resources.GetObject("Button2.BackgroundImage"), System.Drawing.Image)
         Me.Button2.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button2.Location = New System.Drawing.Point(912, 370)
+        Me.Button2.Location = New System.Drawing.Point(760, 344)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(154, 25)
+        Me.Button2.Size = New System.Drawing.Size(128, 23)
         Me.Button2.TabIndex = 5
         Me.Button2.Text = "Re&versal"
         '
@@ -147,9 +148,9 @@ Public Class frmMembersTransactionList
         '
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(10, 23)
+        Me.Label4.Location = New System.Drawing.Point(8, 21)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(182, 17)
+        Me.Label4.Size = New System.Drawing.Size(152, 16)
         Me.Label4.TabIndex = 0
         Me.Label4.Text = "TRANSACTIONS:"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -158,9 +159,9 @@ Public Class frmMembersTransactionList
         '
         Me.Button6.BackgroundImage = CType(resources.GetObject("Button6.BackgroundImage"), System.Drawing.Image)
         Me.Button6.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button6.Location = New System.Drawing.Point(586, 370)
+        Me.Button6.Location = New System.Drawing.Point(488, 344)
         Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(153, 25)
+        Me.Button6.Size = New System.Drawing.Size(128, 23)
         Me.Button6.TabIndex = 3
         Me.Button6.Text = "A&dd Transaction"
         '
@@ -168,9 +169,9 @@ Public Class frmMembersTransactionList
         '
         Me.Button3.BackgroundImage = CType(resources.GetObject("Button3.BackgroundImage"), System.Drawing.Image)
         Me.Button3.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button3.Location = New System.Drawing.Point(749, 370)
+        Me.Button3.Location = New System.Drawing.Point(624, 344)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(153, 25)
+        Me.Button3.Size = New System.Drawing.Size(128, 23)
         Me.Button3.TabIndex = 4
         Me.Button3.Text = "Passbook &Update"
         '
@@ -178,9 +179,9 @@ Public Class frmMembersTransactionList
         '
         Me.Label6.BackColor = System.Drawing.SystemColors.ControlDark
         Me.Label6.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(771, 69)
+        Me.Label6.Location = New System.Drawing.Point(642, 64)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(86, 17)
+        Me.Label6.Size = New System.Drawing.Size(72, 16)
         Me.Label6.TabIndex = 2
         Me.Label6.Text = "BALANCE :"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -190,9 +191,9 @@ Public Class frmMembersTransactionList
         Me.Label7.BackColor = System.Drawing.SystemColors.ControlDark
         Me.Label7.Font = New System.Drawing.Font("Verdana", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label7.Location = New System.Drawing.Point(771, 64)
+        Me.Label7.Location = New System.Drawing.Point(642, 59)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(303, 24)
+        Me.Label7.Size = New System.Drawing.Size(253, 23)
         Me.Label7.TabIndex = 2
         Me.Label7.Text = "KBCI No :"
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -201,9 +202,9 @@ Public Class frmMembersTransactionList
         '
         Me.GroupBox2.Controls.Add(Me.TextBox3)
         Me.GroupBox2.Controls.Add(Me.Label8)
-        Me.GroupBox2.Location = New System.Drawing.Point(480, 233)
+        Me.GroupBox2.Location = New System.Drawing.Point(400, 216)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(115, 69)
+        Me.GroupBox2.Size = New System.Drawing.Size(96, 64)
         Me.GroupBox2.TabIndex = 16
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Visible = False
@@ -211,11 +212,11 @@ Public Class frmMembersTransactionList
         'TextBox3
         '
         Me.TextBox3.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox3.Location = New System.Drawing.Point(30, 29)
+        Me.TextBox3.Location = New System.Drawing.Point(25, 27)
         Me.TextBox3.Maximum = New Decimal(New Integer() {24, 0, 0, 0})
         Me.TextBox3.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(56, 21)
+        Me.TextBox3.Size = New System.Drawing.Size(47, 21)
         Me.TextBox3.TabIndex = 5
         Me.TextBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.TextBox3.Value = New Decimal(New Integer() {1, 0, 0, 0})
@@ -224,9 +225,9 @@ Public Class frmMembersTransactionList
         '
         Me.Label8.BackColor = System.Drawing.Color.Transparent
         Me.Label8.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(0, 9)
+        Me.Label8.Location = New System.Drawing.Point(0, 8)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(115, 17)
+        Me.Label8.Size = New System.Drawing.Size(96, 16)
         Me.Label8.TabIndex = 4
         Me.Label8.Text = "Print Line"
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -235,9 +236,9 @@ Public Class frmMembersTransactionList
         '
         Me.Button1.BackgroundImage = CType(resources.GetObject("Button1.BackgroundImage"), System.Drawing.Image)
         Me.Button1.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.Button1.Location = New System.Drawing.Point(923, 502)
+        Me.Button1.Location = New System.Drawing.Point(860, 508)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(154, 25)
+        Me.Button1.Size = New System.Drawing.Size(128, 23)
         Me.Button1.TabIndex = 20
         Me.Button1.Text = "&Close"
         '
@@ -247,7 +248,7 @@ Public Class frmMembersTransactionList
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
         Me.PictureBox1.Location = New System.Drawing.Point(0, 5)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(634, 54)
+        Me.PictureBox1.Size = New System.Drawing.Size(528, 50)
         Me.PictureBox1.TabIndex = 24
         Me.PictureBox1.TabStop = False
         '
@@ -256,9 +257,9 @@ Public Class frmMembersTransactionList
         Me.Label2.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(254, Byte), Integer), CType(CType(203, Byte), Integer))
         Me.Label2.Font = New System.Drawing.Font("Bookman Old Style", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.Color.DimGray
-        Me.Label2.Location = New System.Drawing.Point(77, 16)
+        Me.Label2.Location = New System.Drawing.Point(64, 15)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(344, 35)
+        Me.Label2.Size = New System.Drawing.Size(287, 32)
         Me.Label2.TabIndex = 19
         Me.Label2.Text = "KBCI No :"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -267,9 +268,9 @@ Public Class frmMembersTransactionList
         '
         Me.Label1.BackColor = System.Drawing.SystemColors.ControlDark
         Me.Label1.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 69)
+        Me.Label1.Location = New System.Drawing.Point(10, 64)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(86, 17)
+        Me.Label1.Size = New System.Drawing.Size(72, 16)
         Me.Label1.TabIndex = 26
         Me.Label1.Text = "KBCI No :"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -279,9 +280,9 @@ Public Class frmMembersTransactionList
         Me.Label3.BackColor = System.Drawing.SystemColors.ControlDark
         Me.Label3.Font = New System.Drawing.Font("Verdana", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label3.Location = New System.Drawing.Point(98, 69)
+        Me.Label3.Location = New System.Drawing.Point(82, 64)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(182, 17)
+        Me.Label3.Size = New System.Drawing.Size(151, 16)
         Me.Label3.TabIndex = 25
         Me.Label3.Text = "KBCI No :"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -291,16 +292,16 @@ Public Class frmMembersTransactionList
         Me.Label9.BackColor = System.Drawing.SystemColors.ControlDark
         Me.Label9.Font = New System.Drawing.Font("Verdana", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.ForeColor = System.Drawing.SystemColors.ControlDark
-        Me.Label9.Location = New System.Drawing.Point(5, 61)
+        Me.Label9.Location = New System.Drawing.Point(4, 57)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(1073, 30)
+        Me.Label9.Size = New System.Drawing.Size(894, 27)
         Me.Label9.TabIndex = 30
         Me.Label9.Text = "..."
         Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'frmFDS_Main_DEntry_Tran
+        'frmMembersTransactionList
         '
-        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 14)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.ClientSize = New System.Drawing.Size(1086, 543)
         Me.ControlBox = False
         Me.Controls.Add(Me.Label1)
@@ -314,7 +315,7 @@ Public Class frmMembersTransactionList
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Label9)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Name = "frmFDS_Main_DEntry_Tran"
+        Me.Name = "frmMembersTransactionList"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
@@ -343,34 +344,36 @@ Public Class frmMembersTransactionList
 
     Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
         Dim msg3 As String
-        TransactionDialogForm = New frmMembersTransactionDialog(CurrentUser)
-        TransactionDialogForm.ShowDialog()
-        If SW = True Then
-            If Not IsPassbookUpdate Then
-                rsFD_Mem.Requery()
-                rsFD_Mem.Filter = adFilterNone
-                rsFD_Mem.Filter = "PRINTED>0"
-                If rsFD_Mem.RecordCount > 0 Then
-                    rsFD_Mem.MoveLast()
-                    lastLine = Int(rsFD_Mem.Fields("PRINTED").Value) + 1
-                    If lastLine > 24 Then lastLine = 1
-                Else
-                    lastLine = 1
-                End If
-                rsFD_Mem.Filter = adFilterNone
-                rsFD_Mem.Filter = "PRINTED<1"
 
-                msg3 = MsgBox(String.Format("There are [{0}] entries that are not yet posted on member's Passbook. Would you like to print.", rsFD_Mem.RecordCount), vbQuestion & vbYesNo, "Print Transaction")
-                If msg3 = vbYes Then
-                    FillLV(ListView1, Label5, rsFD_Mem, "0:0:100:110:67:112:100:285:0:80:0")
-                    GroupBox2.Visible = True
-                    GroupBox1.Enabled = False
-                    TextBox3.Text = lastLine
-                    TextBox3.Focus()
-                    PrintTransaction = True
+        Using MemberTransactionDialogForm As New frmMembersTransactionDialog(New FixedDepositTransactionService, New MessagePromptService, CurrentUser)
+            Dim result As DialogResult = MemberTransactionDialogForm.ShowDialog()
+            If result = Windows.Forms.DialogResult.OK Then
+                If Not IsPassbookUpdate Then
+                    rsFD_Mem.Requery()
+                    rsFD_Mem.Filter = adFilterNone
+                    rsFD_Mem.Filter = "PRINTED>0"
+                    If rsFD_Mem.RecordCount > 0 Then
+                        rsFD_Mem.MoveLast()
+                        lastLine = Int(rsFD_Mem.Fields("PRINTED").Value) + 1
+                        If lastLine > 24 Then lastLine = 1
+                    Else
+                        lastLine = 1
+                    End If
+                    rsFD_Mem.Filter = adFilterNone
+                    rsFD_Mem.Filter = "PRINTED<1"
+
+                    msg3 = MsgBox(String.Format("There are [{0}] entries that are not yet posted on member's Passbook. Would you like to print.", rsFD_Mem.RecordCount), vbQuestion & vbYesNo, "Print Transaction")
+                    If msg3 = vbYes Then
+                        FillLV(ListView1, Label5, rsFD_Mem, "0:0:100:110:67:112:100:285:0:80:0")
+                        GroupBox2.Visible = True
+                        GroupBox1.Enabled = False
+                        TextBox3.Text = lastLine
+                        TextBox3.Focus()
+                        PrintTransaction = True
+                    End If
                 End If
             End If
-        End If
+        End Using
         UPDT_frmFDS_Main_DEntry_Tran()
 errHand:
         If Err.Number <> 0 Then

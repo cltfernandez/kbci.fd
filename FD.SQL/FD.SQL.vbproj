@@ -60,6 +60,9 @@
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="1_Tables\1_Fd.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(MSBuildToolsPath)\SqlServer.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

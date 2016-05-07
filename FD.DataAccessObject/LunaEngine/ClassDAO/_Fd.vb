@@ -340,7 +340,7 @@ End property
         Dim Ris As Boolean = True
         If _KBCI_NO.Length > 7 Then Ris = False
         If _TRAN_CODE.Length > 1 Then Ris = False
-        If _REF.Length > 10 Then Ris = False
+        If _REF.Length > 20 Then Ris = False
         If _RMK.Length > 40 Then Ris = False
         If _USER.Length > 8 Then Ris = False
         If _DRCR.Length > 2 Then Ris = False

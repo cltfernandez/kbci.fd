@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="ViewModels\DivRefSettingsViewModel.vb" />
     <Compile Include="ViewModels\CtrlViewModel.vb" />
+    <Compile Include="ViewModels\FixedDepositViewModel.vb" />
     <Compile Include="ViewModels\MemberSearchBovm.vb" />
     <Compile Include="ViewModels\MembersBovm.vb" />
     <Compile Include="ViewModels\UserViewModel.vb" />

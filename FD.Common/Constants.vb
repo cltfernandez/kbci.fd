@@ -39,6 +39,16 @@ Public Enum DivRefSettingsValidationResult
     NotFound = 2
 End Enum
 
+Public Enum FixedDepositTransactionValidationResult
+    Valid = 0
+    MissingRemarks = 1
+    MissingBankCode = 2
+    MissingCheckNumber = 3
+    MissingTransactionCode = 4
+    InvalidAmount = 5
+    InsufficientFunds = 6
+End Enum
+
 Public Enum ViewOptions
     Current = 0
     History = 1
@@ -70,6 +80,11 @@ Public Enum RecordUpdateResult
     UpdateSuccessful = 1
     Unsuccessful = 2
     RecordExists = 3
+End Enum
+
+Public Enum LedgerPostingStatus
+    NotPosted = 0
+    Posted = 1
 End Enum
 
 Public Structure DivrefPostingParameters
