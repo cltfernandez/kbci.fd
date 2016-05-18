@@ -87,7 +87,7 @@ Public Overrides Function Save(byRef cls as Ledger) as Integer
 		            If cls.LEDGER_ID = 0 Then
                         sql = "INSERT INTO Ledger ("
                             sql &= " PN_NO,"
-                            sql &= " DATE,"
+                            sql &= " [DATE],"
                             sql &= " DOX_TYPE,"
                             sql &= " REF,"
                             sql &= " ACCT_TYPE,"
@@ -117,7 +117,7 @@ Public Overrides Function Save(byRef cls as Ledger) as Integer
 		            Else
 			            sql = "UPDATE Ledger SET "
                   sql &= "PN_NO = @PN_NO,"
-                  sql &= "DATE = @DATE,"
+                            sql &= "[DATE] = @DATE,"
                   sql &= "DOX_TYPE = @DOX_TYPE,"
                   sql &= "REF = @REF,"
                   sql &= "ACCT_TYPE = @ACCT_TYPE,"

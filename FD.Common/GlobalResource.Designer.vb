@@ -92,7 +92,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Please input  amount less than 1,000,000,000.00.
+        '''  Looks up a localized string similar to Please input  amount less than 10,000,000.00.
         '''</summary>
         Friend Shared ReadOnly Property AmountExceeds1B() As String
             Get
@@ -200,7 +200,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Fixed Deposit Members - Maintenance.
+        '''  Looks up a localized string similar to Fixed Deposit - Members Maintenance.
         '''</summary>
         Friend Shared ReadOnly Property FDMembersMaintenance() As String
             Get
@@ -218,11 +218,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Fixed Deposit Members.
+        '''  Looks up a localized string similar to Fixed Deposit - Members.
         '''</summary>
         Friend Shared ReadOnly Property FixedDepositMembers() As String
             Get
                 Return ResourceManager.GetString("FixedDepositMembers", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Fixed Deposit - Transaction.
+        '''</summary>
+        Friend Shared ReadOnly Property FixedDepositTransaction() As String
+            Get
+                Return ResourceManager.GetString("FixedDepositTransaction", resourceCulture)
             End Get
         End Property
         
@@ -250,6 +259,24 @@ Namespace My.Resources
         Friend Shared ReadOnly Property IncorrectPatronageRefundSettings() As String
             Get
                 Return ResourceManager.GetString("IncorrectPatronageRefundSettings", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Transaction error. Insufficient Funds..
+        '''</summary>
+        Friend Shared ReadOnly Property InsufficientFunds() As String
+            Get
+                Return ResourceManager.GetString("InsufficientFunds", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Please input correct amount..
+        '''</summary>
+        Friend Shared ReadOnly Property InvalidAmount() As String
+            Get
+                Return ResourceManager.GetString("InvalidAmount", resourceCulture)
             End Get
         End Property
         
@@ -299,11 +326,74 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Please set the corresponding Bank Code for the check..
+        '''</summary>
+        Friend Shared ReadOnly Property MissingBankCode() As String
+            Get
+                Return ResourceManager.GetString("MissingBankCode", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Please set the corresponding Check No. of the check..
+        '''</summary>
+        Friend Shared ReadOnly Property MissingCheckNumber() As String
+            Get
+                Return ResourceManager.GetString("MissingCheckNumber", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Remarks are required in this type of transaction..
+        '''</summary>
+        Friend Shared ReadOnly Property MissingRemarks() As String
+            Get
+                Return ResourceManager.GetString("MissingRemarks", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to No Records Found.
+        '''</summary>
+        Friend Shared ReadOnly Property NoRecordsFound() As String
+            Get
+                Return ResourceManager.GetString("NoRecordsFound", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to No Transaction available for reversal..
+        '''</summary>
+        Friend Shared ReadOnly Property NoTransactionForReversal() As String
+            Get
+                Return ResourceManager.GetString("NoTransactionForReversal", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to No Transactions found..
         '''</summary>
         Friend Shared ReadOnly Property NoTransactionFound() As String
             Get
                 Return ResourceManager.GetString("NoTransactionFound", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Passbook &amp;Update.
+        '''</summary>
+        Friend Shared ReadOnly Property PassbookUpdateButton() As String
+            Get
+                Return ResourceManager.GetString("PassbookUpdateButton", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to There are [{0}] transaction/s, for printing.  Click OK to continue..
+        '''</summary>
+        Friend Shared ReadOnly Property PassbookUpdatePrompt() As String
+            Get
+                Return ResourceManager.GetString("PassbookUpdatePrompt", resourceCulture)
             End Get
         End Property
         
@@ -326,6 +416,51 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to P&amp;rint.
+        '''</summary>
+        Friend Shared ReadOnly Property PrintButton() As String
+            Get
+                Return ResourceManager.GetString("PrintButton", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Printing Done!.
+        '''</summary>
+        Friend Shared ReadOnly Property PrintingDone() As String
+            Get
+                Return ResourceManager.GetString("PrintingDone", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Please Insert Passbook, and Press OK..
+        '''</summary>
+        Friend Shared ReadOnly Property PrintPassbookPrompt() As String
+            Get
+                Return ResourceManager.GetString("PrintPassbookPrompt", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to There are [{0}] transactions that are not yet posted on Member&apos;s Passbook. Would you like to print?.
+        '''</summary>
+        Friend Shared ReadOnly Property PrintTransactionOnPassbook() As String
+            Get
+                Return ResourceManager.GetString("PrintTransactionOnPassbook", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Would you like to reverse the last transaction?.
+        '''</summary>
+        Friend Shared ReadOnly Property ReverseTransactionPrompt() As String
+            Get
+                Return ResourceManager.GetString("ReverseTransactionPrompt", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to &amp;Save.
         '''</summary>
         Friend Shared ReadOnly Property SaveButton() As String
@@ -344,7 +479,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to New configration definitions are updated kindly restart the application to apply the changes..
+        '''  Looks up a localized string similar to New configration definitions are updated kindly restart the application to apply the changes.
         '''</summary>
         Friend Shared ReadOnly Property SetConfigSuccessful() As String
             Get
@@ -371,7 +506,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to TRANCODE Not found! Please Contact your system administrator..
+        '''  Looks up a localized string similar to Transaction Code Not found! Please Contact your system administrator..
         '''</summary>
         Friend Shared ReadOnly Property TrancodeNotFound() As String
             Get
@@ -380,7 +515,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Unable to process CASH DIVIDEND FOR YEAR:[{0}] QUARTER:[{1}]. Please check if the voucher is processed / dividend is posted.&quot;.
+        '''  Looks up a localized string similar to Please turn to next page, and Press OK..
+        '''</summary>
+        Friend Shared ReadOnly Property TurnPassbookPrompt() As String
+            Get
+                Return ResourceManager.GetString("TurnPassbookPrompt", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Unable to process CASH DIVIDEND FOR YEAR:[{0}] QUARTER:[{1}]. Please check if the voucher is processed / dividend is posted..
         '''</summary>
         Friend Shared ReadOnly Property UnableToProcessDivref() As String
             Get
@@ -389,7 +533,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Update Failed.
+        '''  Looks up a localized string similar to Update Failed!.
         '''</summary>
         Friend Shared ReadOnly Property Unsuccessful() As String
             Get
@@ -398,7 +542,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Updated Record Successfully.
+        '''  Looks up a localized string similar to Updated Record Successfully!.
         '''</summary>
         Friend Shared ReadOnly Property UpdateSuccessful() As String
             Get

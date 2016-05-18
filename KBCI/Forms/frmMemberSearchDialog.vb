@@ -264,7 +264,20 @@ Public Class frmFDS_Main_PrntFDL_Srch
     Dim mTXT As TextBox
     Dim rsMemberSearch As New List(Of MemberSearchBovm)
     Private rsMembersList As New List(Of Members)
-    
+
+
+    Private _SelectedMember As MemberSearchBovm
+    Public Property SelectedMember() As MemberSearchBovm
+        Get
+            Return _SelectedMember
+        End Get
+        Set(ByVal value As MemberSearchBovm)
+            _SelectedMember = value
+        End Set
+    End Property
+
+
+
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         SW = False
@@ -292,7 +305,7 @@ Public Class frmFDS_Main_PrntFDL_Srch
                                                                                                           .MI = x.MI, _
                                                                                                           .FEBTC_SA = x.FEBTC_SA}).ToList
         End Using
-        FillLV2(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
+        PopulateListView(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
     End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
@@ -302,6 +315,7 @@ Public Class frmFDS_Main_PrntFDL_Srch
             SEL_FNAME = TextBox1.Text
             SEL_FEBTC = ListView1.Items(ListView1.SelectedIndices(0)).SubItems(5).Text
             SelectedMemberData = rsMembersList.Find(Function(x) x.KBCI_NO = SEL_KBCI_NO)
+            SelectedMember = rsMemberSearch.Find(Function(x) x.KBCI_NO = SEL_KBCI_NO)
             ClsForm(Me, rsMEM_SRC)
         End If
     End Sub
@@ -324,9 +338,9 @@ Public Class frmFDS_Main_PrntFDL_Srch
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
         If SRCH <> "" Then
             Dim FoundMembers As List(Of MemberSearchBovm) = rsMemberSearch.Where(Function(x) x.KBCI_NO.Contains(SRCH.ToUpper) Or x.LNAME.Contains(SRCH.ToUpper) Or x.FNAME.Contains(SRCH.ToUpper)).ToList
-            FillLV2(ListView1, GetGridViewDataFromObject(FoundMembers, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
+            PopulateListView(ListView1, GetGridViewDataFromObject(FoundMembers, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
         Else
-            FillLV2(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
+            PopulateListView(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
         End If
         If DataGridView1.Rows.Count > 0 Then ListView1.Focus()
     End Sub

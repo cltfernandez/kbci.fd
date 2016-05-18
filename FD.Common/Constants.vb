@@ -2,15 +2,20 @@
 Public Class ColumnWidthDefinition
     Public Const MembersGridList As String = "0:100:222:241:38:136:100:0"
     Public Const MembersSearchList As String = "0:100:222:241:38:0"
+    Public Const TransactionList As String = "0:0:125:125:110:100:100:210:0:0:60"
 
 End Class
 
 Public Class ColumnAlignmentDefinition
     Public Const MemberGridList As String = "1:2:1:1:1:1:1:1"
     Public Const MembersSearchList As String = "1:1:1:1:1:1"
+    Public Const TransactionList As String = "1:1:2:2:1:3:3:1:1:1:2"
 End Class
-
-
+Public Class TransactionType
+    Public Const Debit As String = "DR"
+    Public Const Credit As String = "CR"
+    Public Const Adjustment As String = " "
+End Class
 
 Public Enum CustomDataType
     [Date] = 1
@@ -47,6 +52,7 @@ Public Enum FixedDepositTransactionValidationResult
     MissingTransactionCode = 4
     InvalidAmount = 5
     InsufficientFunds = 6
+    ArithmeticOverflow = 7
 End Enum
 
 Public Enum ViewOptions
@@ -65,7 +71,13 @@ Public Enum TransactionCode
     CloseAccount = 2
     CheckDeposit = 3
     Adjustment = 4
+    Reversal = 5
 End Enum
+
+Public Enum PrintlineNumber
+    Initial = 0
+End Enum
+
 
 Public Enum DivRefToolbarButtons
     Add = 0
@@ -80,11 +92,6 @@ Public Enum RecordUpdateResult
     UpdateSuccessful = 1
     Unsuccessful = 2
     RecordExists = 3
-End Enum
-
-Public Enum LedgerPostingStatus
-    NotPosted = 0
-    Posted = 1
 End Enum
 
 Public Structure DivrefPostingParameters

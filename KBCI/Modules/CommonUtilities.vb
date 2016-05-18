@@ -317,7 +317,7 @@ ErrorHandler:
         'odb.Fill(ds, RSET, "Table")
         'dt = ds.Tables(0)
     End Sub
-    Public Sub FillLV2(ByRef LV As ListView, ByRef DT As DataGridView, ByVal wSET As String, ByVal fSET As String)
+    Public Sub PopulateListView(ByRef LV As ListView, ByRef DT As DataGridView, ByVal wSET As String, ByVal fSET As String)
         Dim sLvw As New ListViewItem
         Dim colCTR, wds, wdsCTR As Integer
         Dim wdSET(50) As String
@@ -325,12 +325,9 @@ ErrorHandler:
         Dim TempStr() As String
         Dim TempNode As ListViewItem
         Dim TempArr() As ListViewItem
-        Dim i As Integer
-        Dim ad As OleDbDataAdapter = New OleDbDataAdapter
-        'Dim dt As DataTable = New DataTable
-        Dim ds As New DataSet
-        'Dim StartTime As DateTime
-        'Dim Elapsed As Double
+        Dim i As Integer                
+        Dim myCheckFont As New System.Drawing.Font("Wingdings", 12, FontStyle.Regular)
+        Dim myRegFont As New System.Drawing.Font("Tahoma", 8.25, FontStyle.Bold)
 
         LV.Items.Clear()
         If DT.Rows.Count > 0 Then
@@ -355,11 +352,11 @@ ErrorHandler:
             For colCTR = 0 To DT.Columns.Count - 1
                 Select Case frSet(colCTR)
                     Case 1
-                        LV.Columns.Add(DT.Columns(colCTR).Name, CInt(wdSET(colCTR)), HorizontalAlignment.Left)
+                        LV.Columns.Add(DT.Columns(colCTR).HeaderText, CInt(wdSET(colCTR)), HorizontalAlignment.Left)
                     Case 2
-                        LV.Columns.Add(DT.Columns(colCTR).Name, CInt(wdSET(colCTR)), HorizontalAlignment.Center)
+                        LV.Columns.Add(DT.Columns(colCTR).HeaderText, CInt(wdSET(colCTR)), HorizontalAlignment.Center)
                     Case 3
-                        LV.Columns.Add(DT.Columns(colCTR).Name, CInt(wdSET(colCTR)), HorizontalAlignment.Right)
+                        LV.Columns.Add(DT.Columns(colCTR).HeaderText, CInt(wdSET(colCTR)), HorizontalAlignment.Right)
                 End Select
 
             Next
@@ -368,9 +365,21 @@ ErrorHandler:
             For i = 0 To DT.Rows.Count - 1
                 TempStr(0) = CStr(DT.Rows(i).Cells(DT.Columns(0).Name).Value)
                 TempNode = New ListViewItem(TempStr)
-                For colCTR = 1 To DT.Columns.Count - 1
+                For colCTR = 1 To DT.Columns.Count - 1                    
                     If Not IsDBNull(DT.Rows(i).Cells(DT.Columns(colCTR).Name).Value) Then
-                        If CInt(frSet(colCTR)) = 3 Then
+                        TempNode.Font = myRegFont
+                        If DT.Columns(colCTR).Name = "PrintLineNumber" Then
+                            Dim checked = CBool(DT.Rows(i).Cells(DT.Columns(colCTR).Name).Value)
+                            Dim checkStatus
+                            With TempNode
+                                If checked Then checkStatus = CheckboxEnum.Checked Else checkStatus = CheckboxEnum.Unchecked
+                                .UseItemStyleForSubItems = False
+                                .SubItems.Add(Chr(checkStatus))
+                                .SubItems.Item(colCTR).ForeColor = Color.Black
+                                .SubItems.Item(colCTR).Font = myCheckFont
+                            End With
+                            ReDim bOWCheck(i)
+                        ElseIf CInt(frSet(colCTR)) = 3 Then
                             TempNode.SubItems.Add(FormatNumber(CStr(DT.Rows(i).Cells(DT.Columns(colCTR).Name).Value), 2))
                         Else
                             Dim itemValue As String = CStr(DT.Rows(i).Cells(DT.Columns(colCTR).Name).Value)
@@ -379,23 +388,16 @@ ErrorHandler:
                             End If
                             TempNode.SubItems.Add(itemValue)
                         End If
-
                     Else
                         TempNode.SubItems.Add("NULL")
                     End If
                 Next
                 TempNode.Tag = i.ToString
+
                 TempArr(i) = TempNode
             Next i
             LV.Items.AddRange(TempArr)
-            'Elapsed = System.DateTime.Now.Subtract(StartTime).TotalMilliseconds
-            'MessageBox.Show("Elapsed time " & Elapsed.ToString & " ms with ListView.Add", _
-            '  "Elapsed Time", _
-            '  MessageBoxButtons.OK, _
-            '  MessageBoxIcon.Information)
         End If
-        'odb.Fill(ds, recSET, "Table")
-        'dt = ds.Tables(0)  
     End Sub
     Public Function GetData(ByVal QRYStr As String, ByVal FLTR As String, ByRef DG As DataGridView) As DataGridView
         Dim DT As New DataTable
@@ -412,7 +414,7 @@ ErrorHandler:
         Return DG
     End Function
     Public Function GetGridViewDataFromObject(Of T)(ByVal items As List(Of T), ByRef DG As DataGridView) As DataGridView
-        DG.DataSource = items
+        DG.DataSource = items        
         Return DG
     End Function
     Public Function WhichCell(ByVal lvw As ListView, ByVal X As Integer, ByVal Y As Integer) As MyCell
@@ -471,5 +473,8 @@ ErrorHandler:
 
     Public Function FormatKBCINo(ByVal rawKBCINo As String) As String
         Return String.Format("{0}-{1}-{2}", Mid(rawKBCINo, 1, 2), Mid(rawKBCINo, 3, 4), Mid(rawKBCINo, 7, 1))
+    End Function
+    Public Function GenerateReferenceNumber(ByVal systemDate As Date) As String
+        Return String.Format("{0}{1}", systemDate.ToString("yyyyMMdd"), Now.ToString("HHmmss"))
     End Function
 End Module

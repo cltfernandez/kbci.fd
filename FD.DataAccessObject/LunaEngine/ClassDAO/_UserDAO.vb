@@ -93,7 +93,7 @@ Public Overrides Function Save(byRef cls as User) as Integer
                             sql &= " CHG_DATE,"
                             sql &= " NAME,"
                             sql &= " POSITION,"
-                            sql &= " USER,"
+                            sql &= " [USER],"
                             sql &= " LOGGED"
                       sql &= ") VALUES ("
                       sql &= " @USERNAME,"

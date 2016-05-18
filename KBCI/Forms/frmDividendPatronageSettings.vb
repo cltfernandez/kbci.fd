@@ -13,6 +13,7 @@ Public Class frmDividendPatronageSettings
         CurrentUser = _CurrentUser
         IDivPatRefSettingsService = _IDivPatRefSettingsService
         _IMessageService = MsgSvc
+        _IRecordMsgService = MsgSvc
         InitializeComponent()
     End Sub
 #Region " Windows Form Designer generated code "
@@ -346,6 +347,15 @@ Public Class frmDividendPatronageSettings
             _IMessageService = value
         End Set
     End Property
+    Private _IRecordMsgService As IRecordUpdateMessagePromptService
+    Private Property IRecordMsgService() As IRecordUpdateMessagePromptService
+        Get
+            Return _IRecordMsgService
+        End Get
+        Set(ByVal value As IRecordUpdateMessagePromptService)
+            _IRecordMsgService = value
+        End Set
+    End Property
 
 
     Private _SelectedDivRefRecord As DivRefSettingsViewModel
@@ -382,7 +392,7 @@ Public Class frmDividendPatronageSettings
                     Else
                         If Not SelectedMemberData Is Nothing Then
                             Dim result As RecordUpdateResult = IDivPatRefSettingsService.Save(SaveParameter, DividendAmount, RefundAmount, ViewOption)
-                            IMessageService.GetMessageFromRecordUpdateResult(result)
+                            IRecordMsgService.GetMessageFromRecordUpdateResult(result)
                             If Not result = RecordUpdateResult.Unsuccessful Then
                                 .Buttons(DivRefToolbarButtons.Exit).Text = GetGlobalResourceString("ExitButton")
                                 e.Button.Text = GetGlobalResourceString("AddButton")
@@ -401,7 +411,7 @@ Public Class frmDividendPatronageSettings
                         TextBox5.Focus()
                     Else
                         Dim result As RecordUpdateResult = IDivPatRefSettingsService.Save(SaveParameter, DividendAmount, RefundAmount, ViewOption)
-                        IMessageService.GetMessageFromRecordUpdateResult(result)
+                        IRecordMsgService.GetMessageFromRecordUpdateResult(result)
                         e.Button.Text = GetGlobalResourceString("EditButton")
                         .Buttons(DivRefToolbarButtons.Exit).Text = GetGlobalResourceString("ExitButton")
                         GroupBox1.Enabled = False

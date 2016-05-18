@@ -56,12 +56,15 @@
     <Compile Include="My Project\AssemblyInfo.vb" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="3_Stored Procedure\_3_dsadsa.sql">
-      <SubType>Content</SubType>
-    </Content>
+    <None Include="_1_Tables\1_Fd.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="1_Tables\1_Fd.sql" />
+    <Folder Include="_2_Views\" />
+    <Folder Include="_3_Functions\" />
+    <Folder Include="_4_StoredProcedures\" />
+    <Folder Include="_5_ConstraintsTriggers\" />
+    <Folder Include="_6_Data\" />
+    <Folder Include="_7_PostScripts\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(MSBuildToolsPath)\SqlServer.targets" />

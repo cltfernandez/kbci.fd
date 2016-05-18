@@ -86,7 +86,7 @@ Public Overrides Function Save(byRef cls as Div) as Integer
 		            If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
 		            If cls.DIV_ID = 0 Then
                         sql = "INSERT INTO Div ("
-                            sql &= " DATE,"
+                            sql &= " [DATE],"
                             sql &= " KBCI_NO,"
                             sql &= " FD_AMT,"
                             sql &= " DIV_AMT,"
@@ -106,7 +106,7 @@ Public Overrides Function Save(byRef cls as Div) as Integer
                       sql &= ")"
 		            Else
 			            sql = "UPDATE Div SET "
-                  sql &= "DATE = @DATE,"
+                            sql &= "[DATE] = @DATE,"
                   sql &= "KBCI_NO = @KBCI_NO,"
                   sql &= "FD_AMT = @FD_AMT,"
                   sql &= "DIV_AMT = @DIV_AMT,"

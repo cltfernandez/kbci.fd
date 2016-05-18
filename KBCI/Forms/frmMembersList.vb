@@ -1,9 +1,16 @@
 Imports FD.DataAccessObject
 Imports FD.ViewModels
 Imports FD.Common
+Imports System.Collections.Generic
+Imports FD.BusinessLogic
+Imports FD.Common.Utilities
+
 Public Class frmMembersList
     Inherits System.Windows.Forms.Form
-
+    Public Sub New(ByVal _CurrentUser As UserViewModel)
+        CurrentUser = _CurrentUser
+        InitializeComponent()
+    End Sub
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -16,10 +23,7 @@ Public Class frmMembersList
 
     End Sub
 
-    Public Sub New(ByVal _CurrentUser As UserViewModel)
-        CurrentUser = _CurrentUser
-        InitializeComponent()
-    End Sub
+
 
     'Form overrides dispose to clean up the component list.
     Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -300,7 +304,7 @@ Public Class frmMembersList
         '
         Me.Timer1.Interval = 500
         '
-        'frmFDS_Main_DEntry
+        'frmMembersList
         '
         Me.AcceptButton = Me.Button2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -308,7 +312,7 @@ Public Class frmMembersList
         Me.ClientSize = New System.Drawing.Size(914, 635)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Name = "frmFDS_Main_DEntry"
+        Me.Name = "frmMembersList"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Data Entry"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
@@ -336,6 +340,18 @@ Public Class frmMembersList
             _CurrentUser = value
         End Set
     End Property
+
+
+    Private _ListOfMembers As List(Of MembersBOVM)
+    Public Property ListOfMembers() As List(Of MembersBOVM)
+        Get
+            Return _ListOfMembers
+        End Get
+        Set(ByVal value As List(Of MembersBOVM))
+            _ListOfMembers = value
+        End Set
+    End Property
+
 
 
     Private Sub TextBox1_KeyUp1(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyUp
@@ -372,31 +388,20 @@ errHand:
         If ListView1.SelectedItems.Count > 0 Then
             Dim KBCIN As String = ListView1.Items(ListView1.SelectedIndices(0)).SubItems(1).Text
             SEL_KBCI_NO = KBCIN
-            TransactionListForm = New frmMembersTransactionList(CurrentUser)
-            rsFD_Mem.Open("SELECT [FD_ID],[KBCI_NO],ISNULL([TRAN_CODE],0) [TRAN_CODE],ISNULL([DATE],'1/1/1800') [DATE],ISNULL([REF],'') [REF],ISNULL([AMOUNT],0) [AMOUNT],ISNULL([BALANCE],0) [BALANCE],ISNULL([RMK],'') [RMK],ISNULL([ADD_DATE],'1/1/1800') [ADD_DATE],ISNULL([USER],'') [USER],isnull([LPOSTED],0) PRINTED,ISNULL([DRCR],'') [DRCR],ISNULL([BANK_CODE],'') [BANK_CODE],ISNULL([CHECKNO],'') [CHECKNO],ISNULL([TPOSTED],'False') [TPOSTED],ISNULL([TREVERSED],'False') [TREVERSED] from fd where kbci_no='" & KBCIN & "' ORDER BY [FD_ID]", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-            rsFD_Mem.Filter = adFilterNone
-            With rsMEMBERS
-                SelectedMemberData = .Find(Function(x) x.KBCI_NO = KBCIN.Trim)
+            With ListOfMembers
+                Dim MemberDataBovm As MembersBOVM = .Find(Function(x) x.KBCI_NO = KBCIN.Trim)
 
-                If Not SelectedMemberData Is Nothing Then
-                    TransactionListForm.Label3.Text = SelectedMemberData.KBCI_NO
-                    TransactionListForm.Label2.Text = String.Format("{0}, {1} {2}", SelectedMemberData.LNAME, SelectedMemberData.FNAME, SelectedMemberData.MI)
-                    TransactionListForm.Label7.Text = FormatNumber(SelectedMemberData.FD_AMOUNT, 2)
-                    TransactionListForm.ShowDialog()
-                    If SW = True Then
-                        PopulateMembersList()
-                        FillLV2(ListView1, GetGridViewDataFromObject(MembersGridList, DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList) : SW = False
-                    End If
-
+                If Not MemberDataBovm Is Nothing Then
+                    Using TransactionListForm As New frmMembersTransactionList(MemberDataBovm, New FixedDepositTransactionService, CurrentUser)
+                        Dim result As DialogResult = TransactionListForm.ShowDialog()
+                        If result = Windows.Forms.DialogResult.OK Then
+                            PopulateListView(ListView1, GetGridViewDataFromObject(ListOfMembers, DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
+                        End If
+                    End Using
                 Else
-                    MsgBox("Member's Data Not Found.", MsgBoxStyle.Critical, "Contact Your System Administrator")
+                    MsgBox(GetGlobalResourceString("NoRecordsFound"), MsgBoxStyle.Critical, GetGlobalResourceString("FixedDepositMembers"))
                 End If
             End With
-        End If
-
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
         End If
     End Sub
 
@@ -405,11 +410,7 @@ errHand:
     End Sub
 
     Private Sub frmFDS_Main_DEntry_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Activated
-        FillLV2(ListView1, GetGridViewDataFromObject(MembersGridList, DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
+        PopulateListView(ListView1, GetGridViewDataFromObject(ListOfMembers, DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
     End Sub
 
     Private Sub TextBox3_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox3.KeyUp
@@ -428,14 +429,25 @@ errHand:
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
         If SRCH <> "" Then
             If fField = "LNAME" Then
-                FillLV2(ListView1, GetGridViewDataFromObject(MembersGridList.Where(Function(x) x.LNAME.Contains(SRCH.ToUpper) Or x.FNAME.Contains(SRCH.ToUpper)).ToList(), DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
+                PopulateListView(ListView1, GetGridViewDataFromObject(ListOfMembers.Where(Function(x) x.LNAME.Contains(SRCH.ToUpper) Or x.FNAME.Contains(SRCH.ToUpper)).ToList(), DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
             ElseIf fField = "KBCI_NO" Then
-                FillLV2(ListView1, GetGridViewDataFromObject(MembersGridList.Where(Function(x) x.KBCI_NO.Contains(SRCH)).ToList(), DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
+                PopulateListView(ListView1, GetGridViewDataFromObject(ListOfMembers.Where(Function(x) x.KBCI_NO.Contains(SRCH)).ToList(), DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
             End If
 
 
         Else
-            FillLV2(ListView1, GetData(QRY, "", DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
+            PopulateListView(ListView1, GetGridViewDataFromObject(ListOfMembers, DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
         End If
+
+        If ListView1.Items.Count > 0 Then
+            ListView1.Items(0).Selected = True
+            ListView1.Focus()
+        End If
+    End Sub
+
+    Private Sub frmMembersList_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        PopulateMembersList()
+        ListOfMembers = MembersGridList
+        TextBox1.Focus()
     End Sub
 End Class

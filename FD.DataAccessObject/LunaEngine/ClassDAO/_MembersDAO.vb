@@ -136,7 +136,7 @@ Public Overrides Function Save(byRef cls as Members) as Integer
                             sql &= " RUN_AMT,"
                             sql &= " ADD_DATE,"
                             sql &= " CHG_DATE,"
-                            sql &= " USER,"
+                            sql &= " [USER],"
                             sql &= " REC_STAT,"
                             sql &= " FD_CNTR"
                       sql &= ") VALUES ("
@@ -246,7 +246,7 @@ Public Overrides Function Save(byRef cls as Members) as Integer
                   sql &= "RUN_AMT = @RUN_AMT,"
                   sql &= "ADD_DATE = @ADD_DATE,"
                   sql &= "CHG_DATE = @CHG_DATE,"
-                  sql &= "USER = @USER,"
+                            sql &= "[USER] = @USER,"
                   sql &= "REC_STAT = @REC_STAT,"
                   sql &= "FD_CNTR = @FD_CNTR"
 			            sql &= " WHERE KBCI_ID= " & cls.KBCI_ID

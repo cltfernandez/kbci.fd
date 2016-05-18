@@ -121,16 +121,18 @@
     <value>Would you like to add this member to the master file?</value>
   </data>
   <data name="AmountExceeds1B" xml:space="preserve">
-    <value>Please input  amount less than 1,000,000,000.00</value>
+    <value>Please input  amount less than 10,000,000.00</value>
   </data>
   <data name="ConfirmationPasswordNotMatch" xml:space="preserve">
     <value>Confirmation Password does not match.</value>
   </data>
   <data name="DividendPatronageMaintenance" xml:space="preserve">
     <value>Cash Dividend / Patronage Refund Maintenance</value>
+    <comment>Title</comment>
   </data>
   <data name="DividendPatronageRefund" xml:space="preserve">
     <value>Cash Dividend / Patronage Refund</value>
+    <comment>Title</comment>
   </data>
   <data name="DivPatProcessingQuestion" xml:space="preserve">
     <value>Would you like to process the CASH DIVIDEND/PAT. REFUND with the following settings?</value>
@@ -142,13 +144,14 @@
     <value>Do you want to exit the application?</value>
   </data>
   <data name="FDMembersMaintenance" xml:space="preserve">
-    <value>Fixed Deposit Members - Maintenance</value>
+    <value>Fixed Deposit - Members Maintenance</value>
   </data>
   <data name="FillOutAllFields" xml:space="preserve">
     <value>Please fill out all fields.</value>
   </data>
   <data name="FixedDepositMembers" xml:space="preserve">
-    <value>Fixed Deposit Members</value>
+    <value>Fixed Deposit - Members</value>
+    <comment>Title</comment>
   </data>
   <data name="IncorrectCredentials" xml:space="preserve">
     <value>Log-In Failed. Incorrect Credentials</value>
@@ -175,7 +178,7 @@
     <value>Please input numeric characters</value>
   </data>
   <data name="SetConfigSuccessful" xml:space="preserve">
-    <value>New configration definitions are updated kindly restart the application to apply the changes.</value>
+    <value>New configration definitions are updated kindly restart the application to apply the changes</value>
   </data>
   <data name="SpecifyDORIReason" xml:space="preserve">
     <value>Please specify the reason why Applicant is considered DORI</value>
@@ -184,10 +187,10 @@
     <value>System Configuration</value>
   </data>
   <data name="TrancodeNotFound" xml:space="preserve">
-    <value>TRANCODE Not found! Please Contact your system administrator.</value>
+    <value>Transaction Code Not found! Please Contact your system administrator.</value>
   </data>
   <data name="UnableToProcessDivref" xml:space="preserve">
-    <value>Unable to process CASH DIVIDEND FOR YEAR:[{0}] QUARTER:[{1}]. Please check if the voucher is processed / dividend is posted."</value>
+    <value>Unable to process CASH DIVIDEND FOR YEAR:[{0}] QUARTER:[{1}]. Please check if the voucher is processed / dividend is posted.</value>
   </data>
   <data name="UserIsLoggedIn" xml:space="preserve">
     <value>User is already logged in. Please contact your administrator.</value>
@@ -206,32 +209,89 @@
   </data>
   <data name="AddButton" xml:space="preserve">
     <value>&amp;Add New</value>
+    <comment>Button.Label</comment>
   </data>
   <data name="CancelButton" xml:space="preserve">
     <value>&amp;Cancel</value>
+    <comment>Button.Label</comment>
   </data>
   <data name="DeleteButton" xml:space="preserve">
     <value>&amp;Delete</value>
+    <comment>Button.Label</comment>
   </data>
   <data name="EditButton" xml:space="preserve">
     <value>&amp;Edit</value>
+    <comment>Button.Label</comment>
   </data>
   <data name="ExitButton" xml:space="preserve">
     <value>E&amp;xit</value>
   </data>
   <data name="SaveButton" xml:space="preserve">
     <value>&amp;Save</value>
+    <comment>Button.Label</comment>
   </data>
   <data name="SearchButton" xml:space="preserve">
     <value>&amp;Find</value>
+    <comment>Button.Label</comment>
   </data>
   <data name="AddSuccessful" xml:space="preserve">
     <value>Added New Record Successfully</value>
   </data>
   <data name="Unsuccessful" xml:space="preserve">
-    <value>Update Failed</value>
+    <value>Update Failed!</value>
   </data>
   <data name="UpdateSuccessful" xml:space="preserve">
-    <value>Updated Record Successfully</value>
+    <value>Updated Record Successfully!</value>
+  </data>
+  <data name="FixedDepositTransaction" xml:space="preserve">
+    <value>Fixed Deposit - Transaction</value>
+    <comment>Title</comment>
+  </data>
+  <data name="InsufficientFunds" xml:space="preserve">
+    <value>Transaction error. Insufficient Funds.</value>
+  </data>
+  <data name="InvalidAmount" xml:space="preserve">
+    <value>Please input correct amount.</value>
+  </data>
+  <data name="MissingBankCode" xml:space="preserve">
+    <value>Please set the corresponding Bank Code for the check.</value>
+  </data>
+  <data name="MissingCheckNumber" xml:space="preserve">
+    <value>Please set the corresponding Check No. of the check.</value>
+  </data>
+  <data name="MissingRemarks" xml:space="preserve">
+    <value>Remarks are required in this type of transaction.</value>
+  </data>
+  <data name="PrintTransactionOnPassbook" xml:space="preserve">
+    <value>There are [{0}] transactions that are not yet posted on Member's Passbook. Would you like to print?</value>
+  </data>
+  <data name="ReverseTransactionPrompt" xml:space="preserve">
+    <value>Would you like to reverse the last transaction?</value>
+  </data>
+  <data name="NoRecordsFound" xml:space="preserve">
+    <value>No Records Found</value>
+  </data>
+  <data name="NoTransactionForReversal" xml:space="preserve">
+    <value>No Transaction available for reversal.</value>
+  </data>
+  <data name="PassbookUpdateButton" xml:space="preserve">
+    <value>Passbook &amp;Update</value>
+    <comment>Button.Label</comment>
+  </data>
+  <data name="PassbookUpdatePrompt" xml:space="preserve">
+    <value>There are [{0}] transaction/s, for printing.  Click OK to continue.</value>
+  </data>
+  <data name="PrintButton" xml:space="preserve">
+    <value>P&amp;rint</value>
+    <comment>Button.Label</comment>
+  </data>
+  <data name="PrintPassbookPrompt" xml:space="preserve">
+    <value>Please Insert Passbook, and Press OK.</value>
+  </data>
+  <data name="PrintingDone" xml:space="preserve">
+    <value>Printing Done!</value>
+  </data>
+  <data name="TurnPassbookPrompt" xml:space="preserve">
+    <value>Please turn to next page, and Press OK.</value>
   </data>
 </root>

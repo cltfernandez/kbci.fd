@@ -86,7 +86,7 @@ Public Overrides Function Save(byRef cls as Ref) as Integer
 		            If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
 		            If cls.REF_ID = 0 Then
                         sql = "INSERT INTO Ref ("
-                            sql &= " DATE,"
+                            sql &= " [DATE],"
                             sql &= " KBCI_NO,"
                             sql &= " INT_PAID,"
                             sql &= " REFUND,"
@@ -102,7 +102,7 @@ Public Overrides Function Save(byRef cls as Ref) as Integer
                       sql &= ")"
 		            Else
 			            sql = "UPDATE Ref SET "
-                  sql &= "DATE = @DATE,"
+                            sql &= "[DATE] = @DATE,"
                   sql &= "KBCI_NO = @KBCI_NO,"
                   sql &= "INT_PAID = @INT_PAID,"
                   sql &= "REFUND = @REFUND,"
