@@ -2,7 +2,7 @@ Imports FD.DataAccessObject
 Imports FD.Common
 Imports FD.ViewModels
 Imports System.Collections.Generic
-Public Class frmFDS_Main_PrntFDL_Srch
+Public Class frmMemberSearchDialog
     Inherits System.Windows.Forms.Form
 
 #Region " Windows Form Designer generated code "
@@ -50,7 +50,7 @@ Public Class frmFDS_Main_PrntFDL_Srch
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmFDS_Main_PrntFDL_Srch))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMemberSearchDialog))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
         Me.DataGridView1 = New System.Windows.Forms.DataGridView
         Me.Label5 = New System.Windows.Forms.Label

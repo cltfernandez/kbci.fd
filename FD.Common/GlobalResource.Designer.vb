@@ -182,6 +182,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Would you like to exit the application?.
+        '''</summary>
+        Friend Shared ReadOnly Property ExitApplicationPrompt() As String
+            Get
+                Return ResourceManager.GetString("ExitApplicationPrompt", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Do you want to exit the application?.
         '''</summary>
         Friend Shared ReadOnly Property ExitApplicationQuestion() As String
@@ -214,6 +223,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property FillOutAllFields() As String
             Get
                 Return ResourceManager.GetString("FillOutAllFields", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Fixed Deposit - Ledger.
+        '''</summary>
+        Friend Shared ReadOnly Property FixedDepositLedger() As String
+            Get
+                Return ResourceManager.GetString("FixedDepositLedger", resourceCulture)
             End Get
         End Property
         
@@ -511,6 +529,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property TrancodeNotFound() As String
             Get
                 Return ResourceManager.GetString("TrancodeNotFound", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Transaction Details.
+        '''</summary>
+        Friend Shared ReadOnly Property TransactionDetails() As String
+            Get
+                Return ResourceManager.GetString("TransactionDetails", resourceCulture)
             End Get
         End Property
         

@@ -1579,8 +1579,8 @@ Public Class frmMembersMaintenance
                 Case 2
 
                 Case 4
-                    Dim frmFDS_Main_PrntFDL_Srch As New frmFDS_Main_PrntFDL_Srch
-                    frmFDS_Main_PrntFDL_Srch.ShowDialog()
+                    Dim MemberSearchForm As New frmMemberSearchDialog
+                    MemberSearchForm.ShowDialog()
                     If SW = True Then
                         FillField()
                     End If

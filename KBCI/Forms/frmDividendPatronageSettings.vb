@@ -377,8 +377,8 @@ Public Class frmDividendPatronageSettings
             Select Case IDX
                 Case DivRefToolbarButtons.Add
                     If e.Button.Text = GetGlobalResourceString("AddButton") Then
-                        Dim frmFDS_Main_PrntFDL_Srch As New frmFDS_Main_PrntFDL_Srch
-                        frmFDS_Main_PrntFDL_Srch.ShowDialog()
+                        Dim MemberSearchForm As New frmMemberSearchDialog
+                        MemberSearchForm.ShowDialog()
                         If SW = True Then
                             TextBox3.Text = SelectedMemberData.KBCI_NO
                             Label4.Text = SelectedMemberData.FEBTC_CA
@@ -421,8 +421,8 @@ Public Class frmDividendPatronageSettings
                 Case DivRefToolbarButtons.Delete
 
                 Case DivRefToolbarButtons.Search
-                    Dim frmFDS_Main_PrntFDL_Srch As New frmFDS_Main_PrntFDL_Srch
-                    frmFDS_Main_PrntFDL_Srch.ShowDialog()
+                    Dim MemberSearchForm As New frmMemberSearchDialog
+                    MemberSearchForm.ShowDialog()
                     If SW = True Then
                         SelectedDivRefRecord = IDivPatRefSettingsService.GetDivRefByKbciNo(SaveParameter, ViewOption)
                         PopulateFields(SelectedDivRefRecord)

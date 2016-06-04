@@ -1,4 +1,5 @@
 ﻿Imports FD.Common
+Imports FD.ViewModels
 Public Interface IDividendPatronageRefundService
     Function ValidateDividendProcessing(ByVal ProcessingYear As String, ByVal ProcessingQuarter As String) As DividendProcessingValidationResult
 
@@ -9,4 +10,6 @@ Public Interface IDividendPatronageRefundService
     Sub UpdateDividendPatronageRefundRegister(ByVal divrefParameter As DivrefPostingParameters, ByVal isBatchPosted As Boolean)
 
     Sub PostPatronageRefund(ByVal divrefParameter As DivrefPostingParameters, ByVal IncludeSTL As Boolean)
+
+    Function GetLatestDivrefPostingHistory() As DivrefPostingViewModel
 End Interface

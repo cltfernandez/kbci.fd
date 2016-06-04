@@ -2,10 +2,13 @@
 Imports FD.Common
 Imports FD.DataAccessObject
 Imports System
+Imports AutoMapper
 
 Public Class DividendPatronageRefundService : Implements IDividendPatronageRefundService
 
-
+    Public Sub New()        
+        Mapper.CreateMap(Of Divrefph, DivrefPostingViewModel)()
+    End Sub
     Private _DividendRefundPh As Divrefph
     Public Property DividendRefundPh() As Divrefph
         Get
@@ -109,5 +112,15 @@ Public Class DividendPatronageRefundService : Implements IDividendPatronageRefun
             cmdRefDao.PopulateRefundRegister(divrefParameter.PatronageRefundProcessingDate, divrefParameter.PatronageRefundPercentage)
         End Using
     End Sub
+
+    Public Function GetLatestDivrefPostingHistory() As DivrefPostingViewModel Implements IDividendPatronageRefundService.GetLatestDivrefPostingHistory
+        Dim model As DivrefPostingViewModel
+        Using rsDivrefPh As New DivrefphDAO
+            Dim src As Divrefph = rsDivrefPh.GetAll("DIVREFPH_ID").LastOrDefault()
+            model = Mapper.Map(Of Divrefph, DivrefPostingViewModel)(src)
+            model.Id = src.DIVREFPH_ID
+        End Using
+        Return model
+    End Function
 
 End Class

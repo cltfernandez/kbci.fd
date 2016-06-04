@@ -1,3 +1,6 @@
+Imports FD.BusinessLogic
+Imports FD.Common.Utilities
+Imports CrystalDecisions.CrystalReports.Engine
 Public Class frmReportViewer
     Inherits System.Windows.Forms.Form
 
@@ -25,35 +28,56 @@ Public Class frmReportViewer
 
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
+    Friend WithEvents bgwLoadData As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Label5 As System.Windows.Forms.Label
 
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents CrystalReportViewer1 As CrystalDecisions.Windows.Forms.CrystalReportViewer
+    Friend WithEvents crvMainViewer As CrystalDecisions.Windows.Forms.CrystalReportViewer
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.CrystalReportViewer1 = New CrystalDecisions.Windows.Forms.CrystalReportViewer
+        Me.crvMainViewer = New CrystalDecisions.Windows.Forms.CrystalReportViewer
+        Me.bgwLoadData = New System.ComponentModel.BackgroundWorker
+        Me.Label5 = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
-        'CrystalReportViewer1
+        'crvMainViewer
         '
-        Me.CrystalReportViewer1.ActiveViewIndex = -1
-        Me.CrystalReportViewer1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.CrystalReportViewer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.CrystalReportViewer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CrystalReportViewer1.Location = New System.Drawing.Point(0, 0)
-        Me.CrystalReportViewer1.Name = "CrystalReportViewer1"
-        Me.CrystalReportViewer1.SelectionFormula = ""
-        Me.CrystalReportViewer1.ShowCloseButton = False
-        Me.CrystalReportViewer1.Size = New System.Drawing.Size(828, 561)
-        Me.CrystalReportViewer1.TabIndex = 0
-        Me.CrystalReportViewer1.ViewTimeSelectionFormula = ""
+        Me.crvMainViewer.ActiveViewIndex = -1
+        Me.crvMainViewer.AutoScroll = True
+        Me.crvMainViewer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.crvMainViewer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.crvMainViewer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.crvMainViewer.Location = New System.Drawing.Point(0, 0)
+        Me.crvMainViewer.Name = "crvMainViewer"
+        Me.crvMainViewer.SelectionFormula = ""
+        Me.crvMainViewer.ShowCloseButton = False
+        Me.crvMainViewer.Size = New System.Drawing.Size(828, 561)
+        Me.crvMainViewer.TabIndex = 0
+        Me.crvMainViewer.ViewTimeSelectionFormula = ""
+        Me.crvMainViewer.Visible = False
         '
-        'frmFD_Member
+        'bgwLoadData
+        '
+        '
+        'Label5
+        '
+        Me.Label5.BackColor = System.Drawing.Color.Transparent
+        Me.Label5.Font = New System.Drawing.Font("Verdana", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(12, 9)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(172, 16)
+        Me.Label5.TabIndex = 15
+        Me.Label5.Text = "Loading..."
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'frmReportViewer
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.ClientSize = New System.Drawing.Size(828, 561)
-        Me.Controls.Add(Me.CrystalReportViewer1)
-        Me.Name = "frmFD_Member"
+        Me.Controls.Add(Me.crvMainViewer)
+        Me.Controls.Add(Me.Label5)
+        Me.Name = "frmReportViewer"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "REPORTS"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
@@ -63,59 +87,37 @@ Public Class frmReportViewer
 
 #End Region
 
+    Public ReportService As IReportService
+    Public ReportModel As ReportClass
+    Public HeaderText As String
+
+    Private data As DataTable
+
     Private Sub frmFD_Member_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
-    End Sub
-
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
+        Me.Text = HeaderText
+        bgwLoadData.RunWorkerAsync()
     End Sub
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.Close()
     End Sub
 
-
-
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-        'dst.Columns.Add("DATE", Type.GetType("System.String"))
-        'dst.Columns.Add("REF", Type.GetType("System.String"))
-        'dst.Columns.Add("DEBIT", Type.GetType("System.Decimal"))
-        'dst.Columns.Add("CREDIT", Type.GetType("System.Decimal"))
-        'dst.Columns.Add("BALANCE", Type.GetType("System.Decimal"))
-        'dst.Columns.Add("CODE", Type.GetType("System.String"))
-        'dst.Columns.Add("REMARKS", Type.GetType("System.String"))
-        'With rsFD_Mem
-        '    .Open("SELECT FD.DATE,TC.TR_CODE,FD.AMOUNT,FD.BALANCE,FD.REF,FD.RMK,FD.DRCR FROM FD INNER JOIN TRANCODE AS TC ON FD.TRAN_CODE=TC.TR_ID where kbci_no='9130381'", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockOptimistic)
-        '    .MoveFirst()
-        '    Do Until .EOF
-        '        Dim dr As DataRow = dst.NewRow
-        '        dr.Item("DATE") = DateValue(.Fields("DATE").Value).ToString("MM/dd/yyyy")
-        '        dr.Item("REF") = .Fields("REF").Value
-        '        If CStr(.Fields("DRCR").Value) = "CR" Then
-        '            dr.Item("DEBIT") = "0.00"
-        '            dr.Item("CREDIT") = .Fields("AMOUNT").Value
-        '        Else
-        '            dr.Item("DEBIT") = .Fields("AMOUNT").Value
-        '            dr.Item("CREDIT") = "0.00"
-        '        End If
-        '        dr.Item("BALANCE") = .Fields("BALANCE").Value
-        '        dr.Item("CODE") = .Fields("TR_CODE").Value
-        '        dr.Item("REMARKS") = .Fields("RMK").Value
-        '        dst.Rows.Add(dr)
-        '        .MoveNext()
-        '    Loop
-
-
-        'End With
-        'ds.Tables.Add(dst)
-        'rpt.SetDataSource(ds.Tables(0))
-
-        'Me.CrystalReportViewer1.ReportSource = rpt
+    Private Sub bgwLoadData_DoWork(ByVal sender As System.Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bgwLoadData.DoWork
+        data = ReportService.GetData()
     End Sub
 
-    Private Sub CrystalReportViewer1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CrystalReportViewer1.Load
+    Private Sub bgwLoadData_RunWorkerCompleted(ByVal sender As System.Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgwLoadData.RunWorkerCompleted
+        If data.Rows.Count > 0 Then
+            ReportModel.SetDataSource(data)
+            crvMainViewer.ReportSource = ReportModel
+            crvMainViewer.Visible = True
+        Else
+            MsgBox(GetGlobalResourceString("NoTransactionFound"), MsgBoxStyle.Critical, GetGlobalResourceString("FixedDepositSystem"))
+        End If
+    End Sub
 
+    Private Sub crvMainViewer_ReportRefresh(ByVal source As System.Object, ByVal e As CrystalDecisions.Windows.Forms.ViewerEventArgs) Handles crvMainViewer.ReportRefresh
+        crvMainViewer.Visible = False
+        bgwLoadData.RunWorkerAsync()
     End Sub
 End Class

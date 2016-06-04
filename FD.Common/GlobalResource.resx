@@ -294,4 +294,13 @@
   <data name="TurnPassbookPrompt" xml:space="preserve">
     <value>Please turn to next page, and Press OK.</value>
   </data>
+  <data name="ExitApplicationPrompt" xml:space="preserve">
+    <value>Would you like to exit the application?</value>
+  </data>
+  <data name="FixedDepositLedger" xml:space="preserve">
+    <value>Fixed Deposit - Ledger</value>
+  </data>
+  <data name="TransactionDetails" xml:space="preserve">
+    <value>Transaction Details</value>
+  </data>
 </root>

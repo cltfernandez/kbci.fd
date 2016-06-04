@@ -106,7 +106,13 @@ err1:
             End If
         Next Control
     End Sub
-    Public Sub GenRPT(ByRef rptRS As ADODB.Recordset, ByRef rptDT As DataTable, ByRef RepViewer As CrystalDecisions.Windows.Forms.CrystalReportViewer, ByVal CrysRep As CrystalDecisions.CrystalReports.Engine.ReportClass, ByVal TBL As Integer, ByVal FString As String)
+    Public Sub PopulateReportData(ByRef rptRS As ADODB.Recordset, _
+                                  ByRef rptDT As DataTable, _
+                                  ByRef RepViewer As CrystalDecisions.Windows.Forms.CrystalReportViewer, _
+                                  ByVal CrysRep As CrystalDecisions.CrystalReports.Engine.ReportClass, _
+                                  ByVal TBL As Integer, _
+                                  ByVal FString As String)
+
         Dim colCTR, wds, wdsctr As Integer
         Dim rptDS As New DataSet
         Dim wdSET(50) As String
@@ -191,21 +197,6 @@ err1:
         MsgBox(DT.Columns.Count)
 
     End Sub
-    Public Function IsDBExist(ByVal CnStr As String, ByVal TBL As String) As Boolean
-        Dim AccessConnection As New System.Data.OleDb.OleDbConnection
-        Dim SchemaTable As DataTable
-
-        AccessConnection.ConnectionString = CnStr
-        AccessConnection.Open()
-        SchemaTable = AccessConnection.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Columns, New Object() {Nothing, Nothing, TBL})
-
-        If SchemaTable.Rows.Count <> 0 Then
-            Return True
-        Else
-            Return False
-        End If
-        AccessConnection.Close()
-    End Function
 
     Public Function LogError(ByVal lngErrNumber As Long, ByVal strErrDescription As String, ByVal strCallingProc As String, ByVal currUser As String, Optional ByVal bShowUser As Boolean = True) As Boolean
         On Error GoTo ErrorHandler
@@ -248,76 +239,7 @@ ErrorHandler:
         Resume ExitHandler
 
     End Function
-    Public Sub FillLV(ByRef LV As ListView, ByRef LBL As Label, ByRef RSET As ADODB.Recordset, ByVal wSET As String)
-        Dim sLvw As New ListViewItem
-        Dim colCTR, wds, wdsCTR As Integer
-        Dim wdSET(50) As String
-        Dim TempStr() As String
-        Dim TempNode As ListViewItem
-        Dim TempArr() As ListViewItem
-        Dim i As Integer
-        Dim myCheckFont As New System.Drawing.Font("Wingdings", 12, FontStyle.Regular)
-        Dim myRegFont As New System.Drawing.Font("Tahoma", 8.25, FontStyle.Bold)
-
-        LV.Items.Clear()
-
-        If RSET.RecordCount > 0 Then
-            'StartTime = System.DateTime.Now
-            RSET.MoveFirst()
-            LBL.Visible = True ': Application.DoEvents()
-            wdsCTR = 0
-            LV.Columns.Clear()
-            For wds = 0 To Len(wSET)
-                If Mid(wSET, wds + 1, 1) = ":" Then
-                    wdsCTR += 1
-                Else
-                    wdSET(wdsCTR) = wdSET(wdsCTR) & Mid(wSET, wds + 1, 1)
-                End If
-            Next
-            For colCTR = 0 To RSET.Fields.Count - 1
-                LV.Columns.Add(RSET.Fields(colCTR).Name, CInt(wdSET(colCTR)), HorizontalAlignment.Left)
-            Next
-            ReDim TempStr(0)
-            ReDim TempArr(RSET.RecordCount - 1)
-            RSET.MoveFirst()
-            For i = 0 To RSET.RecordCount - 1
-                TempStr(0) = CStr(RSET.Fields(RSET.Fields(0).Name).Value)
-                TempNode = New ListViewItem(TempStr)
-                For colCTR = 1 To RSET.Fields.Count - 1
-                    If Not IsDBNull(RSET.Fields(RSET.Fields(colCTR).Name).Value) Then
-                        If RSET.Fields(colCTR).Name = "PRINTED" Then
-                            Dim checked = CBool(RSET.Fields(RSET.Fields(colCTR).Name).Value)
-                            Dim checkStatus
-                            With TempNode
-                                If checked Then checkStatus = CheckboxEnum.Checked Else checkStatus = CheckboxEnum.Unchecked
-                                .UseItemStyleForSubItems = False
-                                .SubItems.Add(Chr(checkStatus))
-                                .SubItems.Item(colCTR).ForeColor = Color.Black
-                                .SubItems.Item(colCTR).Font = myCheckFont
-                            End With
-                            ReDim bOWCheck(i)
-                        Else
-                            TempNode.SubItems.Add(CStr(RSET.Fields(RSET.Fields(colCTR).Name).Value))
-                            TempNode.Font = myRegFont
-                        End If
-                    Else
-                        TempNode.SubItems.Add("NULL")
-                        TempNode.Font = myRegFont
-                    End If
-                Next
-                TempNode.Tag = i.ToString
-                TempArr(i) = TempNode
-                RSET.MoveNext()
-
-            Next i
-            LV.Items.AddRange(TempArr)
-
-            LBL.Visible = False
-        End If
-        'odb.Fill(ds, RSET, "Table")
-        'dt = ds.Tables(0)
-    End Sub
-    Public Sub PopulateListView(ByRef LV As ListView, ByRef DT As DataGridView, ByVal wSET As String, ByVal fSET As String)
+    Public Sub PopulateListView(ByRef listViewControl As ListView, ByRef gridView As DataGridView, ByVal wSET As String, ByVal fSET As String)
         Dim sLvw As New ListViewItem
         Dim colCTR, wds, wdsCTR As Integer
         Dim wdSET(50) As String
@@ -325,15 +247,15 @@ ErrorHandler:
         Dim TempStr() As String
         Dim TempNode As ListViewItem
         Dim TempArr() As ListViewItem
-        Dim i As Integer                
+        Dim i As Integer
         Dim myCheckFont As New System.Drawing.Font("Wingdings", 12, FontStyle.Regular)
         Dim myRegFont As New System.Drawing.Font("Tahoma", 8.25, FontStyle.Bold)
 
-        LV.Items.Clear()
-        If DT.Rows.Count > 0 Then
+        listViewControl.Items.Clear()
+        If gridView.Rows.Count > 0 Then
             'StartTime = System.DateTime.Now           
             wdsCTR = 0
-            LV.Columns.Clear()
+            listViewControl.Columns.Clear()
             For wds = 0 To Len(wSET)
                 If Mid(wSET, wds + 1, 1) = ":" Then
                     wdsCTR += 1
@@ -349,27 +271,27 @@ ErrorHandler:
                     frSet(wdsCTR) = frSet(wdsCTR) & Mid(fSET, wds + 1, 1)
                 End If
             Next
-            For colCTR = 0 To DT.Columns.Count - 1
+            For colCTR = 0 To gridView.Columns.Count - 1
                 Select Case frSet(colCTR)
                     Case 1
-                        LV.Columns.Add(DT.Columns(colCTR).HeaderText, CInt(wdSET(colCTR)), HorizontalAlignment.Left)
+                        listViewControl.Columns.Add(gridView.Columns(colCTR).HeaderText, CInt(wdSET(colCTR)), HorizontalAlignment.Left)
                     Case 2
-                        LV.Columns.Add(DT.Columns(colCTR).HeaderText, CInt(wdSET(colCTR)), HorizontalAlignment.Center)
+                        listViewControl.Columns.Add(gridView.Columns(colCTR).HeaderText, CInt(wdSET(colCTR)), HorizontalAlignment.Center)
                     Case 3
-                        LV.Columns.Add(DT.Columns(colCTR).HeaderText, CInt(wdSET(colCTR)), HorizontalAlignment.Right)
+                        listViewControl.Columns.Add(gridView.Columns(colCTR).HeaderText, CInt(wdSET(colCTR)), HorizontalAlignment.Right)
                 End Select
 
             Next
             ReDim TempStr(0)
-            ReDim TempArr(DT.Rows.Count - 1)
-            For i = 0 To DT.Rows.Count - 1
-                TempStr(0) = CStr(DT.Rows(i).Cells(DT.Columns(0).Name).Value)
+            ReDim TempArr(gridView.Rows.Count - 1)
+            For i = 0 To gridView.Rows.Count - 1
+                TempStr(0) = CStr(gridView.Rows(i).Cells(gridView.Columns(0).Name).Value)
                 TempNode = New ListViewItem(TempStr)
-                For colCTR = 1 To DT.Columns.Count - 1                    
-                    If Not IsDBNull(DT.Rows(i).Cells(DT.Columns(colCTR).Name).Value) Then
+                For colCTR = 1 To gridView.Columns.Count - 1
+                    If Not IsDBNull(gridView.Rows(i).Cells(gridView.Columns(colCTR).Name).Value) Then
                         TempNode.Font = myRegFont
-                        If DT.Columns(colCTR).Name = "PrintLineNumber" Then
-                            Dim checked = CBool(DT.Rows(i).Cells(DT.Columns(colCTR).Name).Value)
+                        If gridView.Columns(colCTR).Name = "PrintLineNumber" Then
+                            Dim checked = CBool(gridView.Rows(i).Cells(gridView.Columns(colCTR).Name).Value)
                             Dim checkStatus
                             With TempNode
                                 If checked Then checkStatus = CheckboxEnum.Checked Else checkStatus = CheckboxEnum.Unchecked
@@ -380,9 +302,9 @@ ErrorHandler:
                             End With
                             ReDim bOWCheck(i)
                         ElseIf CInt(frSet(colCTR)) = 3 Then
-                            TempNode.SubItems.Add(FormatNumber(CStr(DT.Rows(i).Cells(DT.Columns(colCTR).Name).Value), 2))
+                            TempNode.SubItems.Add(FormatNumber(CStr(gridView.Rows(i).Cells(gridView.Columns(colCTR).Name).Value), 2))
                         Else
-                            Dim itemValue As String = CStr(DT.Rows(i).Cells(DT.Columns(colCTR).Name).Value)
+                            Dim itemValue As String = CStr(gridView.Rows(i).Cells(gridView.Columns(colCTR).Name).Value)
                             If itemValue.StartsWith("12:00:00 AM") Then
                                 itemValue = "--"
                             End If
@@ -396,7 +318,7 @@ ErrorHandler:
 
                 TempArr(i) = TempNode
             Next i
-            LV.Items.AddRange(TempArr)
+            listViewControl.Items.AddRange(TempArr)
         End If
     End Sub
     Public Function GetData(ByVal QRYStr As String, ByVal FLTR As String, ByRef DG As DataGridView) As DataGridView

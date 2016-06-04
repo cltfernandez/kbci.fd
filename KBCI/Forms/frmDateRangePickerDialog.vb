@@ -188,6 +188,7 @@ Public Class frmDateRangePickerDialog
             SW = True
             If DateTimePicker2.Visible = False Then
                 DateRange = DateTimePicker1.Value.ToString("MM/dd/yyyy") & "' and '" & DateTimePicker1.Value.ToString("MM/dd/yyyy")
+                StartDate = DateTimePicker1.Value
             Else
                 DateRange = DateTimePicker1.Value.ToString("MM/dd/yyyy") & "' and '" & DateTimePicker2.Value.ToString("MM/dd/yyyy")
                 StartDate = DateTimePicker1.Value

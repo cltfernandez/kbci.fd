@@ -4,13 +4,12 @@ Imports FD.Common.Utilities
 Imports FD.DataAccessObject
 Imports FD.BusinessLogic
 Imports FD.ViewModels
+Imports CrystalDecisions.CrystalReports.Engine
 
 Public Class frmFixedDepositMain
     Inherits System.Windows.Forms.Form
     Public Sub New()
         MyBase.New()
-
-
         MainPasswordValidator = New UserService
         MainUserActionService = New UserService
         MainMessagePromptService = New MessagePromptService
@@ -472,68 +471,24 @@ Public Class frmFixedDepositMain
     End Sub
 
 #End Region
-    Public frmFDS_Main_PrntFDL_Srch As frmFDS_Main_PrntFDL_Srch
+    Public MemberSearchForm As frmMemberSearchDialog
     Public frmFDS_Main_DEntry As frmMembersList
     Public MembersMaintenanceForm As frmMembersMaintenance
     Public SystemConfigurationForm As frmAppConfiguration    
     Public LoginForm As frmFixedDepositLogin
-    Public frmFD_Member As frmReportViewer
+    Public ReportViewerForm As frmReportViewer
     Public frmFDS_Main_Arrange As frmSortOptionDialog
     Public frmDIVPAT As frmDividendPatronageRefundProcessing
-    Public DividendPatronageSettingsForm As frmDividendPatronageSettings    
-    Public frmFDS_Main_DIVREFOpt As frmFDS_Main_DIVREFOpt
+    Public DividendPatronageSettingsForm As frmDividendPatronageSettings
+    Public frmFDS_Main_DIVREFOpt As frmProcessingViewOptionDialog
     Public frmFDS_DVoucher As frmVoucherProcessing
-
-    Private _MainPasswordValidator As IPasswordValidator
-    Private Property MainPasswordValidator() As IPasswordValidator
-        Get
-            Return _MainPasswordValidator
-        End Get
-        Set(ByVal value As IPasswordValidator)
-            _MainPasswordValidator = value
-        End Set
-    End Property
-
-    Private _MainUserActionService As IUserService
-    Private Property MainUserActionService() As IUserService
-        Get
-            Return _MainUserActionService
-        End Get
-        Set(ByVal value As IUserService)
-            _MainUserActionService = value
-        End Set
-    End Property
-
-    Private _MainMessagePromptService As ILoginMessagePromptService
-    Private Property MainMessagePromptService() As ILoginMessagePromptService
-        Get
-            Return _MainMessagePromptService
-        End Get
-        Set(ByVal value As ILoginMessagePromptService)
-            _MainMessagePromptService = value
-        End Set
-    End Property
-
-    Private _CurrentUser As UserViewModel
-    Public Property CurrentUser() As UserViewModel
-        Get
-            Return _CurrentUser
-        End Get
-        Set(ByVal value As UserViewModel)
-            _CurrentUser = value
-        End Set
-    End Property
+    Public MainPasswordValidator As IPasswordValidator
+    Private MainUserActionService As IUserService
+    Private MainMessagePromptService As ILoginMessagePromptService
+    Public CurrentUser As UserViewModel
+    Private SystemCtrl As CtrlViewModel
 
 
-    Private _SystemCtrl As CtrlViewModel
-    Private Property SystemCtrl() As CtrlViewModel
-        Get
-            Return _SystemCtrl
-        End Get
-        Set(ByVal value As CtrlViewModel)
-            _SystemCtrl = value
-        End Set
-    End Property
 
 
 
@@ -563,7 +518,7 @@ Public Class frmFixedDepositMain
 
     Private Sub frmFDS_Main_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
         Dim msg As String
-        msg = MsgBox("Would you like to terminate the application?", MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo, "EXIT FD System")
+        msg = MsgBox(GetGlobalResourceString("ExitApplicationPrompt"), MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo, GetGlobalResourceString("FixedDepositSystem"))
         If msg = vbNo Then
             e.Cancel = 1
         Else
@@ -593,51 +548,40 @@ Public Class frmFixedDepositMain
     End Sub
 
     Private Sub MenuItem4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem4.Click
-        '#####PRINT FD LEDGER
-        Dim rsRPT As New ADODB.Recordset
-        Dim dst As New DataTable("dstFD_Member")
-        Dim rpt As New rptFD_Member
-        Dim ds As New DataSet
-        Dim txtKBCI As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("txtKBCINO")
-        Dim txtFLNAME As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("txtFLNAME")
+        '#####PRINT FD LEDGER        
+        Dim reportObject As New FixedDepositLedgerReport
+        With reportObject.Section2
+            Dim txtKBCI As TextObject = .ReportObjects("txtKBCINO")
+            Dim txtFLNAME As TextObject = .ReportObjects("txtFLNAME")
 
-        frmFD_Member = New frmReportViewer
+            ReportViewerForm = New frmReportViewer
+            MemberSearchForm = New frmMemberSearchDialog
 
-
-
-
-
-
-        frmFDS_Main_PrntFDL_Srch = New frmFDS_Main_PrntFDL_Srch
-        frmFD_Member.MdiParent = Me
-        Dim sQRY As String
-        Using DateRangePicker As New frmDateRangePickerDialog
-            Dim result As DialogResult = DateRangePicker.ShowDialog
-            If result = Windows.Forms.DialogResult.OK Then
-                frmFDS_Main_PrntFDL_Srch.ShowDialog()
-                If SW = True Then
-                    sQRY = "SELECT FD.DATE,TC.TR_CODE AS CODE,FD.AMOUNT AS DEBIT,FD.AMOUNT AS CREDIT,FD.BALANCE,FD.REF,FD.RMK AS REMARKS, FD.DRCR FROM FD INNER JOIN TRANCODE AS TC ON FD.TRAN_CODE=TC.TR_ID WHERE DATE BETWEEN '" & DateRangePicker.DateRange & "' and KBCI_NO = '" & SEL_KBCI_NO & "' ORDER BY FD.[DATE], FD.FD_ID"
-                    rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-                    txtKBCI.Text = Mid(SEL_KBCI_NO, 1, 2) & "-" & Mid(SEL_KBCI_NO, 3, 4) & "-" & Mid(SEL_KBCI_NO, 7, 1)
-                    txtFLNAME.Text = SEL_FNAME
-                    If rsRPT.RecordCount > 0 Then
-                        GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "1:3:2:2:2:3:3")
-                        frmFD_Member.Text = "[" & SEL_FNAME & "] : FD LEDGER"
-                        frmFD_Member.Show()
-                    Else
-                        MsgBox("No transactions found between the specified dates.", MsgBoxStyle.Information, "Fixed Deposit Ledger")
+            ReportViewerForm.MdiParent = Me
+            Using DateRangePicker As New frmDateRangePickerDialog
+                Dim result As DialogResult = DateRangePicker.ShowDialog
+                If result = Windows.Forms.DialogResult.OK Then
+                    MemberSearchForm.ShowDialog()
+                    If SW = True Then
+                        txtKBCI.Text = FormatKBCINo(SEL_KBCI_NO)
+                        txtFLNAME.Text = SEL_FNAME
+                        ReportViewerForm.ReportService = New FixedDepositLedgerReportService(MemberSearchForm.SelectedMember.KBCI_NO, _
+                                                                                             DateRangePicker.StartDate, _
+                                                                                             DateRangePicker.EndDate)
+                        ReportViewerForm.ReportModel = reportObject
+                        ReportViewerForm.HeaderText = String.Format("{0}: {1}", GetGlobalResourceString("FixedDepositLedger"), SEL_FNAME)
+                        ReportViewerForm.Show()
+                        SW = False
                     End If
-                    SW = False
                 End If
-            End If
-        End Using
-        If rsRPT.State = 1 Then rsRPT.Close()
+            End Using
+        End With
     End Sub
 
     Private Sub MenuItem8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem8.Click
         '#####INIT PASSBOOK
-        frmFDS_Main_PrntFDL_Srch = New frmFDS_Main_PrntFDL_Srch
-        frmFDS_Main_PrntFDL_Srch.ShowDialog()
+        MemberSearchForm = New frmMemberSearchDialog
+        MemberSearchForm.ShowDialog()
         Dim prtstr As String
         If SW = True Then
             If rsPASSBOOK.State = 1 Then rsPASSBOOK.Close()
@@ -675,42 +619,27 @@ errHand:
 
     Private Sub MenuItem6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem6.Click
         '#####PRINT DAILY TRANSACTION
-        Dim rsRPT As New ADODB.Recordset
-        Dim dst As New DataTable("dstFD_Member")
-        Dim rpt As New rptDTran_Reg
-        Dim ds As New DataSet
-        Dim sQRY As String
 
-        frmFD_Member = New frmReportViewer
-        frmFD_Member.MdiParent = Me
-        Using DatePicker As New frmDateRangePickerDialog
+        Dim reportObject As New DailyTransactionRegisterReport
+        With reportObject.Section2
+            Dim DDATE As TextObject = .ReportObjects("Text9")
+            ReportViewerForm = New frmReportViewer
+            ReportViewerForm.MdiParent = Me
+            Using DatePicker As New frmDateRangePickerDialog
+                DatePicker.DateTimePicker2.Visible = False
+                DatePicker.Label2.Visible = False
 
-            DatePicker.DateTimePicker2.Visible = False
-            DatePicker.Label2.Visible = False
-            Dim result As DialogResult = DatePicker.ShowDialog
-            If result = Windows.Forms.DialogResult.OK Then
-                sQRY = "SELECT MM.KBCI_NO,MM.LNAME + ', ' + MM.FNAME + ' ' NAME,TC.TR_CODE AS CODE,FD.AMOUNT AS DEBIT,FD.AMOUNT AS CREDIT," & _
-                       "FD.BALANCE,FD.REF,FD.RMK, FD.DRCR FROM FD INNER JOIN MEMBERS AS MM ON FD.KBCI_NO= MM.KBCI_NO INNER JOIN TRANCODE AS TC ON FD.TRAN_CODE=TC.TR_ID " & _
-                       "WHERE DATE BETWEEN '" & DatePicker.DateRange & "' ORDER BY MM.LNAME,MM.FNAME"
-                rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-                If rsRPT.RecordCount > 0 Then
-                    Dim DDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text9")
+                Dim result As DialogResult = DatePicker.ShowDialog
+                If result = Windows.Forms.DialogResult.OK Then
                     DDATE.Text = DatePicker.StartDate.ToString("MMM dd, yyyy")
-                    GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:3:2:2:2:3:3")
-                    frmFD_Member.Text = "[" & DatePicker.EndDate.ToString("MMM dd, yyyy") & "] TRANSACTION DETAILS"
-                    frmFD_Member.Show()
-                Else
-                    MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "Daily Transaction Register")
+                    ReportViewerForm.ReportService = New DailyTransactionRegisterReportService(DatePicker.StartDate)
+                    ReportViewerForm.ReportModel = reportObject
+                    ReportViewerForm.HeaderText = String.Format("{0} For {1}", GetGlobalResourceString("TransactionDetails"), DatePicker.StartDate.ToString("MMM dd, yyyy"))
+                    ReportViewerForm.Show()
+                    SW = False
                 End If
-                SW = False
-
-            End If
-        End Using
-        If rsRPT.State = 1 Then rsRPT.Close()
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
+            End Using
+        End With
     End Sub
 
     Private Sub MenuItem12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem12.Click
@@ -720,8 +649,8 @@ errHand:
         Dim rpt As New rptMem_List
         Dim ds As New DataSet
         Dim ASOFDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text36")
-        frmFD_Member = New frmReportViewer
-        frmFD_Member.MdiParent = Me
+        ReportViewerForm = New frmReportViewer
+        ReportViewerForm.MdiParent = Me
         Dim sQRY As String
         sQRY = "SELECT [KBCI_NO],[LNAME]+ ', ' + [FNAME] + ' ' + [MI] + '.' AS NAME,[MEM_ADDR],[MEM_CODE],[MEM_STAT],[DORI],[REA_DORI]," & _
                "[FEBTC_SA],[CB_EMPNO],[CB_HIRE],[REGION],[DEPT],[POSITION],[OFF_TEL],[RES_TEL],[SAL_BAS],[SAL_ALL],[OTH_INC]," & _
@@ -730,9 +659,9 @@ errHand:
         rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
         If rsRPT.RecordCount > 0 Then
             ASOFDATE.Text = DateValue(SYSDATE).ToString("MMM dd, yyyy")
-            GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:3:3:3:4:3:3:3:1:3:3:3:3:3:2:2:2:3:3:3:1:3:3:3:3:2")
-            frmFD_Member.Text = "CURRENT MEMBERS / INVESTORS AS OF " & DateValue(SYSDATE).ToString("MMM dd, yyyy")
-            frmFD_Member.Show()
+            PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:3:3:3:4:3:3:3:1:3:3:3:3:3:2:2:2:3:3:3:1:3:3:3:3:2")
+            ReportViewerForm.Text = "CURRENT MEMBERS / INVESTORS AS OF " & DateValue(SYSDATE).ToString("MMM dd, yyyy")
+            ReportViewerForm.Show()
         Else
             MsgBox("No members found.", MsgBoxStyle.Information, "Member Listing")
         End If
@@ -755,8 +684,8 @@ errHand:
         Dim rpt As New rptRMem_List
         Dim ds As New DataSet
         Dim sQRY As String
-        frmFD_Member = New frmReportViewer
-        frmFD_Member.MdiParent = Me
+        ReportViewerForm = New frmReportViewer
+        ReportViewerForm.MdiParent = Me
 
         Using DatePicker As New frmDateRangePickerDialog
             Dim result As DialogResult = DatePicker.ShowDialog
@@ -770,9 +699,9 @@ errHand:
                     Dim RDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text13")
                     RDATE.Text = DatePicker.StartDate & " TO " & DatePicker.EndDate
 
-                    GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:3:1:2")
-                    frmFD_Member.Text = "LIST OF RESIGNED MEMBERS / INVESTORS FROM " & DatePicker.StartDate & " TO " & DatePicker.EndDate
-                    frmFD_Member.Show()
+                    PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:3:1:2")
+                    ReportViewerForm.Text = "LIST OF RESIGNED MEMBERS / INVESTORS FROM " & DatePicker.StartDate & " TO " & DatePicker.EndDate
+                    ReportViewerForm.Show()
                 Else
                     MsgBox("No resigned member(s) found between the specified date.", MsgBoxStyle.Information, "Resigned Member/Investor")
                 End If
@@ -796,8 +725,8 @@ errHand:
         Dim ds As New DataSet
         Dim sQRY As String
 
-        frmFD_Member = New frmReportViewer
-        frmFD_Member.MdiParent = Me
+        ReportViewerForm = New frmReportViewer
+        ReportViewerForm.MdiParent = Me
         Dim txtDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("txtDATE")
 
         msg = MsgBox("Last FD Runup is " & DateValue(rsCTL.RUN_DATE).ToString("MM/dd/yyyy") & ". Would you like to continue?", MsgBoxStyle.Information + MsgBoxStyle.YesNo, "Print FD Runup")
@@ -820,12 +749,12 @@ errHand:
                     rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
                     MsgBox("Successfully processed [" & rsRPT.RecordCount & "] records.", MsgBoxStyle.Information, "FD Runup report")
                     If rsRPT.RecordCount > 0 Then
-                        GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:2")
+                        PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:2")
                         cn.Execute("UPDATE CTRL SET RUN_DATE='" & DatePicker.EndDate & "'")
                         rsCTL.Read(1)
-                        frmFD_Member.Text = "FIXED DEPOSIT RUNUP"
+                        ReportViewerForm.Text = "FIXED DEPOSIT RUNUP"
                         txtDATE.Text = Format(DatePicker.StartDate, "MMM dd, yyyy")
-                        frmFD_Member.Show()
+                        ReportViewerForm.Show()
 
                     Else
                         MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
@@ -852,16 +781,25 @@ errHand:
     End Sub
 
     Private Sub MenuItem17_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem17.Click
-        frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
-        frmFDS_DVoucher = New frmVoucherProcessing(CurrentUser)
-        frmFDS_Main_DIVREFOpt.ShowDialog()
-        If SW = True Then
-            frmFDS_DVoucher.ShowDialog()
-            If SW = True Then
-                PRTVOUCHER()
+        Dim postingYr As Integer
+        Dim postingQtr As Integer
+
+        Using ProcessingViewOptionDialogForm As New frmProcessingViewOptionDialog(New DividendPatronageRefundService)
+            Dim result As DialogResult = ProcessingViewOptionDialogForm.ShowDialog()
+            If result = Windows.Forms.DialogResult.OK Then
+                postingYr = ProcessingViewOptionDialogForm.SelectedYear
+                postingQtr = ProcessingViewOptionDialogForm.SelectedQuarter
+
+                frmFDS_DVoucher = New frmVoucherProcessing(CurrentUser)
+                frmFDS_DVoucher.ShowDialog()
+                If SW = True Then
+                    PRTVOUCHER(postingYr, postingQtr)
+                End If
             End If
-        End If
-        SW = False
+            SW = False
+        End Using
+
+
 errHand:
         If Err.Number <> 0 Then
             LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
@@ -874,8 +812,8 @@ errHand:
         Dim ds As New DataSet
         Dim sQRY As String
 
-        frmFD_Member = New frmReportViewer
-        frmFD_Member.MdiParent = Me
+        ReportViewerForm = New frmReportViewer
+        ReportViewerForm.MdiParent = Me
         With frmFDS_Main_Arrange.ComboBox3
             .Items.Clear()
             .Items.Add("KBCI_NO")
@@ -903,9 +841,9 @@ errHand:
                     rsRPT.CursorLocation = CursorLocationEnum.adUseClient
                     rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
                     If rsRPT.RecordCount > 0 Then
-                        GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:2:2:2:3")
-                        frmFD_Member.Text = "CASH DIVIDEND REGISTER"
-                        frmFD_Member.Show()
+                        PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:2:2:2:3")
+                        ReportViewerForm.Text = "CASH DIVIDEND REGISTER"
+                        ReportViewerForm.Show()
                     Else
                         MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
                     End If
@@ -920,9 +858,9 @@ errHand:
                     rsRPT.CursorLocation = CursorLocationEnum.adUseClient
                     rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
                     If rsRPT.RecordCount > 0 Then
-                        GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt2, 0, "5:3:2:2:2")
-                        frmFD_Member.Text = "CASH DIVIDEND REGISTER"
-                        frmFD_Member.Show()
+                        PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt2, 0, "5:3:2:2:2")
+                        ReportViewerForm.Text = "CASH DIVIDEND REGISTER"
+                        ReportViewerForm.Show()
                     Else
                         MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
                     End If
@@ -939,7 +877,7 @@ errHand:
 
     Private Sub MenuItem16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem16.Click
         DividendPatronageSettingsForm = New frmDividendPatronageSettings(CurrentUser, New DividendPatronageRefundSettingService, MainMessagePromptService)
-        frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
+        frmFDS_Main_DIVREFOpt = New frmProcessingViewOptionDialog(New DividendPatronageRefundService)
         frmFDS_Main_DIVREFOpt.ShowDialog()
         If SW = True Then
             DividendPatronageSettingsForm.ShowDialog()
@@ -1013,7 +951,7 @@ errHand:
     End Sub
 
     Private Sub MenuItem33_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem33.Click
-        frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
+        frmFDS_Main_DIVREFOpt = New frmProcessingViewOptionDialog
         frmFDS_Main_Arrange = New frmSortOptionDialog
         With frmFDS_Main_Arrange.ComboBox3
             .Items.Clear()
@@ -1055,7 +993,7 @@ errHand:
     End Sub
 
     Private Sub MenuItem34_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem34.Click
-        frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
+        frmFDS_Main_DIVREFOpt = New frmProcessingViewOptionDialog
 
         Using ArrangeForm As New frmSortOptionDialog
             With ArrangeForm.ComboBox3
@@ -1095,7 +1033,7 @@ errHand:
     End Sub
 
     Private Sub MenuItem35_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem35.Click
-        frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
+        frmFDS_Main_DIVREFOpt = New frmProcessingViewOptionDialog
 
         Using ArrangeForm As New frmSortOptionDialog
             With ArrangeForm.ComboBox3
@@ -1135,7 +1073,7 @@ errHand:
     End Sub
 
     Private Sub MenuItem36_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem36.Click
-        frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
+        frmFDS_Main_DIVREFOpt = New frmProcessingViewOptionDialog
 
         Using ArrangeForm As New frmSortOptionDialog
             With ArrangeForm.ComboBox3
@@ -1175,24 +1113,30 @@ errHand:
     End Sub
 
     Private Sub MenuItem23_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem23.Click
-        frmFDS_Main_DIVREFOpt = New frmFDS_Main_DIVREFOpt
-        frmFDS_Main_DIVREFOpt.ShowDialog()
-        If SW = True Then
+        Dim postingYr As Integer
+        Dim postingQtr As Integer
 
-            Using rsDIVDao As New DivrefphDAO
-                Dim param1 As New LUNA.LunaSearchParameter("YEAR", SELYR)
-                Dim param2 As New LUNA.LunaSearchParameter("QUARTER", SELQTR)
+        Using ProcessingViewOptionDialogForm As New frmProcessingViewOptionDialog(New DividendPatronageRefundService)
+            Dim result As DialogResult = ProcessingViewOptionDialogForm.ShowDialog()
+            If result = Windows.Forms.DialogResult.OK Then
+                postingYr = ProcessingViewOptionDialogForm.SelectedYear
+                postingQtr = ProcessingViewOptionDialogForm.SelectedQuarter
+
+                Using rsDIVDao As New DivrefphDAO
+                    Dim param1 As New LUNA.LunaSearchParameter("YEAR", postingYr)
+                    Dim param2 As New LUNA.LunaSearchParameter("QUARTER", postingQtr)
 
 
-                rsDIV = rsDIVDao.Find(param1, param2)
-                If rsDIV Is Nothing Then
-                    MsgBox(String.Format(GetGlobalResourceString("DivRefRecordNotFound"), SELYR, SELQTR), MsgBoxStyle.Information, GetGlobalResourceString("DividendPatronageRefund"))
-                    Exit Sub
-                End If
-                PRTVOUCHER()
+                    rsDIV = rsDIVDao.Find(param1, param2)
+                    If rsDIV Is Nothing Then
+                        MsgBox(String.Format(GetGlobalResourceString("DivRefRecordNotFound"), postingYr, postingQtr), MsgBoxStyle.Information, GetGlobalResourceString("DividendPatronageRefund"))
+                        Exit Sub
+                    End If
+                    PRTVOUCHER(postingYr, postingQtr)
 
-            End Using
-        End If
+                End Using
+            End If
+        End Using
 errHand:
         If Err.Number <> 0 Then
             LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
@@ -1209,11 +1153,6 @@ errHand:
             .TextBox6.Enabled = False
             .ShowDialog()
         End With
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
-
     End Sub
 
     Private Sub MenuItem26_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem26.Click
@@ -1259,7 +1198,7 @@ errHand:
         SystemConfigurationForm.ShowDialog()
     End Sub
 
-    Sub PRTVOUCHER()
+    Sub PRTVOUCHER(ByVal Year As Integer, ByVal Quarter As Integer)
         Dim rsRPT As New ADODB.Recordset
         Dim dst As New DataTable("dstFD_Member")
         Dim ds As New DataSet
@@ -1267,43 +1206,43 @@ errHand:
         Dim divrefph As New ADODB.Recordset
         Dim sQRY As String
 
-        frmFD_Member = New frmReportViewer
-        frmFD_Member.MdiParent = Me
+        ReportViewerForm = New frmReportViewer
+        ReportViewerForm.MdiParent = Me
 
 
-        sQRY = "SELECT 'APPLIANCE LOAN' AS [DESC], P_APL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'EDUCATIONAL LOAN' AS [DESC], P_EDL AS CDT, null AS DBT  FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'EMERGENCY LOAN' AS [DESC], P_EML AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'REGULAR LOAN' AS [DESC], P_RGL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'SPECIAL LOAN' AS [DESC], P_SPL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'RESTRUCTURED LOAN' AS [DESC], P_RSL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'SHORT TERM LOAN' AS [DESC], P_STL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'PROVIDENT LOAN' AS [DESC], P_PTL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'PAST DUE APL' AS [DESC], PD_APL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'PAST DUE EDL' AS [DESC], PD_EDL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'PAST DUE EML' AS [DESC], PD_EmL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'PAST DUE RGL' AS [DESC], PD_RGL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'PAST DUE SPL' AS [DESC], PD_SPL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'PAST DUE RSL' AS [DESC], PD_RSL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'PAST DUE STL' AS [DESC], PD_STL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'PAST DUE PTL' AS [DESC], PD_PTL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'INTEREST ON LOANS' AS [DESC], INTEREST AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'PENALTY ON LOANS' AS [DESC], PENALTY AS CDT,null as DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT 'SAVINGS DEPOSIT' AS [DESC], SAVINGS AS CDT,null as DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT TDEBDESC1 AS [DESC], null AS CDT,CAST(TDEBAMT1 AS CHAR(12)) AS DBT  FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT TDEBDESC2  AS [DESC], null AS CDT,CAST(TDEBAMT2 AS CHAR(12)) AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' " & _
-                "UNION ALL SELECT TDEBDESC3 AS [DESC], null AS CDT, CAST(TDEBAMT3 AS CHAR(12)) AS DBT FROM DIVREFPH WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "' "
+        sQRY = "SELECT 'APPLIANCE LOAN' AS [DESC], P_APL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'EDUCATIONAL LOAN' AS [DESC], P_EDL AS CDT, null AS DBT  FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'EMERGENCY LOAN' AS [DESC], P_EML AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'REGULAR LOAN' AS [DESC], P_RGL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'SPECIAL LOAN' AS [DESC], P_SPL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'RESTRUCTURED LOAN' AS [DESC], P_RSL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'SHORT TERM LOAN' AS [DESC], P_STL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'PROVIDENT LOAN' AS [DESC], P_PTL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'PAST DUE APL' AS [DESC], PD_APL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'PAST DUE EDL' AS [DESC], PD_EDL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'PAST DUE EML' AS [DESC], PD_EmL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'PAST DUE RGL' AS [DESC], PD_RGL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'PAST DUE SPL' AS [DESC], PD_SPL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'PAST DUE RSL' AS [DESC], PD_RSL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'PAST DUE STL' AS [DESC], PD_STL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'PAST DUE PTL' AS [DESC], PD_PTL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'INTEREST ON LOANS' AS [DESC], INTEREST AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'PENALTY ON LOANS' AS [DESC], PENALTY AS CDT,null as DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT 'SAVINGS DEPOSIT' AS [DESC], SAVINGS AS CDT,null as DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT TDEBDESC1 AS [DESC], null AS CDT,CAST(TDEBAMT1 AS CHAR(12)) AS DBT  FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT TDEBDESC2  AS [DESC], null AS CDT,CAST(TDEBAMT2 AS CHAR(12)) AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
+                "UNION ALL SELECT TDEBDESC3 AS [DESC], null AS CDT, CAST(TDEBAMT3 AS CHAR(12)) AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' "
 
         rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
         If rsRPT.RecordCount > 0 Then
-            divrefph.Open("select  ISNULL(CVNO,'XXXXXXX') CVNO FROM divrefph WHERE [YEAR]='" & SELYR & "' AND [QUARTER]='" & SELQTR & "'", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
+            divrefph.Open("select  ISNULL(CVNO,'XXXXXXX') CVNO FROM divrefph WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "'", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
             Dim CVNO As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text4")
             Dim USR As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section4.ReportObjects("Text10")
             USR.Text = "Prepared by : " & CurrentUser.UserName
             CVNO.Text = CStr(divrefph.Fields("cvno").Value)
             divrefph.Close()
-            GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "3:2:2")
-            frmFD_Member.Show()
+            PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "3:2:2")
+            ReportViewerForm.Show()
         Else
             MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "Daily Transaction Register")
         End If
@@ -1325,8 +1264,8 @@ errHand:
         Dim divrefph As New ADODB.Recordset
 
 
-        frmFD_Member = New frmReportViewer
-        frmFD_Member.MdiParent = Me
+        ReportViewerForm = New frmReportViewer
+        ReportViewerForm.MdiParent = Me
         If STAT = "" Then
             sQRY = "SELECT 	SN.ACCTNO,MM.LNAME + ', ' + MM.FNAME + ' ' + ISNULL(MM.MI,'X') + '.' NAME,SN.APLINT,SN.EDLINT,SN.EMLINT,SN.RGLINT,SN.RSLINT,SN.SPLINT,SN.LHLINT,SN.STLINT,SN.PTLINT,SN.CMLINT,SN.FALINT,SN.MPLINT " & _
                     "FROM  SNTEREST SN INNER JOIN MEMBERS MM ON SN.ACCTNO=MM.KBCI_NO WHERE	MM.MEM_STAT='S'  AND MM.YTD_DIVAMT>0 " & _
@@ -1354,9 +1293,9 @@ errHand:
             DDATE.Text = DateValue(SYSDATE).ToString("MMM dd, yyyy")
             YYEAR.Text = CStr(divrefph.Fields("PR_YEAR").Value)
             If TBL = "INTEREST" Or TBL = "RNTEREST" Then PTL.Text = "-"
-            GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:2:2:2:2:2:2:2:2:2:2:2:2")
-            frmFD_Member.Text = "[DETAILED] PATRONAGE REFUND REGISTER"
-            frmFD_Member.Show()
+            PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:2:2:2:2:2:2:2:2:2:2:2:2")
+            ReportViewerForm.Text = "[DETAILED] PATRONAGE REFUND REGISTER"
+            ReportViewerForm.Show()
         Else
             MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "Daily Transaction Register")
         End If
@@ -1376,8 +1315,8 @@ errHand:
         Dim sQRY As String
         Dim rpt As New rptPATREFSUM
         Dim divrefph As New ADODB.Recordset
-        frmFD_Member = New frmReportViewer
-        frmFD_Member.MdiParent = Me
+        ReportViewerForm = New frmReportViewer
+        ReportViewerForm.MdiParent = Me
 
         sQRY = "SELECT MM.KBCI_NO, MM.LNAME + ', ' + MM.FNAME + ' ' + ISNULL(MM.MI,'X') + '.' NAME,RF.INT_PAID,RF.REFUND " & _
                 "FROM		REF RF INNER JOIN MEMBERS MM ON RF.KBCI_NO=MM.KBCI_NO " & _
@@ -1394,9 +1333,9 @@ errHand:
             DDATE.Text = DateValue(SYSDATE).ToString("MMM dd, yyyy")
             YYEAR.Text = CStr(divrefph.Fields("PR_YEAR").Value)
             divrefph.Close()
-            GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:2:2")
-            frmFD_Member.Text = "[SUMMARIZED] PATRONAGE REFUND REGISTER"
-            frmFD_Member.Show()
+            PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:2:2")
+            ReportViewerForm.Text = "[SUMMARIZED] PATRONAGE REFUND REGISTER"
+            ReportViewerForm.Show()
         Else
             MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "Daily Transaction Register")
         End If
@@ -1415,8 +1354,8 @@ errHand:
         Dim sQRY As String
         Dim rpt As New rptDIVREFREG
         Dim divrefph As New ADODB.Recordset
-        frmFD_Member = New frmReportViewer
-        frmFD_Member.MdiParent = Me
+        ReportViewerForm = New frmReportViewer
+        ReportViewerForm.MdiParent = Me
 
         sQRY = "SELECT DR.KBCI_NO, DR.LNAME + ', ' + DR.FNAME + ' ' + ISNULL(DR.MI,'X') + '.' NAME," & _
                 "ISNULL(DR.DIVIDEND,0) DIVIDEND,ISNULL(DR.REFUND,0) REFUND," & _
@@ -1442,9 +1381,9 @@ errHand:
             End If
 
             'divrefph.Close()
-            GenRPT(rsRPT, dst, frmFD_Member.CrystalReportViewer1, rpt, 0, "5:3:2:2:2")
-            frmFD_Member.Text = "CASH DIV. / PAT REFUND. REGISTER"
-            frmFD_Member.Show()
+            PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:2:2:2")
+            ReportViewerForm.Text = "CASH DIV. / PAT REFUND. REGISTER"
+            ReportViewerForm.Show()
         Else
             MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "Daily Transaction Register")
         End If

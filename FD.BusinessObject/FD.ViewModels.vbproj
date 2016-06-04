@@ -78,6 +78,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\DisplayAttribute.vb" />
+    <Compile Include="ViewModels\DivrefPostingViewModel.vb" />
     <Compile Include="ViewModels\DivRefSettingsViewModel.vb" />
     <Compile Include="ViewModels\CtrlViewModel.vb" />
     <Compile Include="ViewModels\FixedDepositViewModel.vb" />

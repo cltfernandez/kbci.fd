@@ -213,7 +213,7 @@ Public Class frmMembersTransactionList
         '
         Me.GroupBox2.Controls.Add(Me.TextBox3)
         Me.GroupBox2.Controls.Add(Me.Label8)
-        Me.GroupBox2.Location = New System.Drawing.Point(480, 233)
+        Me.GroupBox2.Location = New System.Drawing.Point(378, 233)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(115, 69)
         Me.GroupBox2.TabIndex = 16
