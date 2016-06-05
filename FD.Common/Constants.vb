@@ -94,6 +94,11 @@ Public Enum RecordUpdateResult
     RecordExists = 3
 End Enum
 
+Public Enum DatePickerType
+    DateRange = 0
+    SingleDate = 1
+End Enum
+
 Public Structure DivrefPostingParameters
     Public PostingYear As Integer
     Public PostingQuarter As Integer

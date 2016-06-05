@@ -36,4 +36,35 @@ Public Class MembersDAO
 
     End Sub
 
+    Public Function GetActiveMembers(ByVal SystemDate As Date) As DataTable
+        Dim Sql As String
+        Dim resultDataTable As New DataTable
+        Try
+            Sql = "SELECT [KBCI_NO],[LNAME]+ ', ' + [FNAME] + ' ' + [MI] + '.' AS NAME,[MEM_ADDR],[MEM_CODE],[MEM_STAT],[DORI],[REA_DORI]," & _
+                   "[FEBTC_SA],[CB_EMPNO],[CB_HIRE],[REGION],[DEPT],[POSITION],[OFF_TEL],[RES_TEL],[SAL_BAS],[SAL_ALL],[OTH_INC]," & _
+                   "[SEX],[CIV_STAT],[NO_DEPEND],[B_DATE],[SP_NAME],[SP_EMPLOY],[SP_CBEMPNO] AS SP_CBEMPN,[SP_OFFTEL],[SP_SALARY] AS SP_SAL FROM MEMBERS " & _
+                   "WHERE MEM_DATE <=@SystemDate"
+
+            Using myCommand As DbCommand = _Cn.CreateCommand
+                myCommand.CommandText = Sql
+                Dim paramSystemDate = myCommand.CreateParameter
+                With paramSystemDate
+                    .ParameterName = "@SystemDate"
+                    .Value = SystemDate
+                End With
+
+                myCommand.Parameters.Add(paramSystemDate)
+
+                If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
+                Using myReader As DbDataReader = myCommand.ExecuteReader()
+                    resultDataTable.Load(myReader)
+                End Using
+            End Using
+        Catch ex As Exception
+            ManageError(ex)
+        End Try
+
+        Return resultDataTable
+
+    End Function
 End Class

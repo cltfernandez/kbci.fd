@@ -626,8 +626,7 @@ errHand:
             ReportViewerForm = New frmReportViewer
             ReportViewerForm.MdiParent = Me
             Using DatePicker As New frmDateRangePickerDialog
-                DatePicker.DateTimePicker2.Visible = False
-                DatePicker.Label2.Visible = False
+                DatePicker.DatePickerType = DatePickerType.SingleDate
 
                 Dim result As DialogResult = DatePicker.ShowDialog
                 If result = Windows.Forms.DialogResult.OK Then
@@ -644,32 +643,19 @@ errHand:
 
     Private Sub MenuItem12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem12.Click
         '#####LIST OF CURRENT MEM/INV
-        Dim rsRPT As New ADODB.Recordset
-        Dim dst As New DataTable("dstFD_Member")
-        Dim rpt As New rptMem_List
-        Dim ds As New DataSet
-        Dim ASOFDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text36")
-        ReportViewerForm = New frmReportViewer
-        ReportViewerForm.MdiParent = Me
-        Dim sQRY As String
-        sQRY = "SELECT [KBCI_NO],[LNAME]+ ', ' + [FNAME] + ' ' + [MI] + '.' AS NAME,[MEM_ADDR],[MEM_CODE],[MEM_STAT],[DORI],[REA_DORI]," & _
-               "[FEBTC_SA],[CB_EMPNO],[CB_HIRE],[REGION],[DEPT],[POSITION],[OFF_TEL],[RES_TEL],[SAL_BAS],[SAL_ALL],[OTH_INC]," & _
-               "[SEX],[CIV_STAT],[NO_DEPEND],[B_DATE],[SP_NAME],[SP_EMPLOY],[SP_CBEMPNO] AS SP_CBEMPN,[SP_OFFTEL],[SP_SALARY] AS SP_SAL FROM MEMBERS " & _
-               "WHERE MEM_DATE <='" & DateValue(SYSDATE).ToString("MM/dd/yyyy") & "'"
-        rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-        If rsRPT.RecordCount > 0 Then
+        Dim reportObject As New ActiveMembersReport
+        With reportObject.Section2
+            Dim ASOFDATE As TextObject = .ReportObjects("Text36")
             ASOFDATE.Text = DateValue(SYSDATE).ToString("MMM dd, yyyy")
-            PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:3:3:3:4:3:3:3:1:3:3:3:3:3:2:2:2:3:3:3:1:3:3:3:3:2")
-            ReportViewerForm.Text = "CURRENT MEMBERS / INVESTORS AS OF " & DateValue(SYSDATE).ToString("MMM dd, yyyy")
-            ReportViewerForm.Show()
-        Else
-            MsgBox("No members found.", MsgBoxStyle.Information, "Member Listing")
-        End If
-        If rsRPT.State = 1 Then rsRPT.Close()
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
+            ReportViewerForm = New frmReportViewer
+            With ReportViewerForm
+                .MdiParent = Me
+                .ReportService = New ActiveMembersReportService(DateValue(SYSDATE))
+                .ReportModel = reportObject
+                .HeaderText = String.Format(GetGlobalResourceString("CurrentMembersHeader"), DateValue(SYSDATE).ToString("MMM dd, yyyy"))
+                .Show()
+            End With
+        End With
     End Sub
 
     Private Sub MenuItem28_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem28.Click
@@ -718,57 +704,30 @@ errHand:
 
     Private Sub MenuItem7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem7.Click
         '#### FDRUNUP
-        Dim rsRPT As New ADODB.Recordset
-        Dim msg As String
-        Dim dst As New DataTable("dstFD_Member")
-        Dim rpt As New rptFD_Runup
-        Dim ds As New DataSet
-        Dim sQRY As String
-
+        Dim reportObject As New FixedDepositRunupReport
         ReportViewerForm = New frmReportViewer
         ReportViewerForm.MdiParent = Me
-        Dim txtDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("txtDATE")
+        With reportObject.Section2
+            Dim txtDATE As TextObject = .ReportObjects("txtDATE")
 
-        msg = MsgBox("Last FD Runup is " & DateValue(rsCTL.RUN_DATE).ToString("MM/dd/yyyy") & ". Would you like to continue?", MsgBoxStyle.Information + MsgBoxStyle.YesNo, "Print FD Runup")
-        If msg = vbYes Then
-            Using DatePicker As New frmDateRangePickerDialog
+            Dim msg As DialogResult = _
+                MsgBox(String.Format(GetGlobalResourceString("FixedDepositRunupPrompt"), DateValue(rsCTL.RUN_DATE).ToString("MM/dd/yyyy")), MsgBoxStyle.Information + MsgBoxStyle.YesNo, GetGlobalResourceString("FixedDepositRunup"))
 
-                DatePicker.DateTimePicker2.Visible = False
-                DatePicker.Label1.Text = "AS OF : "
-                DatePicker.Label2.Visible = False
-
-                Dim result As DialogResult = DatePicker.ShowDialog
-                If result = Windows.Forms.DialogResult.OK Then
-                    sQRY = "SELECT A.KBCI_NO,CASE WHEN A.MI IS NULL THEN A.LNAME+', '+A.FNAME ELSE A.LNAME+', '+A." & _
-                           "FNAME+' '+ISNULL(A.MI,'')+'.'END NAME,B.BALANCE FROM MEMBERS A JOIN(SELECT X.KBCI_NO," & _
-                           "isnull(SUM(X.CREDIT),0)-isnull(SUM(X.DEBIT),0)BALANCE FROM(select KBCI_NO,CASE WHEN " & _
-                           "DRCR='DR'THEN AMOUNT END DEBIT,CASE WHEN DRCR='CR'THEN AMOUNT END CREDIT from FD WHERE" & _
-                           "[DATE]<='" & DatePicker.StartDate & "')X GROUP BY KBCI_NO)B ON A.KBCI_NO=B.KBCI_NO WHERE B.BALANCE IS NOT " & _
-                           "NULL AND B.BALANCE>1"
-                    rsRPT.CursorLocation = CursorLocationEnum.adUseClient
-                    rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
-                    MsgBox("Successfully processed [" & rsRPT.RecordCount & "] records.", MsgBoxStyle.Information, "FD Runup report")
-                    If rsRPT.RecordCount > 0 Then
-                        PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:2")
-                        cn.Execute("UPDATE CTRL SET RUN_DATE='" & DatePicker.EndDate & "'")
-                        rsCTL.Read(1)
-                        ReportViewerForm.Text = "FIXED DEPOSIT RUNUP"
+            If msg = vbYes Then
+                Using DatePicker As New frmDateRangePickerDialog
+                    DatePicker.DatePickerType = DatePickerType.SingleDate
+                    Dim result As DialogResult = DatePicker.ShowDialog
+                    If result = Windows.Forms.DialogResult.OK Then
                         txtDATE.Text = Format(DatePicker.StartDate, "MMM dd, yyyy")
+                        ReportViewerForm.ReportService = New FixedDepositRunupReportService(DatePicker.StartDate)
+                        ReportViewerForm.ReportModel = reportObject
+                        ReportViewerForm.HeaderText = GetGlobalResourceString("FixedDepositRunup")
                         ReportViewerForm.Show()
-
-                    Else
-                        MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
+                        SW = False
                     End If
-                    SW = False
-                End If
-            End Using
-
-            If rsRPT.State = 1 Then rsRPT.Close()
-        End If
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
+                End Using
+            End If
+        End With
     End Sub
 
     Private Sub MenuItem15_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem15.Click

@@ -322,14 +322,14 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Reports\rptFD_Runup.vb">
-      <DependentUpon>rptFD_Runup.rpt</DependentUpon>
+    <Compile Include="Reports\FixedDepositRunupReport.vb">
+      <DependentUpon>FixedDepositRunupReport.rpt</DependentUpon>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Reports\rptMem_List.vb">
-      <DependentUpon>rptMem_List.rpt</DependentUpon>
+    <Compile Include="Reports\ActiveMembersReport.vb">
+      <DependentUpon>ActiveMembersReport.rpt</DependentUpon>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -467,13 +467,13 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>FixedDepositLedgerReport.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptFD_Runup.rpt">
+    <EmbeddedResource Include="Reports\FixedDepositRunupReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptFD_Runup.vb</LastGenOutput>
+      <LastGenOutput>FixedDepositRunupReport.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptMem_List.rpt">
+    <EmbeddedResource Include="Reports\ActiveMembersReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptMem_List.vb</LastGenOutput>
+      <LastGenOutput>ActiveMembersReport.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptPATREFDET.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

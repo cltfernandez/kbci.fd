@@ -98,4 +98,41 @@ Public Class FdDAO
 
         Return resultDataTable
     End Function
+
+    Public Function GenerateFixedDepositRunup(ByVal TransactionDate As Date) As DataTable
+
+        Dim Sql As String
+        Dim resultDataTable As New DataTable
+        Try
+            Sql = "SELECT A.KBCI_NO,CASE WHEN A.MI IS NULL THEN A.LNAME+', '+A.FNAME ELSE A.LNAME+', '+A." & _
+                               "FNAME+' '+ISNULL(A.MI,'')+'.'END NAME,B.BALANCE FROM MEMBERS A JOIN(SELECT X.KBCI_NO," & _
+                               "isnull(SUM(X.CREDIT),0)-isnull(SUM(X.DEBIT),0)BALANCE FROM(select KBCI_NO,CASE WHEN " & _
+                               "DRCR='DR'THEN AMOUNT END DEBIT,CASE WHEN DRCR='CR'THEN AMOUNT END CREDIT from FD WHERE" & _
+                               "[DATE]<=@TransactionDate )X GROUP BY KBCI_NO)B ON A.KBCI_NO=B.KBCI_NO WHERE B.BALANCE IS NOT " & _
+                               "NULL AND B.BALANCE>1"
+            Using myCommand As DbCommand = _Cn.CreateCommand
+                myCommand.CommandText = Sql
+
+                Dim paramTransactionDate = myCommand.CreateParameter
+                With paramTransactionDate
+                    .ParameterName = "@TransactionDate"
+                    .Value = TransactionDate
+                End With
+
+                myCommand.Parameters.Add(paramTransactionDate)
+
+                If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
+                Using myReader As DbDataReader = myCommand.ExecuteReader()
+                    resultDataTable.Load(myReader)
+                End Using
+            End Using
+        Catch ex As Exception
+            ManageError(ex)
+        End Try
+
+        Return resultDataTable
+
+    End Function
+
+
 End Class

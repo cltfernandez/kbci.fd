@@ -119,6 +119,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Current Members/Investors As of {0}.
+        '''</summary>
+        Friend Shared ReadOnly Property CurrentMembersHeader() As String
+            Get
+                Return ResourceManager.GetString("CurrentMembersHeader", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to &amp;Delete.
         '''</summary>
         Friend Shared ReadOnly Property DeleteButton() As String
@@ -241,6 +250,24 @@ Namespace My.Resources
         Friend Shared ReadOnly Property FixedDepositMembers() As String
             Get
                 Return ResourceManager.GetString("FixedDepositMembers", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Fixed Deposit System - Run-up.
+        '''</summary>
+        Friend Shared ReadOnly Property FixedDepositRunup() As String
+            Get
+                Return ResourceManager.GetString("FixedDepositRunup", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Last Run-up was [{0}]. Would you like to continue?.
+        '''</summary>
+        Friend Shared ReadOnly Property FixedDepositRunupPrompt() As String
+            Get
+                Return ResourceManager.GetString("FixedDepositRunupPrompt", resourceCulture)
             End Get
         End Property
         

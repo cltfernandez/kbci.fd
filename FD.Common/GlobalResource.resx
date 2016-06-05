@@ -303,4 +303,13 @@
   <data name="TransactionDetails" xml:space="preserve">
     <value>Transaction Details</value>
   </data>
+  <data name="FixedDepositRunup" xml:space="preserve">
+    <value>Fixed Deposit System - Run-up</value>
+  </data>
+  <data name="FixedDepositRunupPrompt" xml:space="preserve">
+    <value>Last Run-up was [{0}]. Would you like to continue?</value>
+  </data>
+  <data name="CurrentMembersHeader" xml:space="preserve">
+    <value>Current Members/Investors As of {0}</value>
+  </data>
 </root>

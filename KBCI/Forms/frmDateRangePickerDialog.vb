@@ -1,4 +1,5 @@
 Imports FD.Common.Utilities
+Imports FD.Common
 Public Class frmDateRangePickerDialog
     Inherits System.Windows.Forms.Form
 
@@ -109,7 +110,7 @@ Public Class frmDateRangePickerDialog
         '
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(8, 32)
+        Me.Label2.Location = New System.Drawing.Point(8, 40)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(32, 16)
         Me.Label2.TabIndex = 1
@@ -127,7 +128,7 @@ Public Class frmDateRangePickerDialog
         Me.Label1.Text = "FROM"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'frmFDS_Main_PrntFDL
+        'frmDateRangePickerDialog
         '
         Me.AcceptButton = Me.Button2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -136,7 +137,7 @@ Public Class frmDateRangePickerDialog
         Me.ControlBox = False
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Name = "frmFDS_Main_PrntFDL"
+        Me.Name = "frmDateRangePickerDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)
@@ -146,47 +147,37 @@ Public Class frmDateRangePickerDialog
 #End Region
 
 
-    Private _StartDate As Date
-    Public Property StartDate() As Date
+    Public StartDate As Date
+    Public EndDate As Date
+    Public DateRange As String
+
+
+    Private _DatePickerType As DatepickerType
+    Public Property DatePickerType() As DatePickerType
         Get
-            Return _StartDate
+            Return _DatePickerType
         End Get
-        Set(ByVal value As Date)
-            _StartDate = value
+        Set(ByVal value As DatePickerType)
+            _DatePickerType = value
         End Set
     End Property
 
-
-    Private _EndDate As Date
-    Public Property EndDate() As Date
-        Get
-            Return _EndDate
-        End Get
-        Set(ByVal value As Date)
-            _EndDate = value
-        End Set
-    End Property
-
-
-    Private _DateRange As String
-    Public Property DateRange() As String
-        Get
-            Return _DateRange
-        End Get
-        Set(ByVal value As String)
-            _DateRange = value
-        End Set
-    End Property
 
     Private Sub frmFDS_Main_PrntFDL_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         DateTimePicker1.Value = DateValue(SYSDATE)
         DateTimePicker2.Value = DateValue(SYSDATE)
+
+        If DatePickerType = FD.Common.DatePickerType.SingleDate Then
+            DateTimePicker2.Visible = False
+            Label1.Text = "AS OF : "
+            Label2.Visible = False
+        End If
     End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         If DateTimePicker1.Value <= DateTimePicker2.Value And DateTimePicker1.Value <= DateValue(SYSDATE) And DateTimePicker2.Value <= DateValue(SYSDATE) Then
             SW = True
-            If DateTimePicker2.Visible = False Then
+            If DatePickerType = FD.Common.DatePickerType.SingleDate Then
                 DateRange = DateTimePicker1.Value.ToString("MM/dd/yyyy") & "' and '" & DateTimePicker1.Value.ToString("MM/dd/yyyy")
                 StartDate = DateTimePicker1.Value
             Else
