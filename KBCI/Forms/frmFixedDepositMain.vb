@@ -588,7 +588,6 @@ Public Class frmFixedDepositMain
             rsPASSBOOK.Open("SELECT LNAME + ', ' + FNAME + ' ' + MI + '.' NAME,ISNULL(DEPT,'') DEPT,ISNULL(OFF_TEL,'') OFF_TEL,ISNULL(MEM_ADDR,'') MEM_ADDR,ISNULL(RES_TEL,'') RES_TEL FROM MEMBERS WHERE KBCI_NO ='" & SEL_KBCI_NO & "'", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
             If rsPASSBOOK.RecordCount > 0 Then
                 With rsPASSBOOK
-                    'prtstr = vbCrLf & " TEST 1" & "<ST=10000>" & vbCrLf & "TEST 2"
                     prtstr = vbCrLf & " " & vbCrLf & " " & vbCrLf & _
                              "                         " & Mid(SEL_KBCI_NO, 1, 2) & "-" & Mid(SEL_KBCI_NO, 3, 4) & "-" & Mid(SEL_KBCI_NO, 7, 1) & _
                              vbCrLf & " " & vbCrLf & _
@@ -665,41 +664,22 @@ errHand:
 
     Private Sub MenuItem13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem13.Click
         '#####LIST OF RESIGNED INV/MEM
-        Dim rsRPT As New ADODB.Recordset
-        Dim dst As New DataTable("dstFD_Member")
-        Dim rpt As New rptRMem_List
-        Dim ds As New DataSet
-        Dim sQRY As String
+        Dim reportObject As New ResignedMembersReport
         ReportViewerForm = New frmReportViewer
-        ReportViewerForm.MdiParent = Me
-
         Using DatePicker As New frmDateRangePickerDialog
             Dim result As DialogResult = DatePicker.ShowDialog
             If result = Windows.Forms.DialogResult.OK Then
-                sQRY = "SELECT M.[KBCI_NO],M.[LNAME]+', '+M.[FNAME]+' '+COALESCE(M.[MI]+'.','') AS NAME,M.[MEM_STAT]," & _
-                        "FDA.[DATE] CHG_DATE,FDA.AMOUNT FD_AMOUNT FROM MEMBERS M LEFT JOIN(SELECT*from FD WHERE FD_ID IN(" & _
-                        "select MAX(FD_ID)from fd group by KBCI_NO))FDA ON M.KBCI_NO=FDA.KBCI_NO WHERE M.MEM_STAT=" & _
-                        "'R'AND CHG_DATE BETWEEN'" & DatePicker.DateRange & "' ORDER BY M.KBCI_NO"
-                rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-                If rsRPT.RecordCount > 0 Then
-                    Dim RDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text13")
+                With ReportViewerForm
+                    Dim RDATE As TextObject = reportObject.Section2.ReportObjects("Text13")
                     RDATE.Text = DatePicker.StartDate & " TO " & DatePicker.EndDate
-
-                    PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:3:1:2")
-                    ReportViewerForm.Text = "LIST OF RESIGNED MEMBERS / INVESTORS FROM " & DatePicker.StartDate & " TO " & DatePicker.EndDate
-                    ReportViewerForm.Show()
-                Else
-                    MsgBox("No resigned member(s) found between the specified date.", MsgBoxStyle.Information, "Resigned Member/Investor")
-                End If
-                SW = False
+                    .MdiParent = Me
+                    .ReportService = New ResignedMembersReportService(DatePicker.StartDate, DatePicker.EndDate)
+                    .ReportModel = reportObject
+                    .HeaderText = String.Format(GetGlobalResourceString("ResignedMembersHeader"), DatePicker.StartDate.ToString("MM/dd/yyyy"), DatePicker.EndDate.ToString("MM/dd/yyyy"))
+                    .Show()
+                End With
             End If
         End Using
-
-        If rsRPT.State = 1 Then rsRPT.Close()
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
     End Sub
 
     Private Sub MenuItem7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem7.Click

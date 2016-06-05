@@ -1485,7 +1485,7 @@ Partial Public Class dstFD_Member
                     ByVal REA_DORI As String,  _
                     ByVal FEBTC_SA As String,  _
                     ByVal CB_EMPNO As String,  _
-                    ByVal CB_HIRE As String,  _
+                    ByVal CB_HIRE As Date,  _
                     ByVal _REGION As String,  _
                     ByVal DEPT As String,  _
                     ByVal POSITION As String,  _
@@ -1497,7 +1497,7 @@ Partial Public Class dstFD_Member
                     ByVal SEX As String,  _
                     ByVal CIV_STAT As String,  _
                     ByVal NO_DEPEND As String,  _
-                    ByVal B_DATE As String,  _
+                    ByVal B_DATE As Date,  _
                     ByVal SP_NAME As String,  _
                     ByVal SP_EMPLOY As String,  _
                     ByVal SP_CBEMPNO As String,  _
@@ -1573,7 +1573,7 @@ Partial Public Class dstFD_Member
             MyBase.Columns.Add(Me.columnFEBTC_SA)
             Me.columnCB_EMPNO = New Global.System.Data.DataColumn("CB_EMPNO", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnCB_EMPNO)
-            Me.columnCB_HIRE = New Global.System.Data.DataColumn("CB_HIRE", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            Me.columnCB_HIRE = New Global.System.Data.DataColumn("CB_HIRE", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnCB_HIRE)
             Me.columnREGION = New Global.System.Data.DataColumn("REGION", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             Me.columnREGION.ExtendedProperties.Add("Generator_ColumnPropNameInTable", "REGIONColumn")
@@ -1600,7 +1600,7 @@ Partial Public Class dstFD_Member
             MyBase.Columns.Add(Me.columnCIV_STAT)
             Me.columnNO_DEPEND = New Global.System.Data.DataColumn("NO_DEPEND", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnNO_DEPEND)
-            Me.columnB_DATE = New Global.System.Data.DataColumn("B_DATE", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            Me.columnB_DATE = New Global.System.Data.DataColumn("B_DATE", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnB_DATE)
             Me.columnSP_NAME = New Global.System.Data.DataColumn("SP_NAME", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnSP_NAME)
@@ -1847,7 +1847,7 @@ Partial Public Class dstFD_Member
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Overloads Function AddR_MembersRow(ByVal KBCI_NO As String, ByVal NAME As String, ByVal MEM_STAT As String, ByVal CHG_DATE As String, ByVal FD_AMOUNT As Decimal) As R_MembersRow
+        Public Overloads Function AddR_MembersRow(ByVal KBCI_NO As String, ByVal NAME As String, ByVal MEM_STAT As String, ByVal CHG_DATE As Date, ByVal FD_AMOUNT As Decimal) As R_MembersRow
             Dim rowR_MembersRow As R_MembersRow = CType(Me.NewRow,R_MembersRow)
             Dim columnValuesArray() As Object = New Object() {KBCI_NO, NAME, MEM_STAT, CHG_DATE, FD_AMOUNT}
             rowR_MembersRow.ItemArray = columnValuesArray
@@ -1884,7 +1884,7 @@ Partial Public Class dstFD_Member
             MyBase.Columns.Add(Me.columnNAME)
             Me.columnMEM_STAT = New Global.System.Data.DataColumn("MEM_STAT", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnMEM_STAT)
-            Me.columnCHG_DATE = New Global.System.Data.DataColumn("CHG_DATE", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            Me.columnCHG_DATE = New Global.System.Data.DataColumn("CHG_DATE", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnCHG_DATE)
             Me.columnFD_AMOUNT = New Global.System.Data.DataColumn("FD_AMOUNT", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnFD_AMOUNT)
@@ -4262,10 +4262,10 @@ Partial Public Class dstFD_Member
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property CB_HIRE() As String
+        Public Property CB_HIRE() As Date
             Get
                 Try 
-                    Return CType(Me(Me.tableMEM_List.CB_HIREColumn),String)
+                    Return CType(Me(Me.tableMEM_List.CB_HIREColumn),Date)
                 Catch e As Global.System.InvalidCastException
                     Throw New Global.System.Data.StrongTypingException("The value for column 'CB_HIRE' in table 'MEM_List' is DBNull.", e)
                 End Try
@@ -4430,10 +4430,10 @@ Partial Public Class dstFD_Member
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property B_DATE() As String
+        Public Property B_DATE() As Date
             Get
                 Try 
-                    Return CType(Me(Me.tableMEM_List.B_DATEColumn),String)
+                    Return CType(Me(Me.tableMEM_List.B_DATEColumn),Date)
                 Catch e As Global.System.InvalidCastException
                     Throw New Global.System.Data.StrongTypingException("The value for column 'B_DATE' in table 'MEM_List' is DBNull.", e)
                 End Try
@@ -4842,10 +4842,10 @@ Partial Public Class dstFD_Member
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property CHG_DATE() As String
+        Public Property CHG_DATE() As Date
             Get
                 Try 
-                    Return CType(Me(Me.tableR_Members.CHG_DATEColumn),String)
+                    Return CType(Me(Me.tableR_Members.CHG_DATEColumn),Date)
                 Catch e As Global.System.InvalidCastException
                     Throw New Global.System.Data.StrongTypingException("The value for column 'CHG_DATE' in table 'R_Members' is DBNull.", e)
                 End Try

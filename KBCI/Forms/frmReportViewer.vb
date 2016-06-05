@@ -95,7 +95,7 @@ Public Class frmReportViewer
 
     Private Sub frmFD_Member_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Me.Text = HeaderText
-        bgwLoadData.RunWorkerAsync()
+        If Not ReportService Is Nothing Then bgwLoadData.RunWorkerAsync()
     End Sub
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -113,6 +113,7 @@ Public Class frmReportViewer
             crvMainViewer.Visible = True
         Else
             MsgBox(GetGlobalResourceString("NoTransactionFound"), MsgBoxStyle.Critical, GetGlobalResourceString("FixedDepositSystem"))
+            Me.Dispose()
         End If
     End Sub
 

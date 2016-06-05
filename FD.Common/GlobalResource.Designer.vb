@@ -497,6 +497,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Resigned Members/Investors from {0} to {1}..
+        '''</summary>
+        Friend Shared ReadOnly Property ResignedMembersHeader() As String
+            Get
+                Return ResourceManager.GetString("ResignedMembersHeader", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Would you like to reverse the last transaction?.
         '''</summary>
         Friend Shared ReadOnly Property ReverseTransactionPrompt() As String

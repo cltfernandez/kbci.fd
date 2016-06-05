@@ -89,6 +89,7 @@
     <Compile Include="Interfaces\IUserService.vb" />
     <Compile Include="Services\DividendPatronageRefundSettingService.vb" />
     <Compile Include="Services\Reports\ActiveMembersReportService.vb" />
+    <Compile Include="Services\Reports\ResignedMembersReportService.vb" />
     <Compile Include="Services\Reports\FixedDepositRunupReportService.vb" />
     <Compile Include="Services\Reports\DailyTransactionRegisterReportService.vb" />
     <Compile Include="Services\Reports\FixedDepositLedgerReportService.vb" />

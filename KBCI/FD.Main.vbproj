@@ -286,12 +286,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Reports\Passbook.vb">
-      <DependentUpon>Passbook.rpt</DependentUpon>
-      <SubType>Component</SubType>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Reports\rptCASHDIVR.vb">
       <DependentUpon>rptCASHDIVR.rpt</DependentUpon>
       <SubType>Component</SubType>
@@ -352,8 +346,8 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Reports\rptRMem_List.vb">
-      <DependentUpon>rptRMem_List.rpt</DependentUpon>
+    <Compile Include="Reports\ResignedMembersReport.vb">
+      <DependentUpon>ResignedMembersReport.rpt</DependentUpon>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -443,10 +437,6 @@
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Passbook.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Passbook.vb</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptCASHDIVR.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptCASHDIVR.vb</LastGenOutput>
@@ -487,9 +477,9 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptPRVOUCHER.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptRMem_List.rpt">
+    <EmbeddedResource Include="Reports\ResignedMembersReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptRMem_List.vb</LastGenOutput>
+      <LastGenOutput>ResignedMembersReport.vb</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

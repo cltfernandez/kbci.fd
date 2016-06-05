@@ -67,4 +67,43 @@ Public Class MembersDAO
         Return resultDataTable
 
     End Function
+
+    Public Function GetResignedMembers(ByVal StartDate As Date, ByVal EndDate As Date) As DataTable
+        Dim Sql As String
+        Dim resultDataTable As New DataTable
+        Try
+            Sql = "SELECT M.[KBCI_NO],M.[LNAME]+', '+M.[FNAME]+' '+COALESCE(M.[MI]+'.','') AS NAME,M.[MEM_STAT]," & _
+                        "FDA.[DATE] CHG_DATE,FDA.AMOUNT FD_AMOUNT FROM MEMBERS M LEFT JOIN(SELECT*from FD WHERE FD_ID IN(" & _
+                        "select MAX(FD_ID)from fd group by KBCI_NO))FDA ON M.KBCI_NO=FDA.KBCI_NO WHERE M.MEM_STAT=" & _
+                        "'R'AND CHG_DATE BETWEEN @StartDate AND @EndDate ORDER BY M.KBCI_NO"
+
+            Using myCommand As DbCommand = _Cn.CreateCommand
+                myCommand.CommandText = Sql
+                Dim paramStartDate = myCommand.CreateParameter
+                With paramStartDate
+                    .ParameterName = "@StartDate"
+                    .Value = StartDate
+                End With
+                Dim paramEndDate = myCommand.CreateParameter
+                With paramEndDate
+                    .ParameterName = "@EndDate"
+                    .Value = EndDate
+                End With
+
+                myCommand.Parameters.Add(paramStartDate)
+                myCommand.Parameters.Add(paramEndDate)
+
+                If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
+                Using myReader As DbDataReader = myCommand.ExecuteReader()
+                    resultDataTable.Load(myReader)
+                End Using
+            End Using
+        Catch ex As Exception
+            ManageError(ex)
+        End Try
+
+        Return resultDataTable
+
+    End Function
+    
 End Class

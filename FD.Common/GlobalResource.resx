@@ -312,4 +312,7 @@
   <data name="CurrentMembersHeader" xml:space="preserve">
     <value>Current Members/Investors As of {0}</value>
   </data>
+  <data name="ResignedMembersHeader" xml:space="preserve">
+    <value>Resigned Members/Investors from {0} to {1}.</value>
+  </data>
 </root>
