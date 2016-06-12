@@ -87,4 +87,37 @@ Public Class DivDAO
             myCommand.ExecuteNonQuery()
         End Using
     End Sub
+
+
+    Public Function GetDividendsByRegion(ByVal SortBy As String, Optional ByVal RegionFilter As String = "") As DataTable
+        Dim Sql As String
+
+        Dim resultDataTable As New DataTable
+
+        Try
+            Sql = String.Format("SELECT DIV.KBCI_NO, MEM.LNAME + ' ' + MEM.FNAME + ', ' + ISNULL(MEM.MI,'X') + '.' AS NAME, DIV.FD_AMT, " & _
+                  "DIV.DIV_AMT, DIV.DEDNS,MEM.REGION FROM DIV INNER JOIN MEMBERS MEM ON  MEM.KBCI_NO= div.KBCI_NO WHERE DIV.FD_AMT>0 AND (@SelectedRegion = '' OR @SelectedRegion = REGION) ORDER BY {0}", SortBy)
+
+            Using myCommand As DbCommand = _Cn.CreateCommand
+                myCommand.CommandText = Sql
+                Dim paramSelectedRegion = myCommand.CreateParameter
+                With paramSelectedRegion
+                    .ParameterName = "@SelectedRegion"
+                    .Value = RegionFilter
+                End With
+
+                myCommand.Parameters.Add(paramSelectedRegion)
+
+                If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
+                Using myReader As DbDataReader = myCommand.ExecuteReader()
+                    resultDataTable.Load(myReader)
+                End Using
+            End Using
+        Catch ex As Exception
+            ManageError(ex)
+        End Try
+
+        Return resultDataTable
+
+    End Function
 End Class

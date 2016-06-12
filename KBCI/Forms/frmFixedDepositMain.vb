@@ -5,6 +5,7 @@ Imports FD.DataAccessObject
 Imports FD.BusinessLogic
 Imports FD.ViewModels
 Imports CrystalDecisions.CrystalReports.Engine
+Imports System.Collections.Generic
 
 Public Class frmFixedDepositMain
     Inherits System.Windows.Forms.Form
@@ -474,7 +475,7 @@ Public Class frmFixedDepositMain
     Public MemberSearchForm As frmMemberSearchDialog
     Public frmFDS_Main_DEntry As frmMembersList
     Public MembersMaintenanceForm As frmMembersMaintenance
-    Public SystemConfigurationForm As frmAppConfiguration    
+    Public SystemConfigurationForm As frmAppConfiguration
     Public LoginForm As frmFixedDepositLogin
     Public ReportViewerForm As frmReportViewer
     Public frmFDS_Main_Arrange As frmSortOptionDialog
@@ -485,6 +486,8 @@ Public Class frmFixedDepositMain
     Public MainPasswordValidator As IPasswordValidator
     Private MainUserActionService As IUserService
     Private MainMessagePromptService As ILoginMessagePromptService
+
+    Private CashDividendSettingsService As ICashDividendSettingsService
     Public CurrentUser As UserViewModel
     Private SystemCtrl As CtrlViewModel
 
@@ -746,72 +749,35 @@ errHand:
     End Sub
 
     Private Sub MenuItem19_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem19.Click
-        Dim rsRPT As New ADODB.Recordset
-        Dim dst As New DataTable("dstFD_Member")
-        Dim ds As New DataSet
-        Dim sQRY As String
-
-        ReportViewerForm = New frmReportViewer
-        ReportViewerForm.MdiParent = Me
-        With frmFDS_Main_Arrange.ComboBox3
-            .Items.Clear()
-            .Items.Add("KBCI_NO")
-            .Items.Add("NAME")
-            .Items.Add("REGION")
-        End With
-
         Using ArrangeForm As New frmSortOptionDialog
+            ReportViewerForm = New frmReportViewer
+            ReportViewerForm.MdiParent = Me
             Dim result As DialogResult = ArrangeForm.ShowDialog()
 
             If result = Windows.Forms.DialogResult.OK Then
-                If ArrangeForm.SelectedField = "REGION" Then
-                    Dim rpt As New rptCASHDIVREG
-                    Dim ASOFDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section6.ReportObjects("Text11")
-                    rsRPT.Open("SELECT TOP 1 DIV.DATE FROM DIV", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
-                    ASOFDATE.Text = DateValue(rsRPT.Fields("DATE").Value)
-                    rsRPT.Close()
-                    If ArrangeForm.SelectedRegion.Trim = "" Then
-                        sQRY = "SELECT DIV.KBCI_NO, MEM.LNAME + ' ' + MEM.FNAME + ', ' + ISNULL(MEM.MI,'X') + '.' AS NAME, DIV.FD_AMT, " & _
-                               "DIV.DIV_AMT, DIV.DEDNS,MEM.REGION FROM DIV INNER JOIN MEMBERS MEM ON  MEM.KBCI_NO= div.KBCI_NO WHERE DIV.FD_AMT>0"
-                    Else
-                        sQRY = "SELECT DIV.KBCI_NO, MEM.LNAME + ' ' + MEM.FNAME + ', ' + ISNULL(MEM.MI,'X') + '.' AS NAME, DIV.FD_AMT, " & _
-                               "DIV.DIV_AMT, DIV.DEDNS,MEM.REGION FROM DIV INNER JOIN MEMBERS MEM ON  MEM.KBCI_NO= div.KBCI_NO WHERE MEM.REGION='" & ArrangeForm.SelectedRegion & "' AND DIV.FD_AMT>0"
-                    End If
-                    rsRPT.CursorLocation = CursorLocationEnum.adUseClient
-                    rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-                    If rsRPT.RecordCount > 0 Then
-                        PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:2:2:2:3")
-                        ReportViewerForm.Text = "CASH DIVIDEND REGISTER"
-                        ReportViewerForm.Show()
-                    Else
-                        MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
-                    End If
-                Else
-                    Dim rpt2 As New rptCASHDIVR
-                    Dim ASOFDATE2 As CrystalDecisions.CrystalReports.Engine.TextObject = rpt2.Section2.ReportObjects("Text11")
-                    rsRPT.Open("SELECT TOP 1 DIV.DATE FROM DIV", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
-                    ASOFDATE2.Text = DateValue(rsRPT.Fields("DATE").Value)
-                    rsRPT.Close()
-                    sQRY = "SELECT DIV.KBCI_NO, MEM.LNAME + ' ' + MEM.FNAME + ', ' + ISNULL(MEM.MI,'X') + '.' AS NAME, DIV.FD_AMT, " & _
-                           "DIV.DIV_AMT, DIV.DEDNS FROM DIV INNER JOIN MEMBERS MEM ON  MEM.KBCI_NO= div.KBCI_NO WHERE DIV.FD_AMT>0 ORDER BY " & ArrangeForm.SelectedField
-                    rsRPT.CursorLocation = CursorLocationEnum.adUseClient
-                    rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly, )
-                    If rsRPT.RecordCount > 0 Then
-                        PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt2, 0, "5:3:2:2:2")
-                        ReportViewerForm.Text = "CASH DIVIDEND REGISTER"
-                        ReportViewerForm.Show()
-                    Else
-                        MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "FD Runup")
-                    End If
-                End If
-            End If
+                CashDividendSettingsService = New CashDividendSettingsService
+                Dim cashDivSettingsModel As CashDividendPolicySettingsViewModel = CashDividendSettingsService.Read
 
+                If ArrangeForm.SelectedField.Equals(SortOptions.Region) Then
+                    Dim reportObject As New CashDividendRegisterPerRegionReport
+                    With reportObject.Section6
+                        Dim ASOFDATE As TextObject = .ReportObjects("Text11")
+                        ASOFDATE.Text = cashDivSettingsModel.TransactionDate
+                        ReportViewerForm.ReportModel = reportObject
+                    End With
+                Else
+                    Dim reportObject As New CashDividendRegisterReport
+                    With reportObject.Section2
+                        Dim ASOFDATE2 As TextObject = .ReportObjects("Text11")
+                        ASOFDATE2.Text = cashDivSettingsModel.TransactionDate
+                        ReportViewerForm.ReportModel = reportObject
+                    End With
+                End If
+                ReportViewerForm.ReportService = New CashDividendRegisterPerRegionReportService(ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
+                ReportViewerForm.HeaderText = GetGlobalResourceString("CashDividendRegister")
+                ReportViewerForm.Show()
+            End If
         End Using
-        If rsRPT.State = 1 Then rsRPT.Close()
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
     End Sub
 
     Private Sub MenuItem16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem16.Click
@@ -933,6 +899,7 @@ errHand:
 
     Private Sub MenuItem34_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem34.Click
         frmFDS_Main_DIVREFOpt = New frmProcessingViewOptionDialog
+
 
         Using ArrangeForm As New frmSortOptionDialog
             With ArrangeForm.ComboBox3

@@ -121,6 +121,13 @@ Public Class MemberStatusEnum
     Public Const Staff As String = "S"
 End Class
 
+Public Class SortOptions
+    Public Const KbciNumber As String = "KBCI_NO"
+    Public Const Name As String = "NAME"
+    Public Const Region As String = "REGION"
+
+End Class
+
 Public Structure DivrefSaveParameters
     Public KbciNo As String
     Public Year As Integer

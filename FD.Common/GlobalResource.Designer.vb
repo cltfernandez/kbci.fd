@@ -110,6 +110,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Cash Dividend Register.
+        '''</summary>
+        Friend Shared ReadOnly Property CashDividendRegister() As String
+            Get
+                Return ResourceManager.GetString("CashDividendRegister", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Confirmation Password does not match..
         '''</summary>
         Friend Shared ReadOnly Property ConfirmationPasswordNotMatch() As String
@@ -335,6 +344,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to KBCI Number.
+        '''</summary>
+        Friend Shared ReadOnly Property KBCINumber() As String
+            Get
+                Return ResourceManager.GetString("KBCINumber", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to KBCI No: [{0}] is not found on the database..
         '''</summary>
         Friend Shared ReadOnly Property KBCINumberNotFound() As String
@@ -394,6 +412,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property MissingRemarks() As String
             Get
                 Return ResourceManager.GetString("MissingRemarks", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Name.
+        '''</summary>
+        Friend Shared ReadOnly Property Name() As String
+            Get
+                Return ResourceManager.GetString("Name", resourceCulture)
             End Get
         End Property
         
@@ -493,6 +520,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property PrintTransactionOnPassbook() As String
             Get
                 Return ResourceManager.GetString("PrintTransactionOnPassbook", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Region.
+        '''</summary>
+        Friend Shared ReadOnly Property Region() As String
+            Get
+                Return ResourceManager.GetString("Region", resourceCulture)
             End Get
         End Property
         

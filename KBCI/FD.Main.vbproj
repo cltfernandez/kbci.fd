@@ -286,14 +286,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Reports\rptCASHDIVR.vb">
-      <DependentUpon>rptCASHDIVR.rpt</DependentUpon>
+    <Compile Include="Reports\CashDividendRegisterReport.vb">
+      <DependentUpon>CashDividendRegisterReport.rpt</DependentUpon>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Reports\rptCASHDIVREG.vb">
-      <DependentUpon>rptCASHDIVREG.rpt</DependentUpon>
+    <Compile Include="Reports\CashDividendRegisterPerRegionReport.vb">
+      <DependentUpon>CashDividendRegisterPerRegionReport.rpt</DependentUpon>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -437,13 +437,13 @@
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptCASHDIVR.rpt">
+    <EmbeddedResource Include="Reports\CashDividendRegisterReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptCASHDIVR.vb</LastGenOutput>
+      <LastGenOutput>CashDividendRegisterReport.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptCASHDIVREG.rpt">
+    <EmbeddedResource Include="Reports\CashDividendRegisterPerRegionReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptCASHDIVREG.vb</LastGenOutput>
+      <LastGenOutput>CashDividendRegisterPerRegionReport.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptDIVREFREG.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

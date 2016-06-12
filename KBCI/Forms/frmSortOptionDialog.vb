@@ -1,17 +1,20 @@
+Imports FD.Common
+Imports FD.Common.Utilities
+Imports System.Collections.Generic
+
 Public Class frmSortOptionDialog
     Inherits System.Windows.Forms.Form
 
-#Region " Windows Form Designer generated code "
-
     Public Sub New()
         MyBase.New()
-
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
 
     End Sub
+#Region " Windows Form Designer generated code "
+
 
     'Form overrides dispose to clean up the component list.
     Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -71,7 +74,7 @@ Public Class frmSortOptionDialog
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(96, 25)
         Me.Button1.TabIndex = 13
-        Me.Button1.Text = "Close"
+        Me.Button1.Text = "Cancel"
         '
         'Label4
         '
@@ -93,7 +96,7 @@ Public Class frmSortOptionDialog
         Me.TextBox6.Size = New System.Drawing.Size(173, 21)
         Me.TextBox6.TabIndex = 15
         '
-        'frmFDS_Main_Arrange
+        'frmSortOptionDialog
         '
         Me.AcceptButton = Me.Button2
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 14)
@@ -106,7 +109,7 @@ Public Class frmSortOptionDialog
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.ComboBox3)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Name = "frmFDS_Main_Arrange"
+        Me.Name = "frmSortOptionDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -136,20 +139,20 @@ Public Class frmSortOptionDialog
         End Set
     End Property
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-        If ComboBox3.Text <> "" Then
+    Private SortOptionItems As New List(Of KeyValuePair(Of String, String))
 
-            SelectedField = ComboBox3.Text
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        If Not ComboBox3.SelectedItem.Value.Equals(String.Empty) Then
+            SelectedField = ComboBox3.SelectedItem.Value
             SelectedRegion = TextBox6.Text
             Me.DialogResult = Windows.Forms.DialogResult.OK
             Me.Close()
-        Else
-            MsgBox("Please select a Field to use for Sorting/Grouping")
         End If
     End Sub
 
     Private Sub ComboBox3_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox3.SelectedIndexChanged
-        If ComboBox3.Text = "REGION" Then
+        If ComboBox3.SelectedItem.Value = SortOptions.Region Then
             TextBox6.Enabled = True
         Else : TextBox6.Enabled = False : TextBox6.Text = ""
         End If
@@ -159,5 +162,16 @@ Public Class frmSortOptionDialog
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         Me.DialogResult = Windows.Forms.DialogResult.Cancel
         Me.Close()
+    End Sub
+
+    Private Sub frmSortOptionDialog_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        ComboBox3.Items.Clear()
+        ComboBox3.DisplayMember = "Text"
+        ComboBox3.ValueMember = "Value"
+
+        ComboBox3.Items.Add(New With {Key .Value = SortOptions.KbciNumber, Key .Text = GetGlobalResourceString("KBCINumber")})
+        ComboBox3.Items.Add(New With {Key .Value = SortOptions.Name, Key .Text = GetGlobalResourceString("Name")})
+        ComboBox3.Items.Add(New With {Key .Value = SortOptions.Region, Key .Text = GetGlobalResourceString("Region")})
+        ComboBox3.SelectedIndex = 0
     End Sub
 End Class

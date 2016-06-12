@@ -38,11 +38,12 @@ Public Class DividendPatronageRefundService : Implements IDividendPatronageRefun
 
     Public Sub PostCashDividend(ByVal dividendPercentage As Decimal, ByVal systemDate As Date, ByVal fixedDepositCutOffDate As Date, ByVal processingDate As Date, ByVal currentUser As String) Implements IDividendPatronageRefundService.PostCashDividend
         Using rsDividendDAO As New DivDAO
-            rsDividendDAO.PostDividendsForMembers(DividendPercentage, SystemDate, FixedDepositCutOffDate, ProcessingDate)
+            rsDividendDAO.PostDividendsForMembers(dividendPercentage, systemDate, fixedDepositCutOffDate, processingDate)
         End Using
 
+
         Using rsCashDivDAO As New CashdivDAO
-            Dim Cashdiv = rsCashDivDAO.GetAll().FirstOrDefault()
+            Dim Cashdiv = rsCashDivDAO.Read(1)
             With Cashdiv
                 .DATE = processingDate
                 .PERCENT = Math.Round(dividendPercentage * 100, 2)
