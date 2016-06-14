@@ -9,6 +9,7 @@
 
 
 Imports System.Data.Common
+Imports FD.Common
 
 ''' <summary>
 '''DAO Class for table Ref
@@ -17,7 +18,7 @@ Imports System.Data.Common
 '''Write your DATABASE custom method here
 ''' </remarks>
 Public Class RefDAO
-	Inherits _RefDAO
+    Inherits _RefDAO
 
     Public Sub New()
         MyBase.New()
@@ -67,4 +68,35 @@ Public Class RefDAO
             ManageError(ex)
         End Try
     End Sub
+
+    Public Function GetPatronageRefundSummarizedData(ByVal memberStatus As String) As DataTable
+        Dim Sql As String
+        Dim resultDataTable As New DataTable
+        Try
+            Sql = "SELECT MM.KBCI_NO, MM.LNAME + ', ' + MM.FNAME + ' ' + ISNULL(MM.MI,'X') + '.' NAME,RF.INT_PAID,RF.REFUND " & _
+                    "FROM REF RF INNER JOIN MEMBERS MM ON RF.KBCI_NO=MM.KBCI_NO WHERE MM.MEM_STAT=@MemberStatus OR @MemberStatus ='' ORDER BY NAME"
+
+            Using myCommand As DbCommand = _Cn.CreateCommand
+                myCommand.CommandText = Sql
+                Dim parammemberStatus = myCommand.CreateParameter
+                With parammemberStatus
+                    .ParameterName = "@MemberStatus"
+                    .Value = memberStatus
+                End With
+
+                myCommand.Parameters.Add(parammemberStatus)
+
+                If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
+                Using myReader As DbDataReader = myCommand.ExecuteReader()
+                    resultDataTable.Load(myReader)
+                End Using
+            End Using
+        Catch ex As Exception
+            ManageError(ex)
+        End Try
+
+        Return resultDataTable
+
+    End Function
+
 End Class

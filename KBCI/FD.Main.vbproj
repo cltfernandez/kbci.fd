@@ -334,8 +334,8 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Reports\rptPATREFSUM.vb">
-      <DependentUpon>rptPATREFSUM.rpt</DependentUpon>
+    <Compile Include="Reports\PatronageRefundSummaryReport.vb">
+      <DependentUpon>PatronageRefundSummaryReport.rpt</DependentUpon>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -469,9 +469,9 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptPATREFDET.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptPATREFSUM.rpt">
+    <EmbeddedResource Include="Reports\PatronageRefundSummaryReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptPATREFSUM.vb</LastGenOutput>
+      <LastGenOutput>PatronageRefundSummaryReport.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptPRVOUCHER.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

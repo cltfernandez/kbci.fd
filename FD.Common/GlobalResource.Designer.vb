@@ -65,6 +65,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Active Members.
+        '''</summary>
+        Friend Shared ReadOnly Property ActiveMembers() As String
+            Get
+                Return ResourceManager.GetString("ActiveMembers", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to &amp;Add New.
         '''</summary>
         Friend Shared ReadOnly Property AddButton() As String
@@ -88,6 +97,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property AddSuccessful() As String
             Get
                 Return ResourceManager.GetString("AddSuccessful", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to All KBCI Members.
+        '''</summary>
+        Friend Shared ReadOnly Property AllMembers() As String
+            Get
+                Return ResourceManager.GetString("AllMembers", resourceCulture)
             End Get
         End Property
         
@@ -362,6 +380,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to KBCI Staff Members.
+        '''</summary>
+        Friend Shared ReadOnly Property KbciStaff() As String
+            Get
+                Return ResourceManager.GetString("KbciStaff", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Log-In.
         '''</summary>
         Friend Shared ReadOnly Property Login() As String
@@ -533,6 +560,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Resigned Members.
+        '''</summary>
+        Friend Shared ReadOnly Property ResignedMembers() As String
+            Get
+                Return ResourceManager.GetString("ResignedMembers", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Resigned Members/Investors from {0} to {1}..
         '''</summary>
         Friend Shared ReadOnly Property ResignedMembersHeader() As String
@@ -583,6 +619,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property SpecifyDORIReason() As String
             Get
                 Return ResourceManager.GetString("SpecifyDORIReason", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Patronage Refund Report (Summarized).
+        '''</summary>
+        Friend Shared ReadOnly Property SummarizedPatronageRefundReport() As String
+            Get
+                Return ResourceManager.GetString("SummarizedPatronageRefundReport", resourceCulture)
             End Get
         End Property
         

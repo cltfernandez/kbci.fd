@@ -355,7 +355,7 @@ Public Class frmMembersList
 
 
     Private Sub TextBox1_KeyUp1(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyUp
-        SRCH = TextBox1.Text : fField = "LNAME"
+        SRCH = TextBox1.Text : fField = TableFieldConstants.LastName
         Me.AcceptButton = Button3
 
     End Sub
@@ -373,17 +373,12 @@ Public Class frmMembersList
             TextBox1.Text = String.Format("{0}, {1} {2}", LName, FName, MI)
             If Trim(FDAmount) <> "NULL" Then TextBox2.Text = FormatNumber(FDAmount, 2) Else TextBox2.Text = "0.00"
         End If
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
     End Sub
     Private Sub TextBox1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox1.Click
         TextBox1.SelectionStart = 0 : TextBox1.SelectionLength = Len(TextBox1.Text) + 1
     End Sub
 
     Private Sub Button2_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-        'On Error GoTo errHand
 
         If ListView1.SelectedItems.Count > 0 Then
             Dim KBCIN As String = ListView1.Items(ListView1.SelectedIndices(0)).SubItems(1).Text
@@ -414,7 +409,7 @@ errHand:
     End Sub
 
     Private Sub TextBox3_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox3.KeyUp
-        SRCH = TextBox3.Text : fField = "KBCI_NO"
+        SRCH = TextBox3.Text : fField = TableFieldConstants.KbciNumber
         Me.AcceptButton = Button3
     End Sub
 
@@ -427,10 +422,10 @@ errHand:
     End Sub
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
-        If SRCH <> "" Then
-            If fField = "LNAME" Then
+        If SRCH <> String.Empty Then
+            If fField = TableFieldConstants.LastName Then
                 PopulateListView(ListView1, GetGridViewDataFromObject(ListOfMembers.Where(Function(x) x.LNAME.Contains(SRCH.ToUpper) Or x.FNAME.Contains(SRCH.ToUpper)).ToList(), DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
-            ElseIf fField = "KBCI_NO" Then
+            ElseIf fField = TableFieldConstants.KbciNumber Then
                 PopulateListView(ListView1, GetGridViewDataFromObject(ListOfMembers.Where(Function(x) x.KBCI_NO.Contains(SRCH)).ToList(), DataGridView1), ColumnWidthDefinition.MembersGridList, ColumnAlignmentDefinition.MemberGridList)
             End If
 

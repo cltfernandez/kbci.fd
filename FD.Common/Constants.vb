@@ -122,12 +122,19 @@ Public Class MemberStatusEnum
 End Class
 
 Public Class SortOptions
-    Public Const KbciNumber As String = "KBCI_NO"
-    Public Const Name As String = "NAME"
-    Public Const Region As String = "REGION"
+    Public Const KbciNumber As String = TableFieldConstants.KbciNumber
+    Public Const Name As String = TableFieldConstants.Name
+    Public Const Region As String = TableFieldConstants.Region
 
 End Class
 
+Public Class TableFieldConstants
+    Public Const KbciNumber As String = "KBCI_NO"
+    Public Const Name As String = "NAME"
+    Public Const LastName As String = "LNAME"
+    Public Const Region As String = "REGION"
+
+End Class
 Public Structure DivrefSaveParameters
     Public KbciNo As String
     Public Year As Integer

@@ -488,6 +488,7 @@ Public Class frmFixedDepositMain
     Private MainMessagePromptService As ILoginMessagePromptService
 
     Private CashDividendSettingsService As ICashDividendSettingsService
+    Private LatestDivRefPostingDefinition As DivrefPostingViewModel
     Public CurrentUser As UserViewModel
     Private SystemCtrl As CtrlViewModel
 
@@ -740,12 +741,6 @@ errHand:
             End If
             SW = False
         End Using
-
-
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
     End Sub
 
     Private Sub MenuItem19_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem19.Click
@@ -788,10 +783,6 @@ errHand:
             DividendPatronageSettingsForm.ShowDialog()
         End If
         SW = False
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
     End Sub
 
     Private Sub MenuItem20_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem20.Click
@@ -805,7 +796,7 @@ errHand:
             Dim result As DialogResult = SummaryViewOptionForm.ShowDialog
             If result = Windows.Forms.DialogResult.OK Then
                 If SummaryViewOptionForm.IsSummarized = True Then
-                    genPATREFS("WHERE MM.MEM_STAT='A'", "ACTIVE MEMBERS")
+                    GeneratePatronageRefundSummaryReport(MemberStatusEnum.Active, GetGlobalResourceString("ActiveMembers"))
                 Else
                     genPATREFD("INTEREST", "A", ",NULL AS PTLINT", "ACTIVE MEMBERS")
                 End If
@@ -820,7 +811,7 @@ errHand:
             Dim result As DialogResult = SummaryViewOptionForm.ShowDialog
             If result = Windows.Forms.DialogResult.OK Then
                 If SummaryViewOptionForm.IsSummarized = True Then
-                    genPATREFS("WHERE MM.MEM_STAT='R'", "RESIGNED MEMBERS")
+                    GeneratePatronageRefundSummaryReport(MemberStatusEnum.Resigned, GetGlobalResourceString("ResignedMembers"))
                 Else
                     genPATREFD("RNTEREST", "R", ",NULL AS PTLINT", "RESIGNED MEMBERS")
                 End If
@@ -833,7 +824,7 @@ errHand:
             Dim result As DialogResult = SummaryViewOptionForm.ShowDialog
             If result = Windows.Forms.DialogResult.OK Then
                 If SummaryViewOptionForm.IsSummarized = True Then
-                    genPATREFS("WHERE MM.MEM_STAT='S'", "KBCI STAFF")
+                    GeneratePatronageRefundSummaryReport(MemberStatusEnum.Staff, GetGlobalResourceString("KbciStaff"))                    
                 Else
                     genPATREFD("SNTEREST", "S", ",ISNULL(SN.PTLINT,0) PTLINT", "KBCI STAFF")
                 End If
@@ -847,7 +838,7 @@ errHand:
             Dim result As DialogResult = SummaryViewOptionForm.ShowDialog
             If result = Windows.Forms.DialogResult.OK Then
                 If SummaryViewOptionForm.IsSummarized = True Then
-                    genPATREFS("", "ALL MEMBERS")
+                    GeneratePatronageRefundSummaryReport(String.Empty, GetGlobalResourceString("AllMembers"))
                 Else
                     genPATREFD("", "", "", "ALL MEMBERS")
                 End If
@@ -1214,43 +1205,29 @@ errHand:
 
     End Sub
 
-    Friend Sub genPATREFS(ByVal optstr As String, ByVal categ As String)
-        Dim rsRPT As New ADODB.Recordset
-        Dim dst As New DataTable("dstFD_Member")
-        Dim ds As New DataSet
-        Dim sQRY As String
-        Dim rpt As New rptPATREFSUM
-        Dim divrefph As New ADODB.Recordset
+    Friend Sub GeneratePatronageRefundSummaryReport(ByVal memberStatus As String, ByVal reportTitle As String)
+        If LatestDivRefPostingDefinition Is Nothing Then
+            Dim DivRefPostingHistory As IDividendPatronageRefundService = New DividendPatronageRefundService()
+            LatestDivRefPostingDefinition = DivRefPostingHistory.GetLatestDivrefPostingHistory()
+        End If
+        Dim reportObject As New PatronageRefundSummaryReport
         ReportViewerForm = New frmReportViewer
         ReportViewerForm.MdiParent = Me
 
-        sQRY = "SELECT MM.KBCI_NO, MM.LNAME + ', ' + MM.FNAME + ' ' + ISNULL(MM.MI,'X') + '.' NAME,RF.INT_PAID,RF.REFUND " & _
-                "FROM		REF RF INNER JOIN MEMBERS MM ON RF.KBCI_NO=MM.KBCI_NO " & _
-                optstr & " " & _
-                "ORDER BY	NAME"
-
-        rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-        If rsRPT.RecordCount > 0 Then
-            divrefph.Open("select TOP 1 PR_YEAR FROM divrefph ORDER BY [YEAR] DESC, [QUARTER] DESC", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-            Dim CAT As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text19")
-            Dim DDATE As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text5")
-            Dim YYEAR As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text6")
-            CAT.Text = categ
+        With reportObject.Section2
+            Dim CAT As TextObject = .ReportObjects("Text19")
+            Dim DDATE As TextObject = .ReportObjects("Text5")
+            Dim YYEAR As TextObject = .ReportObjects("Text6")
+            CAT.Text = reportTitle
             DDATE.Text = DateValue(SYSDATE).ToString("MMM dd, yyyy")
-            YYEAR.Text = CStr(divrefph.Fields("PR_YEAR").Value)
-            divrefph.Close()
-            PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:2:2")
-            ReportViewerForm.Text = "[SUMMARIZED] PATRONAGE REFUND REGISTER"
+            YYEAR.Text = LatestDivRefPostingDefinition.YEAR
+            ReportViewerForm.ReportService = New PatronageRefundSummaryReportService(memberStatus)
+            ReportViewerForm.ReportModel = reportObject
+            ReportViewerForm.HeaderText = GetGlobalResourceString("SummarizedPatronageRefundReport")
             ReportViewerForm.Show()
-        Else
-            MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "Daily Transaction Register")
-        End If
-        SW = False
-        If rsRPT.State = 1 Then rsRPT.Close()
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
+        End With
+
+
     End Sub
 
     Friend Sub genDIVREFREG(ByVal MSTAT As String, ByVal ORDR As String, ByVal TBL As String, ByVal SelectedField As String, ByVal SelectedRegion As String)

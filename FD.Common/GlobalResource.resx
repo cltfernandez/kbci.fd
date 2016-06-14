@@ -327,4 +327,19 @@
   <data name="Region" xml:space="preserve">
     <value>Region</value>
   </data>
+  <data name="ActiveMembers" xml:space="preserve">
+    <value>Active Members</value>
+  </data>
+  <data name="SummarizedPatronageRefundReport" xml:space="preserve">
+    <value>Patronage Refund Report (Summarized)</value>
+  </data>
+  <data name="AllMembers" xml:space="preserve">
+    <value>All KBCI Members</value>
+  </data>
+  <data name="KbciStaff" xml:space="preserve">
+    <value>KBCI Staff Members</value>
+  </data>
+  <data name="ResignedMembers" xml:space="preserve">
+    <value>Resigned Members</value>
+  </data>
 </root>
