@@ -105,5 +105,35 @@ Public Class MembersDAO
         Return resultDataTable
 
     End Function
+
+    Public Function GetInterestForAllMembers() As DataTable
+        Dim Sql As String
+        Dim resultDataTable As New DataTable
+        Try
+            Sql = "SELECT 	SN.ACCTNO,MM.LNAME + ', ' + MM.FNAME + ' ' + ISNULL(MM.MI,'X') + '.' NAME,SN.APLINT,SN.EDLINT,SN.EMLINT,SN.RGLINT,SN.RSLINT,SN.SPLINT,SN.LHLINT,SN.STLINT,SN.PTLINT,SN.CMLINT,SN.FALINT,SN.MPLINT " & _
+                    "FROM  SNTEREST SN INNER JOIN MEMBERS MM ON SN.ACCTNO=MM.KBCI_NO WHERE	MM.MEM_STAT='S'  AND MM.YTD_DIVAMT>0 " & _
+                    "UNION ALL " & _
+                    "SELECT 	SN.ACCTNO,MM.LNAME + ', ' + MM.FNAME + ' ' + ISNULL(MM.MI,'X') + '.' NAME,SN.APLINT,SN.EDLINT,SN.EMLINT,SN.RGLINT,SN.RSLINT,SN.SPLINT,SN.LHLINT,SN.STLINT,SN.PTLINT,SN.CMLINT,SN.FALINT,SN.MPLINT " & _
+                    "FROM  RNTEREST SN INNER JOIN MEMBERS MM ON SN.ACCTNO=MM.KBCI_NO WHERE	MM.MEM_STAT='R'  AND MM.YTD_DIVAMT>0 " & _
+                    "UNION ALL " & _
+                    "SELECT 	SN.ACCTNO,MM.LNAME + ', ' + MM.FNAME + ' ' + ISNULL(MM.MI,'X') + '.' NAME,SN.APLINT,SN.EDLINT,SN.EMLINT,SN.RGLINT,SN.RSLINT,SN.SPLINT,SN.LHLINT,SN.STLINT,0.00 PTLINT,SN.CMLINT,SN.FALINT,SN.MPLINT " & _
+                    "FROM  INTEREST SN INNER JOIN MEMBERS MM ON SN.ACCTNO=MM.KBCI_NO WHERE	MM.MEM_STAT='A'  AND MM.YTD_DIVAMT>0 ORDER BY NAME"
+
+            Using myCommand As DbCommand = _Cn.CreateCommand
+                myCommand.CommandText = Sql
+
+                If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
+                Using myReader As DbDataReader = myCommand.ExecuteReader()
+                    resultDataTable.Load(myReader)
+                End Using
+            End Using
+        Catch ex As Exception
+            ManageError(ex)
+        End Try
+
+        Return resultDataTable
+
+    End Function
+    
     
 End Class

@@ -88,4 +88,27 @@ Public Class SnterestDAO
             myCommand.ExecuteNonQuery()
         End Using
     End Sub
+    Public Function GetInterestForAllMembers() As DataTable
+        Dim Sql As String
+        Dim tableName As String = "Snterest"
+        Dim ptlIntParameter As String = "ISNULL(SN.PTLINT,0) PTLINT"
+        Dim resultDataTable As New DataTable
+        Try
+            Sql = String.Format(CustomQueryString.PatronageRefundDetailedReport, ptlIntParameter, tableName, MemberStatusEnum.Staff)
+
+            Using myCommand As DbCommand = _Cn.CreateCommand
+                myCommand.CommandText = Sql
+
+                If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
+                Using myReader As DbDataReader = myCommand.ExecuteReader()
+                    resultDataTable.Load(myReader)
+                End Using
+            End Using
+        Catch ex As Exception
+            ManageError(ex)
+        End Try
+
+        Return resultDataTable
+
+    End Function
 End Class

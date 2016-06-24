@@ -190,6 +190,14 @@ Public Class MembersPostingSqlStringEnum
 
 End Class
 
+Public Class CustomQueryString
+    Public Const PatronageRefundDetailedReport As String = "SELECT 	SN.ACCTNO,MM.LNAME + ', ' + MM.FNAME + ' ' + ISNULL(MM.MI,'X') + '.' NAME,ISNULL(SN.APLINT,0) APLINT,ISNULL(SN.EDLINT,0) EDLINT," & _
+                                                            "ISNULL(SN.EMLINT,0) EMLINT,ISNULL(SN.RGLINT,0) RGLINT,ISNULL(SN.RSLINT,0) RSLINT,ISNULL(SN.SPLINT,0) SPLINT,ISNULL(SN.LHLINT,0) LHLINT,ISNULL(SN.STLINT,0) STLINT" & _
+                                                            ",ISNULL(SN.CMLINT,0) CMLINT,ISNULL(SN.FALINT,0) FALINT,ISNULL(SN.MPLINT,0) MPLINT, {0} " & _
+                                                            " FROM {1} SN INNER JOIN MEMBERS MM ON SN.ACCTNO=MM.KBCI_NO WHERE	MM.MEM_STAT='{2}' AND MM.YTD_DIVAMT>0 ORDER BY MM.LNAME, MM.FNAME"
+End Class
+
+
 
 
 

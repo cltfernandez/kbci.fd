@@ -328,8 +328,8 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Reports\rptPATREFDET.vb">
-      <DependentUpon>rptPATREFDET.rpt</DependentUpon>
+    <Compile Include="Reports\PatronageRefundDetailedReport.vb">
+      <DependentUpon>PatronageRefundDetailedReport.rpt</DependentUpon>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -465,9 +465,9 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ActiveMembersReport.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptPATREFDET.rpt">
+    <EmbeddedResource Include="Reports\PatronageRefundDetailedReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptPATREFDET.vb</LastGenOutput>
+      <LastGenOutput>PatronageRefundDetailedReport.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\PatronageRefundSummaryReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
