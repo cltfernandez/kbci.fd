@@ -1,4 +1,4 @@
-Imports FD.DataAccessObject
+Imports FD.BusinessLogic
 Imports FD.Common
 Imports FD.ViewModels
 Imports System.Collections.Generic
@@ -260,12 +260,10 @@ Public Class frmMemberSearchDialog
 #End Region
 
     Dim eload As Boolean
-    Dim QRY, SRCH, fField As String
+    Dim SRCH, fField As String
     Dim mTXT As TextBox
-    Dim rsMemberSearch As New List(Of MemberSearchBovm)
-    Private rsMembersList As New List(Of Members)
-
-
+    Private rsMemberSearch As New List(Of MemberSearchBovm)
+    Private svc As IFormOperations
     Private _SelectedMember As MemberSearchBovm
     Public Property SelectedMember() As MemberSearchBovm
         Get
@@ -275,36 +273,23 @@ Public Class frmMemberSearchDialog
             _SelectedMember = value
         End Set
     End Property
-
-
-
-
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        SW = False
-        ClsForm(Me, rsMEM_SRC)
+        Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
 
 
     Private Sub TextBox1_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyUp
-        SRCH = TextBox1.Text : fField = "LNAME"
+        SRCH = TextBox1.Text : fField = TableFieldConstants.LastName
         Me.AcceptButton = Button3
     End Sub
     Private Sub TextBox3_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox3.KeyUp
-        SRCH = TextBox3.Text : fField = "KBCI_NO"
+        SRCH = TextBox3.Text : fField = TableFieldConstants.KbciNumber
         Me.AcceptButton = Button3
-
     End Sub
 
     Private Sub frmFDS_Main_PrntFDL_Srch_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Using rsMemberSearchDao As New MembersDAO
-            rsMembersList = rsMemberSearchDao.GetAll()
-            rsMemberSearch = rsMembersList.Select(Function(x) New MemberSearchBovm() With {.KBCI_ID = x.KBCI_ID, _
-                                                                                                          .KBCI_NO = x.KBCI_NO, _
-                                                                                                          .LNAME = x.LNAME, _
-                                                                                                          .FNAME = x.FNAME, _
-                                                                                                          .MI = x.MI, _
-                                                                                                          .FEBTC_SA = x.FEBTC_SA}).ToList
-        End Using
+        svc = New MembersOperationService()
+        rsMemberSearch = svc.GetAll()
         PopulateListView(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
     End Sub
 
@@ -313,10 +298,9 @@ Public Class frmMemberSearchDialog
             SW = True
             SEL_KBCI_NO = ListView1.Items(ListView1.SelectedIndices(0)).SubItems(1).Text
             SEL_FNAME = TextBox1.Text
-            SEL_FEBTC = ListView1.Items(ListView1.SelectedIndices(0)).SubItems(5).Text
-            SelectedMemberData = rsMembersList.Find(Function(x) x.KBCI_NO = SEL_KBCI_NO)
+            SEL_FEBTC = ListView1.Items(ListView1.SelectedIndices(0)).SubItems(5).Text            
             SelectedMember = rsMemberSearch.Find(Function(x) x.KBCI_NO = SEL_KBCI_NO)
-            ClsForm(Me, rsMEM_SRC)
+            Me.DialogResult = Windows.Forms.DialogResult.OK
         End If
     End Sub
 
@@ -327,7 +311,7 @@ Public Class frmMemberSearchDialog
     Private Sub ListView1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListView1.SelectedIndexChanged
         If ListView1.SelectedIndices.Count > 0 Then
             Me.AcceptButton = Button2
-            TextBox3.Text = Mid(ListView1.Items(ListView1.SelectedIndices(0)).SubItems(1).Text, 1, 2) & "-" & Mid(ListView1.Items(ListView1.SelectedIndices(0)).SubItems(1).Text, 3, 4) & "-" & Mid(ListView1.Items(ListView1.SelectedIndices(0)).SubItems(1).Text, 7, 1)
+            TextBox3.Text = FormatKBCINo(ListView1.Items(ListView1.SelectedIndices(0)).SubItems(1).Text)
             TextBox1.Text = ListView1.Items(ListView1.SelectedIndices(0)).SubItems(2).Text & ", " & _
                 ListView1.Items(ListView1.SelectedIndices(0)).SubItems(3).Text & " " & _
                 ListView1.Items(ListView1.SelectedIndices(0)).SubItems(4).Text & "."
@@ -343,13 +327,5 @@ Public Class frmMemberSearchDialog
             PopulateListView(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
         End If
         If DataGridView1.Rows.Count > 0 Then ListView1.Focus()
-    End Sub
-
-    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
-
-    End Sub
-
-    Private Sub TextBox3_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox3.TextChanged
-
     End Sub
 End Class

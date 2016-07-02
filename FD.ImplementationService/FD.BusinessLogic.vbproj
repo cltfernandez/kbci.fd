@@ -68,6 +68,8 @@
     <Compile Include="Interfaces\ICashDividendSettingsService.vb" />
     <Compile Include="Interfaces\IDividendPatronageRefundSettingService.vb" />
     <Compile Include="Interfaces\IFixedDepositTransactionService.vb" />
+    <Compile Include="Interfaces\IFormOperations.vb" />
+    <Compile Include="Interfaces\IReportFactoryService.vb" />
     <Compile Include="Interfaces\IReportService.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -93,6 +95,7 @@
     </Compile>
     <Compile Include="Services\DividendPatronageRefundSettingService.vb" />
     <Compile Include="Services\FixedDepositTransactionService.vb" />
+    <Compile Include="Services\FormOperations\MembersOperationService.vb" />
     <Compile Include="Services\MessagePromptService.vb" />
     <Compile Include="Services\Reports\ActiveMembersReportService.vb">
       <SubType>Code</SubType>
@@ -100,6 +103,7 @@
     <Compile Include="Services\Reports\CashDividendRegisterPerRegionReportService.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\Reports\DivdendRefundReportService.vb" />
     <Compile Include="Services\Reports\PatronageRefundDetailedReportService.vb" />
     <Compile Include="Services\Reports\PatronageRefundSummaryReportService.vb" />
     <Compile Include="Services\Reports\DailyTransactionRegisterReportService.vb">
@@ -111,7 +115,8 @@
     <Compile Include="Services\Reports\FixedDepositRunupReportService.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\Reports\ReportFactoryService.vb" />
+    <Compile Include="Services\Reports\ReportFactories\DividenRefundReportFactory.vb" />
+    <Compile Include="Services\Reports\ReportFactories\PatronageRefundReportFactory.vb" />
     <Compile Include="Services\Reports\ResignedMembersReportService.vb">
       <SubType>Code</SubType>
     </Compile>

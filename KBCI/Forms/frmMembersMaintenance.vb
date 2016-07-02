@@ -1498,6 +1498,8 @@ Public Class frmMembersMaintenance
     Dim KBCINUM As String
     Dim MemberUpdates As Boolean = False
 
+    Private _memberData As Members
+
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.Close()
     End Sub
@@ -1600,7 +1602,7 @@ Public Class frmMembersMaintenance
 
             If MemberUpdates = True Then
                 PopulateMembersList()
-                SelectedMemberData = rsMEMBERS.Find(Function(x) x.KBCI_NO = KBCINUM)
+                _memberData = rsMEMBERS.Find(Function(x) x.KBCI_NO = KBCINUM)
                 FillField()
                 MemberUpdates = False
             End If
@@ -1613,7 +1615,7 @@ errHand:
     Private Sub frmFDS_Main_NMem_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Using rsMembersDAO As New MembersDAO
             rsMEMBERS = rsMembersDAO.GetAll("LNAME")
-            SelectedMemberData = rsMEMBERS.FirstOrDefault()
+            _memberData = rsMEMBERS.FirstOrDefault()
             FillField()
         End Using
 
@@ -1725,7 +1727,7 @@ errHand:
 
     Sub FillField()
         'On Error Resume Next
-        With SelectedMemberData
+        With _memberData
             If Not .KBCI_NO Is Nothing Then TextBox3.Text = FormatKBCINo(.KBCI_NO)
             If Not .LNAME Is Nothing Then TextBox1.Text = .LNAME Else TextBox1.Text = ""
             If Not .FNAME Is Nothing Then TextBox4.Text = .FNAME Else TextBox4.Text = ""

@@ -154,7 +154,7 @@ Public Class frmSortOptionDialog
     Private Sub ComboBox3_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox3.SelectedIndexChanged
         If ComboBox3.SelectedItem.Value = SortOptions.Region Then
             TextBox6.Enabled = True
-        Else : TextBox6.Enabled = False : TextBox6.Text = ""
+        Else : TextBox6.Enabled = False : TextBox6.Text = String.Empty
         End If
 
     End Sub

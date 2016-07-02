@@ -471,8 +471,7 @@ Public Class frmFixedDepositMain
 
     End Sub
 
-#End Region
-    Public MemberSearchForm As frmMemberSearchDialog
+#End Region    
     Public frmFDS_Main_DEntry As frmMembersList
     Public MembersMaintenanceForm As frmMembersMaintenance
     Public SystemConfigurationForm As frmAppConfiguration
@@ -556,26 +555,24 @@ Public Class frmFixedDepositMain
         With reportObject.Section2
             Dim txtKBCI As TextObject = .ReportObjects("txtKBCINO")
             Dim txtFLNAME As TextObject = .ReportObjects("txtFLNAME")
-
             ReportViewerForm = New frmReportViewer
-            MemberSearchForm = New frmMemberSearchDialog
-
             ReportViewerForm.MdiParent = Me
             Using DateRangePicker As New frmDateRangePickerDialog
                 Dim result As DialogResult = DateRangePicker.ShowDialog
                 If result = Windows.Forms.DialogResult.OK Then
-                    MemberSearchForm.ShowDialog()
-                    If SW = True Then
-                        txtKBCI.Text = FormatKBCINo(SEL_KBCI_NO)
-                        txtFLNAME.Text = SEL_FNAME
-                        ReportViewerForm.ReportService = New FixedDepositLedgerReportService(MemberSearchForm.SelectedMember.KBCI_NO, _
-                                                                                             DateRangePicker.StartDate, _
-                                                                                             DateRangePicker.EndDate)
-                        ReportViewerForm.ReportModel = reportObject
-                        ReportViewerForm.HeaderText = String.Format("{0}: {1}", GetGlobalResourceString("FixedDepositLedger"), SEL_FNAME)
-                        ReportViewerForm.Show()
-                        SW = False
-                    End If
+                    Using MemberSearchForm As New frmMemberSearchDialog
+                        If MemberSearchForm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                            txtKBCI.Text = FormatKBCINo(SEL_KBCI_NO)
+                            txtFLNAME.Text = SEL_FNAME
+                            ReportViewerForm.ReportService = New FixedDepositLedgerReportService(MemberSearchForm.SelectedMember.KBCI_NO, _
+                                                                                                 DateRangePicker.StartDate, _
+                                                                                                 DateRangePicker.EndDate)
+                            ReportViewerForm.ReportModel = reportObject
+                            ReportViewerForm.HeaderText = String.Format("{0}: {1}", GetGlobalResourceString("FixedDepositLedger"), SEL_FNAME)
+                            ReportViewerForm.Show()
+                            SW = False
+                        End If
+                    End Using
                 End If
             End Using
         End With
@@ -583,40 +580,36 @@ Public Class frmFixedDepositMain
 
     Private Sub MenuItem8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem8.Click
         '#####INIT PASSBOOK
-        MemberSearchForm = New frmMemberSearchDialog
-        MemberSearchForm.ShowDialog()
-        Dim prtstr As String
-        If SW = True Then
-            If rsPASSBOOK.State = 1 Then rsPASSBOOK.Close()
-            rsPASSBOOK.Open("SELECT LNAME + ', ' + FNAME + ' ' + MI + '.' NAME,ISNULL(DEPT,'') DEPT,ISNULL(OFF_TEL,'') OFF_TEL,ISNULL(MEM_ADDR,'') MEM_ADDR,ISNULL(RES_TEL,'') RES_TEL FROM MEMBERS WHERE KBCI_NO ='" & SEL_KBCI_NO & "'", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-            If rsPASSBOOK.RecordCount > 0 Then
-                With rsPASSBOOK
-                    prtstr = vbCrLf & " " & vbCrLf & " " & vbCrLf & _
-                             "                         " & Mid(SEL_KBCI_NO, 1, 2) & "-" & Mid(SEL_KBCI_NO, 3, 4) & "-" & Mid(SEL_KBCI_NO, 7, 1) & _
-                             vbCrLf & " " & vbCrLf & _
-                             "          " & .Fields("NAME").Value & _
-                             vbCrLf & _
-                             "               " & .Fields("DEPT").Value.ToString.PadRight(26, " ") & .Fields("OFF_TEL").Value & _
-                             vbCrLf & " " & vbCrLf & _
-                             "               " & Mid(.Fields("MEM_ADDR").Value, 1, 30) & _
-                             vbCrLf & " " & vbCrLf & _
-                             "               " & .Fields("RES_TEL").Value
-                End With
-                MsgBox("Please Insert Passbook for Initialization then Press OK", MsgBoxStyle.Exclamation, "Passbook Initialization")
-                Dim prtobj As New TextPrint(prtstr, DEFPRINTER)
-                prtobj.Font = New Font("Letter Gothic", 10, FontStyle.Regular, GraphicsUnit.Point)
-                ' Issue print command
-                prtobj.Print()
-                prtobj.Dispose()
-            Else
+        Using MemberSearchForm As New frmMemberSearchDialog
+            Dim prtstr As String
+            If MemberSearchForm.ShowDialog() = DialogResult.OK Then
+                If rsPASSBOOK.State = 1 Then rsPASSBOOK.Close()
+                rsPASSBOOK.Open("SELECT LNAME + ', ' + FNAME + ' ' + MI + '.' NAME,ISNULL(DEPT,'') DEPT,ISNULL(OFF_TEL,'') OFF_TEL,ISNULL(MEM_ADDR,'') MEM_ADDR,ISNULL(RES_TEL,'') RES_TEL FROM MEMBERS WHERE KBCI_NO ='" & SEL_KBCI_NO & "'", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
+                If rsPASSBOOK.RecordCount > 0 Then
+                    With rsPASSBOOK
+                        prtstr = vbCrLf & " " & vbCrLf & " " & vbCrLf & _
+                                 "                         " & Mid(SEL_KBCI_NO, 1, 2) & "-" & Mid(SEL_KBCI_NO, 3, 4) & "-" & Mid(SEL_KBCI_NO, 7, 1) & _
+                                 vbCrLf & " " & vbCrLf & _
+                                 "          " & .Fields("NAME").Value & _
+                                 vbCrLf & _
+                                 "               " & .Fields("DEPT").Value.ToString.PadRight(26, " ") & .Fields("OFF_TEL").Value & _
+                                 vbCrLf & " " & vbCrLf & _
+                                 "               " & Mid(.Fields("MEM_ADDR").Value, 1, 30) & _
+                                 vbCrLf & " " & vbCrLf & _
+                                 "               " & .Fields("RES_TEL").Value
+                    End With
+                    MsgBox("Please Insert Passbook for Initialization then Press OK", MsgBoxStyle.Exclamation, "Passbook Initialization")
+                    Dim prtobj As New TextPrint(prtstr, DEFPRINTER)
+                    prtobj.Font = New Font("Letter Gothic", 10, FontStyle.Regular, GraphicsUnit.Point)
+                    ' Issue print command
+                    prtobj.Print()
+                    prtobj.Dispose()
+                Else
 
+                End If
             End If
-        End If
-        SW = False
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
+
+        End Using
     End Sub
 
     Private Sub MenuItem6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem6.Click
@@ -806,148 +799,19 @@ errHand:
     End Sub
 
     Private Sub MenuItem33_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem33.Click
-        Using ProcessingViewOptionDialogForm As New frmProcessingViewOptionDialog(New DividendPatronageRefundService)
-            frmFDS_Main_Arrange = New frmSortOptionDialog
-            With frmFDS_Main_Arrange.ComboBox3
-                .Items.Clear()
-                .Items.Add("KBCI_NO")
-                .Items.Add("LNAME")
-                .Items.Add("REGION")
-            End With
-            Using ArrangeForm As New frmSortOptionDialog
-
-                Dim result As DialogResult = ArrangeForm.ShowDialog()
-                If result = Windows.Forms.DialogResult.OK Then
-                    ProcessingViewOptionDialogForm.ShowDialog()
-                    If SW = True Then
-                        If ArrangeForm.SelectedField <> "REGION" Then
-                            If ViewOption = ViewOptions.Current Then
-                                genDIVREFREG("MM.MEM_STAT='A' AND", "ORDER BY DR." & ArrangeForm.SelectedField, "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            Else
-                                genDIVREFREG("MM.MEM_STAT='A' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & ArrangeForm.SelectedField, "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            End If
-                        Else
-                            If ViewOption = ViewOptions.Current Then
-                                genDIVREFREG("MM.MEM_STAT='A' AND", "AND MM.REGION='" & ArrangeForm.SelectedRegion & "'", "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-
-                            Else
-                                genDIVREFREG("MM.MEM_STAT='A' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & ArrangeForm.SelectedRegion & "' ORDER BY DR.KBCI_NO", "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            End If
-                        End If
-                    End If
-                End If
-            End Using
-            SW = False
-        End Using
+        GenerateDividendRefundReport(MemberStatusEnum.Active)
     End Sub
 
     Private Sub MenuItem34_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem34.Click
-        Using ProcessingViewOptionDialogForm As New frmProcessingViewOptionDialog(New DividendPatronageRefundService)
-            Using ArrangeForm As New frmSortOptionDialog
-                With ArrangeForm.ComboBox3
-                    .Items.Clear()
-                    .Items.Add("KBCI_NO")
-                    .Items.Add("LNAME")
-                    .Items.Add("REGION")
-                End With
-
-                Dim result As DialogResult = ArrangeForm.ShowDialog()
-                If result = Windows.Forms.DialogResult.OK Then
-                    ProcessingViewOptionDialogForm.ShowDialog()
-                    If SW = True Then
-                        If ArrangeForm.SelectedField <> "REGION" Then
-                            If ViewOption = ViewOptions.Current Then
-                                genDIVREFREG("MM.MEM_STAT='R' AND", "ORDER BY DR." & ArrangeForm.SelectedField, "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            Else
-                                genDIVREFREG("MM.MEM_STAT='R' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & ArrangeForm.SelectedField, "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            End If
-                        Else
-                            If ViewOption = ViewOptions.Current Then
-                                genDIVREFREG("MM.MEM_STAT='R' AND", "AND MM.REGION='" & ArrangeForm.SelectedRegion & "'", "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            Else
-                                genDIVREFREG("MM.MEM_STAT='R' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & ArrangeForm.SelectedRegion & "' ORDER BY DR.KBCI_NO", "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            End If
-                        End If
-                    End If
-
-                End If
-            End Using
-            SW = False
-        End Using
+        GenerateDividendRefundReport(MemberStatusEnum.Resigned)
     End Sub
 
     Private Sub MenuItem35_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem35.Click
-        Using ProcessingViewOptionDialogForm As New frmProcessingViewOptionDialog(New DividendPatronageRefundService)
-
-            Using ArrangeForm As New frmSortOptionDialog
-                With ArrangeForm.ComboBox3
-                    .Items.Clear()
-                    .Items.Add("KBCI_NO")
-                    .Items.Add("LNAME")
-                    .Items.Add("REGION")
-                End With
-
-                Dim result As DialogResult = ArrangeForm.ShowDialog()
-                If result = Windows.Forms.DialogResult.OK Then
-                    ProcessingViewOptionDialogForm.ShowDialog()
-                    If SW = True Then
-                        If ArrangeForm.SelectedField <> "REGION" Then
-                            If ViewOption = ViewOptions.Current Then
-                                genDIVREFREG("MM.MEM_STAT='S' AND", "ORDER BY DR." & ArrangeForm.SelectedField, "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            Else
-                                genDIVREFREG("MM.MEM_STAT='S' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & ArrangeForm.SelectedField, "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            End If
-                        Else
-                            If ViewOption = ViewOptions.Current Then
-                                genDIVREFREG("MM.MEM_STAT='S' AND", "AND MM.REGION='" & ArrangeForm.SelectedRegion & "'", "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            Else
-                                genDIVREFREG("MM.MEM_STAT='S' AND", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & ArrangeForm.SelectedRegion & "' ORDER BY DR.KBCI_NO", "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            End If
-                        End If
-                    End If
-
-                End If
-            End Using
-            SW = False
-        End Using
+        GenerateDividendRefundReport(MemberStatusEnum.Staff)
     End Sub
 
     Private Sub MenuItem36_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem36.Click
-        Using ProcessingViewOptionDialogForm As New frmProcessingViewOptionDialog(New DividendPatronageRefundService)
-
-            Using ArrangeForm As New frmSortOptionDialog
-                With ArrangeForm.ComboBox3
-                    .Items.Clear()
-                    .Items.Add("KBCI_NO")
-                    .Items.Add("LNAME")
-                    .Items.Add("REGION")
-                End With
-
-                Dim result As DialogResult = ArrangeForm.ShowDialog()
-                If result = Windows.Forms.DialogResult.OK Then
-                    ProcessingViewOptionDialogForm.ShowDialog()
-                    If SW = True Then
-                        If ArrangeForm.SelectedField <> "REGION" Then
-                            If ViewOption = ViewOptions.Current Then
-                                genDIVREFREG("", "ORDER BY DR." & ArrangeForm.SelectedField, "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            Else
-                                genDIVREFREG("", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') ORDER BY DR." & ArrangeForm.SelectedField, "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            End If
-                        Else
-                            If ViewOption = ViewOptions.Current Then
-                                genDIVREFREG("", "AND MM.REGION='" & ArrangeForm.SelectedRegion & "'", "DIVREF", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            Else
-                                genDIVREFREG("", "AND (DR.YEAR='" & SELYR & "' AND DR.QUARTER='" & SELQTR & "') AND MM.REGION='" & ArrangeForm.SelectedRegion & "' ORDER BY DR.KBCI_NO", "DIVREFH", ArrangeForm.SelectedField, ArrangeForm.SelectedRegion)
-                            End If
-                        End If
-                    End If
-
-                End If
-            End Using
-            SW = False
-        End Using
-
-
+        GenerateDividendRefundReport(String.Empty)
     End Sub
 
     Private Sub MenuItem23_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem23.Click
@@ -1087,6 +951,7 @@ errHand:
         End If
 
     End Sub
+
     Private Sub GeneratePatronageRefundReport(ByVal memberStatus As String, ByVal reportTitle As String)
         Using SummaryViewOptionForm As New frmSummaryViewOptionDialog
             Dim result As DialogResult = SummaryViewOptionForm.ShowDialog
@@ -1151,53 +1016,36 @@ errHand:
 
     End Sub
 
-    Private Sub genDIVREFREG(ByVal MSTAT As String, ByVal ORDR As String, ByVal TBL As String, ByVal SelectedField As String, ByVal SelectedRegion As String)
-        Dim rsRPT As New ADODB.Recordset
-        Dim dst As New DataTable("dstFD_Member")
-        Dim ds As New DataSet
-        Dim sQRY As String
-        Dim rpt As New rptDIVREFREG
+    Private Sub GenerateDividendRefundReport(ByVal memberStatus As String)
+        Dim reportObject As New DividendRefundReport
         Dim divrefph As New ADODB.Recordset
         ReportViewerForm = New frmReportViewer
         ReportViewerForm.MdiParent = Me
 
-        sQRY = "SELECT DR.KBCI_NO, DR.LNAME + ', ' + DR.FNAME + ' ' + ISNULL(DR.MI,'X') + '.' NAME," & _
-                "ISNULL(DR.DIVIDEND,0) DIVIDEND,ISNULL(DR.REFUND,0) REFUND," & _
-                "ISNULL(DR.DEDUCTIONS,0) DEDUCTIONS " & _
-                "FROM " & TBL & " DR " & _
-                "LEFT JOIN MEMBERS MM ON MM.KBCI_NO=DR.KBCI_NO " & _
-                "WHERE " & MSTAT & " (DR.REFUND>0 OR DR.DIVIDEND>0) " & ORDR
+        Using ProcessingViewOptionDialogForm As New frmProcessingViewOptionDialog(New DividendPatronageRefundService)
+            Using ArrangeForm As New frmSortOptionDialog
+                Dim result As DialogResult = ArrangeForm.ShowDialog()
+                If result = Windows.Forms.DialogResult.OK Then
+                    If ProcessingViewOptionDialogForm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                        With reportObject.Section2
+                            Dim CAT As TextObject = .ReportObjects("Text9")
+                            Dim REG As TextObject = .ReportObjects("Text11")
 
-
-        rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-        If rsRPT.RecordCount > 0 Then
-            'divrefph.Open("select TOP 1 PR_YEAR FROM divrefph ORDER BY [YEAR] DESC, [QUARTER] DESC", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-            Dim CAT As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text9")
-            Dim REG As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text11")
-            '
-            'Dim YYEAR As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text6")
-
-            CAT.Text = "FOR QUARTER " & SELQTR & " YEAR " & SELYR
-            If SelectedField = "REGION" Then
-                REG.Text = "REGION : " & SelectedRegion.ToUpper
-            Else
-                REG.Text = ""
-            End If
-
-            'divrefph.Close()
-            PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "5:3:2:2:2")
-            ReportViewerForm.Text = "CASH DIV. / PAT REFUND. REGISTER"
-            ReportViewerForm.Show()
-        Else
-            MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "Daily Transaction Register")
-        End If
-        SW = False
-        If rsRPT.State = 1 Then rsRPT.Close()
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
-
+                            CAT.Text = String.Format("FOR QUARTER: {0}     YEAR: {1}", ProcessingViewOptionDialogForm.SelectedQuarter, ProcessingViewOptionDialogForm.SelectedYear)
+                            REG.Text = String.Empty
+                            If ArrangeForm.SelectedField.Equals(SortOptions.Region) Then
+                                REG.Text = String.Format("REGION : {0}", ArrangeForm.SelectedRegion)
+                            End If
+                        End With
+                        ReportViewerForm.ReportModel = reportObject
+                        ReportViewerForm.ReportService = New DivdendRefundReportService(ProcessingViewOptionDialogForm.SelectedViewOption, memberStatus, ArrangeForm.SelectedField, ArrangeForm.SelectedRegion, ProcessingViewOptionDialogForm.SelectedYear, ProcessingViewOptionDialogForm.SelectedQuarter)
+                        ReportViewerForm.Text = "CASH DIV. / PAT REFUND. REGISTER"
+                        ReportViewerForm.Show()
+                    End If
+                End If
+            End Using
+            SW = False
+        End Using
     End Sub
 
     Private Sub fillStatbar()

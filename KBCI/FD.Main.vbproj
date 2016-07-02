@@ -298,8 +298,8 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Reports\rptDIVREFREG.vb">
-      <DependentUpon>rptDIVREFREG.rpt</DependentUpon>
+    <Compile Include="Reports\DividendRefundReport.vb">
+      <DependentUpon>DividendRefundReport.rpt</DependentUpon>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -445,9 +445,9 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CashDividendRegisterPerRegionReport.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptDIVREFREG.rpt">
+    <EmbeddedResource Include="Reports\DividendRefundReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptDIVREFREG.vb</LastGenOutput>
+      <LastGenOutput>DividendRefundReport.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\DailyTransactionRegisterReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

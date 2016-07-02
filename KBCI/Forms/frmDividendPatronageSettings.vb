@@ -380,9 +380,9 @@ Public Class frmDividendPatronageSettings
                         Dim MemberSearchForm As New frmMemberSearchDialog
                         MemberSearchForm.ShowDialog()
                         If SW = True Then
-                            TextBox3.Text = SelectedMemberData.KBCI_NO
-                            Label4.Text = SelectedMemberData.FEBTC_CA
-                            Label5.Text = SelectedMemberData.LNAME
+                            TextBox3.Text = MemberSearchForm.SelectedMember.KBCI_NO
+                            Label4.Text = MemberSearchForm.SelectedMember.FEBTC_CA
+                            Label5.Text = MemberSearchForm.SelectedMember.LNAME
                             EDTool(ToolBar1, False)
                             .Buttons(IDX).Enabled = True
                             GroupBox1.Enabled = True
@@ -390,15 +390,13 @@ Public Class frmDividendPatronageSettings
                             .Buttons(DivRefToolbarButtons.Exit).Text = GetGlobalResourceString("CancelButton")
                         End If
                     Else
-                        If Not SelectedMemberData Is Nothing Then
-                            Dim result As RecordUpdateResult = IDivPatRefSettingsService.Save(SaveParameter, DividendAmount, RefundAmount, ViewOption)
-                            IRecordMsgService.GetMessageFromRecordUpdateResult(result)
-                            If Not result = RecordUpdateResult.Unsuccessful Then
-                                .Buttons(DivRefToolbarButtons.Exit).Text = GetGlobalResourceString("ExitButton")
-                                e.Button.Text = GetGlobalResourceString("AddButton")
-                                EDTool(ToolBar1, True)
-                                GroupBox1.Enabled = False
-                            End If
+                        Dim result As RecordUpdateResult = IDivPatRefSettingsService.Save(SaveParameter, DividendAmount, RefundAmount, ViewOption)
+                        IRecordMsgService.GetMessageFromRecordUpdateResult(result)
+                        If Not result = RecordUpdateResult.Unsuccessful Then
+                            .Buttons(DivRefToolbarButtons.Exit).Text = GetGlobalResourceString("ExitButton")
+                            e.Button.Text = GetGlobalResourceString("AddButton")
+                            EDTool(ToolBar1, True)
+                            GroupBox1.Enabled = False
                         End If
                     End If
                 Case DivRefToolbarButtons.Edit

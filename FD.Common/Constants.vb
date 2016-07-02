@@ -195,7 +195,23 @@ Public Class CustomQueryString
                                                             "ISNULL(SN.EMLINT,0) EMLINT,ISNULL(SN.RGLINT,0) RGLINT,ISNULL(SN.RSLINT,0) RSLINT,ISNULL(SN.SPLINT,0) SPLINT,ISNULL(SN.LHLINT,0) LHLINT,ISNULL(SN.STLINT,0) STLINT" & _
                                                             ",ISNULL(SN.CMLINT,0) CMLINT,ISNULL(SN.FALINT,0) FALINT,ISNULL(SN.MPLINT,0) MPLINT, {0} " & _
                                                             " FROM {1} SN INNER JOIN MEMBERS MM ON SN.ACCTNO=MM.KBCI_NO WHERE	MM.MEM_STAT='{2}' AND MM.YTD_DIVAMT>0 ORDER BY MM.LNAME, MM.FNAME"
+
+    Public Const DividendRefundReport As String = "SELECT DR.KBCI_NO, DR.LNAME + ', ' + DR.FNAME + ' ' + ISNULL(DR.MI,'X') + '.' NAME, " & _
+                                                            "ISNULL(DR.DIVIDEND,0) DIVIDEND,ISNULL(DR.REFUND,0) REFUND,ISNULL(DR.DEDUCTIONS,0) DEDUCTIONS " & _
+                                                            "FROM DIVREF DR LEFT JOIN MEMBERS MM ON MM.KBCI_NO=DR.KBCI_NO  " & _
+                                                            "WHERE (MM.MEM_STAT =@MemberStatus OR @MemberStatus = '') AND (DR.REFUND>0 OR DR.DIVIDEND>0) AND (MM.REGION = @FilterByRegion OR @FilterByRegion= '') " & _
+                                                            "ORDER BY CASE @SortBy WHEN 'KBCI_NO' THEN MM.KBCI_NO WHEN 'NAME' THEN DR.LNAME WHEN 'REGION' THEN MM.REGION END"
+
+    Public Const DividendRefundReportHistory As String = "SELECT DR.KBCI_NO, DR.LNAME + ', ' + DR.FNAME + ' ' + ISNULL(DR.MI,'X') + '.' NAME, " & _
+                                                            "ISNULL(DR.DIVIDEND,0) DIVIDEND,ISNULL(DR.REFUND,0) REFUND,ISNULL(DR.DEDUCTIONS,0) DEDUCTIONS " & _
+                                                            "FROM DIVREFH DR LEFT JOIN MEMBERS MM ON MM.KBCI_NO=DR.KBCI_NO  " & _
+                                                            "WHERE (MM.MEM_STAT =@MemberStatus OR @MemberStatus = '') AND (DR.REFUND>0 OR DR.DIVIDEND>0) AND DR.YEAR=@PostingYear AND DR.QUARTER=@PostingQuarter AND (MM.REGION = @FilterByRegion OR @FilterByRegion= '') " & _
+                                                            "ORDER BY CASE @SortBy WHEN 'KBCI_NO' THEN MM.KBCI_NO WHEN 'NAME' THEN DR.LNAME WHEN 'REGION' THEN MM.REGION END"
 End Class
+
+
+
+
 
 
 

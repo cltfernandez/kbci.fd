@@ -18,8 +18,7 @@ Module CommonUtilities
     Public rsTRANCODE As New List(Of Trancode)
     Public rsMEMBERS As New List(Of Members)
     Public MembersGridList As New List(Of MembersBOVM)
-    Public rsNMEMBERS As New ADODB.Recordset
-    Public SelectedMemberData As New Members    
+    Public rsNMEMBERS As New ADODB.Recordset     
     Public rsFD_Mem As New ADODB.Recordset
     Public rsFD_MemX As New ADODB.Recordset
     Public rsFD_Mem_L As New ADODB.Recordset

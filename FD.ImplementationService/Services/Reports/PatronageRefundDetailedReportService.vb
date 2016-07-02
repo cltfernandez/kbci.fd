@@ -12,7 +12,7 @@ Public Class PatronageRefundDetailedReportService : Implements IReportService
 
 
     Public Function GetData() As DataTable Implements IReportService.GetData
-        Dim reportFactory As New ReportFactoryService
-        Return reportFactory.GetReportData(_memberStatus)
+        Dim reportFactory As IReportFactoryService = New PatronageRefundReportFactory(_memberStatus)
+        Return reportFactory.GetReportData()
     End Function
 End Class

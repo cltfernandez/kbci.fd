@@ -60,4 +60,14 @@ Public Class MemberSearchBovm
             _FEBTC_SA = value
         End Set
     End Property
+
+    Private _FEBTC_CA As String
+    Public Property FEBTC_CA() As String
+        Get
+            Return _FEBTC_CA
+        End Get
+        Set(ByVal value As String)
+            _FEBTC_CA = value
+        End Set
+    End Property
 End Class

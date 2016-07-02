@@ -1,9 +1,14 @@
 ﻿Imports FD.Common
 Imports FD.DataAccessObject
-Public Class ReportFactoryService
-    Public Function GetReportData(ByVal memberStatus As String) As DataTable
+Public Class PatronageRefundReportFactory : Implements IReportFactoryService
+
+    Private _memberStatus As String
+    Sub New(ByVal memberStatus As String)
+        _memberStatus = memberStatus
+    End Sub
+    Public Function GetReportData() As DataTable Implements IReportFactoryService.GetReportData
         Dim data As DataTable
-        Select Case memberStatus
+        Select Case _memberStatus
             Case MemberStatusEnum.Active
                 Using dao As New InterestDAO
                     data = dao.GetInterestForAllMembers()
@@ -23,4 +28,5 @@ Public Class ReportFactoryService
         End Select
         Return data
     End Function
+
 End Class

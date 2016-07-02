@@ -1,5 +1,6 @@
 Imports FD.BusinessLogic
 Imports FD.ViewModels
+Imports FD.Common
 Public Class frmProcessingViewOptionDialog
     Inherits System.Windows.Forms.Form
     Public Sub New(ByVal svc As IDividendPatronageRefundService)
@@ -202,6 +203,17 @@ Public Class frmProcessingViewOptionDialog
         End Set
     End Property
 
+
+    Private _selectedViewOption As Integer
+    Public Property SelectedViewOption() As Integer
+        Get
+            Return _selectedViewOption
+        End Get
+        Set(ByVal value As Integer)
+            _selectedViewOption = value
+        End Set
+    End Property
+
     Private Service As IDividendPatronageRefundService
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
@@ -218,14 +230,19 @@ Public Class frmProcessingViewOptionDialog
 
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        'TODO:Remove the filthy ViewOption 
         If RadioButton1.Checked = True Then
-            ViewOption = FD.Common.ViewOptions.Current
+            ViewOption = ViewOptions.Current
+            SelectedViewOption = FD.Common.ViewOptions.Current
         End If
 
         If RadioButton2.Checked = True Then
-            ViewOption = FD.Common.ViewOptions.History
+            ViewOption = ViewOptions.History
+            SelectedViewOption = FD.Common.ViewOptions.History
             SELYR = NumericUpDown4.Value
+            SelectedYear = NumericUpDown4.Value
             SELQTR = NumericUpDown3.Value
+            SelectedQuarter = NumericUpDown3.Value
         End If
         Me.DialogResult = Windows.Forms.DialogResult.OK
     End Sub
