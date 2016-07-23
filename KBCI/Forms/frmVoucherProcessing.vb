@@ -432,7 +432,7 @@ Public Class frmVoucherProcessing
         rsDV.Close()
     End Sub
     Function CVNo() As String
-        Dim TMPCVNo As Integer = Val(rsCTL.VOUCHER)
+        Dim TMPCVNo As Integer = Val(rsCTL.VoucherNumber)
         Dim TMPCVNUM As String
         If TMPCVNo >= 999 Then TMPCVNo = 0
         TMPCVNo += 1

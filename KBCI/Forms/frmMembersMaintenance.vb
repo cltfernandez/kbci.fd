@@ -2,6 +2,8 @@ Imports FD.Common
 Imports FD.Common.Utilities
 Imports FD.ViewModels
 Imports FD.DataAccessObject
+Imports FD.BusinessLogic
+Imports System.Collections.Generic
 
 Public Class frmMembersMaintenance
     Inherits System.Windows.Forms.Form
@@ -1499,6 +1501,9 @@ Public Class frmMembersMaintenance
     Dim MemberUpdates As Boolean = False
 
     Private _memberData As Members
+    Private MembersGridList As New List(Of MembersBOVM)
+    Private FormOperationService As IFormOperations
+    Private rsMEMBERS As New List(Of Members)
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.Close()
@@ -1537,8 +1542,7 @@ Public Class frmMembersMaintenance
                                     cn.Execute(CleanSTR("INSERT INTO FD([KBCI_NO],[TRAN_CODE],[DATE],[REF],[AMOUNT],[BALANCE],[RMK],[ADD_DATE],[USER] ,[LPOSTED],[DRCR],[BANK_CODE],[CHECKNO],[TPOSTED],[TREVERSED])" & _
                                              "VALUES('" & KBCINUM & "','1','" & SYSDATE & "','INITIAL'," & Round(CDec(TextBox25.Text), 2) & "," & Round(CDec(TextBox25.Text), 2) & ",'INITIAL SETUP','" & SYSDATE & "','" & CurrentUser.UserName & "',0,'CR','','','True','False')"))
                                 End If
-                                cn.Execute("UPDATE CTRL SET KBCI_NO='" & KBCINUM & "'")
-                                rsCTL.Read(1)
+                                cn.Execute("UPDATE CTRL SET KBCI_NO='" & KBCINUM & "'")                                
                                 MemberUpdates = True
                                 .Buttons(6).Text = "EXIT"
                             End If
@@ -1860,7 +1864,7 @@ errHand:
         End If
     End Sub
     Function KBCINumber() As String
-        Dim KBCINO As Integer = Val(Mid(CStr(rsCTL.KBCI_NO), 3, 4)) + 1
+        Dim KBCINO As Integer = Val(Mid(CStr(rsCTL.KbciNumber), 3, 4)) + 1
         Dim NOKBCI As String = Microsoft.VisualBasic.Right(Format(DateValue(SYSDATE), "mmddyyyy"), 2)
         Dim i As Integer = 7
         Dim tot As Integer = 0
@@ -1914,6 +1918,9 @@ errHand:
             LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
         End If
     End Function
-
+    Private Sub PopulateMembersList()
+        FormOperationService = New MembersOperationService()
+        MembersGridList = FormOperationService.GetAll()
+    End Sub
 End Class
 

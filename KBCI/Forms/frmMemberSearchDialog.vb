@@ -288,7 +288,7 @@ Public Class frmMemberSearchDialog
     End Sub
 
     Private Sub frmFDS_Main_PrntFDL_Srch_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        svc = New MembersOperationService()
+        svc = New MembersSearchOperationService()
         rsMemberSearch = svc.GetAll()
         PopulateListView(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
     End Sub

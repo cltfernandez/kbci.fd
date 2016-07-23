@@ -8,17 +8,14 @@ Imports System.Collections.Generic
 Imports FD.DataAccessObject
 Imports FD.ViewModels
 Imports System.Reflection
+Imports FD.BusinessLogic
 
-Module CommonUtilities
-    Public BALANCE As Integer
+Module CommonUtilities    
     Public SW As Boolean = False
     Public frmFDS_Main As frmFixedDepositMain
     Public cn As New ADODB.Connection
-    Public rsCTL As New Ctrl
-    Public rsTRANCODE As New List(Of Trancode)
-    Public rsMEMBERS As New List(Of Members)
-    Public MembersGridList As New List(Of MembersBOVM)
-    Public rsNMEMBERS As New ADODB.Recordset     
+    Public rsCTL As New CtrlViewModel
+    Public rsNMEMBERS As New ADODB.Recordset
     Public rsFD_Mem As New ADODB.Recordset
     Public rsFD_MemX As New ADODB.Recordset
     Public rsFD_Mem_L As New ADODB.Recordset
@@ -30,7 +27,7 @@ Module CommonUtilities
     Public rsPASSBOOK As New ADODB.Recordset
     Public Const adFilterNone As ADODB.FilterGroupEnum = ADODB.FilterGroupEnum.adFilterNone
     Public DEFPRINTER As String
-    Public SEL_KBCI_NO, SEL_FNAME, SEL_FEBTC As String    
+    Public SEL_KBCI_NO, SEL_FNAME, SEL_FEBTC As String
     Public SYSDATE, SELYR, SELQTR, rCN As String
     Public SUMMRY As Boolean
 
@@ -39,8 +36,7 @@ Module CommonUtilities
     Public bOWCheck() As Boolean
     Public _GlobalCurrentUser As UserViewModel
     Public Forms As System.Windows.Forms.FormCollection = Application.OpenForms
-    
-    
+
     Public Function IsFormLoaded(ByVal FormName As String) As Boolean
         Dim i As Integer, fnamelc As String
 
@@ -77,15 +73,7 @@ Module CommonUtilities
     Public Function App_Path() As String
         Return System.AppDomain.CurrentDomain.BaseDirectory()
     End Function
-    Public Sub WLOG(ByVal LogMsg As String, ByVal LogPTH As String)
-        On Error GoTo err1
-        Dim logWrite As StreamWriter = File.AppendText(LogPTH)
-        logWrite.WriteLine(LogMsg) : logWrite.Flush() : logWrite.Close()
-err1:
-        If Err.Number <> 0 Then
-            WLOG("**RUNTIME ERROR** " & Err.Description & "  Module: 'WLOG'" & Now, LogPTH) : Resume err1
-        End If
-    End Sub
+
     Public Sub clrTXT(ByRef Mee As Form)
         Dim Control As Control
         Dim gControl As Control
@@ -184,18 +172,6 @@ err1:
         Next
         Return rStr
     End Function
-    Public Sub SQLConn(ByVal QRYStr As String, ByRef DS As DataSet, ByVal DT As DataTable)
-        Dim cnn As New SqlConnection("Provider=SQLOLEDB.1;Password=password123;Persist Security Info=True;User ID=sa;Initial Catalog=kbci;Data Source=BLITZ\SQLEXPRESS,1433")
-        Dim sqlCMD As New SqlCommand(QRYStr, cnn)
-        Dim shitadapter As New SqlDataAdapter(sqlCMD)
-        sqlCMD.CommandType = CommandType.Text
-        cnn.Open()
-        shitadapter.Fill(DS)
-        cnn.Close()
-        DT = DS.Tables(0)
-        MsgBox(DT.Columns.Count)
-
-    End Sub
 
     Public Function LogError(ByVal lngErrNumber As Long, ByVal strErrDescription As String, ByVal strCallingProc As String, ByVal currUser As String, Optional ByVal bShowUser As Boolean = True) As Boolean
         On Error GoTo ErrorHandler
@@ -335,7 +311,7 @@ ErrorHandler:
         Return DG
     End Function
     Public Function GetGridViewDataFromObject(Of T)(ByVal items As List(Of T), ByRef DG As DataGridView) As DataGridView
-        DG.DataSource = items        
+        DG.DataSource = items
         Return DG
     End Function
     Public Function WhichCell(ByVal lvw As ListView, ByVal X As Integer, ByVal Y As Integer) As MyCell
@@ -378,19 +354,6 @@ ErrorHandler:
         'put a breakpoint here and check datatable
         Return dataTable
     End Function
-    Public Sub PopulateMembersList()
-        Using rsMEMBERSDao As New MembersDAO
-            rsMEMBERS = rsMEMBERSDao.GetAll("LNAME")
-            MembersGridList = rsMEMBERS.Select(Function(x) New MembersBOVM() With {.KBCI_ID = x.KBCI_ID, _
-                                                                          .KBCI_NO = x.KBCI_NO, _
-                                                                          .LNAME = x.LNAME, _
-                                                                          .FNAME = x.FNAME, _
-                                                                          .MI = x.MI, _
-                                                                          .MEM_STAT = x.MEM_STAT, _
-                                                                          .DATE = x.MEM_DATE, _
-                                                                          .FD_AMOUNT = x.FD_AMOUNT}).ToList
-        End Using
-    End Sub
 
     Public Function FormatKBCINo(ByVal rawKBCINo As String) As String
         Return String.Format("{0}-{1}-{2}", Mid(rawKBCINo, 1, 2), Mid(rawKBCINo, 3, 4), Mid(rawKBCINo, 7, 1))

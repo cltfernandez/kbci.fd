@@ -9,8 +9,8 @@ Public Class frmFixedDepositLogin
         InitializeComponent()
     End Sub
     Public Sub New(ByVal LoginMemberService As IPasswordValidator, ByVal MessageService As ILoginMessagePromptService)
-        _ILoginMemberService = LoginMemberService
-        _IMessageService = MessageService
+        ILoginMemberService = LoginMemberService
+        IMessageService = MessageService
         InitializeComponent()
     End Sub
 #Region " Windows Form Designer generated code "
@@ -150,35 +150,11 @@ Public Class frmFixedDepositLogin
 
 #End Region
 
-    Private _ILoginMemberService As IPasswordValidator
-    Private Property ILoginMemberService() As IPasswordValidator
-        Get
-            Return _ILoginMemberService
-        End Get
-        Set(ByVal value As IPasswordValidator)
-            _ILoginMemberService = value
-        End Set
-    End Property
+    Private ILoginMemberService As IPasswordValidator
 
-    Private _IMessageService As ILoginMessagePromptService
-    Private Property IMessageService() As ILoginMessagePromptService
-        Get
-            Return _IMessageService
-        End Get
-        Set(ByVal value As ILoginMessagePromptService)
-            _IMessageService = value
-        End Set
-    End Property
+    Private IMessageService As ILoginMessagePromptService
 
-    Private _CurrentUser As UserViewModel
-    Public Property CurrentUser() As UserViewModel
-        Get
-            Return _CurrentUser
-        End Get
-        Set(ByVal value As UserViewModel)
-            _CurrentUser = value
-        End Set
-    End Property
+    Public CurrentUser As UserViewModel
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
         Dim result As UserViewModel = ILoginMemberService.ValidatePassword(TextBox6.Text.Trim, TextBox1.Text.Trim)

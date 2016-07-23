@@ -1,7 +1,6 @@
 Imports System.Data.SqlClient
 Imports FD.Common
 Imports FD.Common.Utilities
-Imports FD.DataAccessObject
 Imports FD.BusinessLogic
 Imports FD.ViewModels
 Imports CrystalDecisions.CrystalReports.Engine
@@ -472,7 +471,7 @@ Public Class frmFixedDepositMain
     End Sub
 
 #End Region    
-    Public frmFDS_Main_DEntry As frmMembersList
+    Private FixedDepositTransactionMembersListForm As frmMembersList
     Public MembersMaintenanceForm As frmMembersMaintenance
     Public SystemConfigurationForm As frmAppConfiguration
     Public LoginForm As frmFixedDepositLogin
@@ -489,6 +488,9 @@ Public Class frmFixedDepositMain
     Private LatestDivRefPostingDefinition As DivrefPostingViewModel
     Public CurrentUser As UserViewModel
     Private SystemCtrl As CtrlViewModel
+
+    Private FormOperationService As IFormOperations
+    Private MembersGridList As New List(Of MembersBOVM)
 
 
 
@@ -510,10 +512,6 @@ Public Class frmFixedDepositMain
             DEFPRINTER = Utilities.GetConfig("PT")
 
             If Not rsCTL Is Nothing Then SYSDATE = rsCTL.SYSDATE Else MsgBox("CTRL Configuration Not found! Please Contact your system administrator.", MsgBoxStyle.Critical, "Critical Error") : End
-
-            rsTRANCODE = rsTrancodeDAO.GetAll
-
-            If Not rsTRANCODE.Any Then MsgBox("TRANCODE Not found! Please Contact your system administrator.", MsgBoxStyle.Critical, "Critical Error") : End
             fillStatbar()
         End Using
     End Sub
@@ -529,15 +527,12 @@ Public Class frmFixedDepositMain
     End Sub
 
     Private Sub MenuItem2_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem2.Click
-        If IsFormLoaded("frmFDS_Main_DEntry") Then Exit Sub
-        PopulateMembersList()
-        If Not rsMEMBERS Is Nothing Then
-            frmFDS_Main_DEntry = New frmMembersList(CurrentUser)
-            frmFDS_Main_DEntry.MdiParent = Me
-            frmFDS_Main_DEntry.Show()
-        Else
-            MsgBox("No Records Found")
-        End If
+        If IsFormLoaded("FixedDepositTransactionMembersListForm") Then Exit Sub
+        FixedDepositTransactionMembersListForm = New frmMembersList(CurrentUser)
+        With FixedDepositTransactionMembersListForm
+            .MdiParent = Me
+            .Show()
+        End With
     End Sub
 
     Private Sub MenuItem10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem10.Click
@@ -687,7 +682,7 @@ Public Class frmFixedDepositMain
             Dim txtDATE As TextObject = .ReportObjects("txtDATE")
 
             Dim msg As DialogResult = _
-                MsgBox(String.Format(GetGlobalResourceString("FixedDepositRunupPrompt"), DateValue(rsCTL.RUN_DATE).ToString("MM/dd/yyyy")), MsgBoxStyle.Information + MsgBoxStyle.YesNo, GetGlobalResourceString("FixedDepositRunup"))
+                MsgBox(String.Format(GetGlobalResourceString("FixedDepositRunupPrompt"), DateValue(rsCTL.RunDate).ToString("MM/dd/yyyy")), MsgBoxStyle.Information + MsgBoxStyle.YesNo, GetGlobalResourceString("FixedDepositRunup"))
 
             If msg = vbYes Then
                 Using DatePicker As New frmDateRangePickerDialog
@@ -707,7 +702,7 @@ Public Class frmFixedDepositMain
     End Sub
 
     Private Sub MenuItem15_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem15.Click
-        frmDIVPAT = New frmDividendPatronageRefundProcessing(New DividendPatronageRefundService, MainMessagePromptService, CurrentUser, rsCTL.SYSDATE)
+        frmDIVPAT = New frmDividendPatronageRefundProcessing(New DividendPatronageRefundService, MainMessagePromptService, CurrentUser, rsCTL.SystemDate)
         frmDIVPAT.ShowDialog()
     End Sub
 
@@ -867,12 +862,6 @@ errHand:
             fillStatbar()
         End If
     End Sub
-
-    Private Sub MenuItem37_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        frmFDS_Main_DEntry.MdiParent = Me
-        frmFDS_Main_DEntry.Show()
-    End Sub
-
 
     Private Sub MenuItem38_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim crypt As New Crypt

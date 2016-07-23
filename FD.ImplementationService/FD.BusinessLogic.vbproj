@@ -95,7 +95,9 @@
     </Compile>
     <Compile Include="Services\DividendPatronageRefundSettingService.vb" />
     <Compile Include="Services\FixedDepositTransactionService.vb" />
+    <Compile Include="Services\FormOperations\ApplicationSettingsService.vb" />
     <Compile Include="Services\FormOperations\MembersOperationService.vb" />
+    <Compile Include="Services\FormOperations\MembersSearchOperationService.vb" />
     <Compile Include="Services\MessagePromptService.vb" />
     <Compile Include="Services\Reports\ActiveMembersReportService.vb">
       <SubType>Code</SubType>

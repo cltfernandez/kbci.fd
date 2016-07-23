@@ -330,29 +330,11 @@ Public Class frmMembersList
     Dim eload As Boolean
     Dim mTXT As TextBox
     Dim fField, SRCH, QRY As String
-    Public TransactionListForm As frmMembersTransactionList
-    Private _CurrentUser As UserViewModel
-    Public Property CurrentUser() As UserViewModel
-        Get
-            Return _CurrentUser
-        End Get
-        Set(ByVal value As UserViewModel)
-            _CurrentUser = value
-        End Set
-    End Property
-
-
-    Private _ListOfMembers As List(Of MembersBOVM)
-    Public Property ListOfMembers() As List(Of MembersBOVM)
-        Get
-            Return _ListOfMembers
-        End Get
-        Set(ByVal value As List(Of MembersBOVM))
-            _ListOfMembers = value
-        End Set
-    End Property
-
-
+    Private TransactionListForm As frmMembersTransactionList
+    Private CurrentUser As UserViewModel
+    Private ListOfMembers As List(Of MembersBOVM)
+    Private FormOperationService As IFormOperations
+    Private MembersGridList As New List(Of MembersBOVM)
 
     Private Sub TextBox1_KeyUp1(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyUp
         SRCH = TextBox1.Text : fField = TableFieldConstants.LastName
@@ -444,5 +426,10 @@ Public Class frmMembersList
         PopulateMembersList()
         ListOfMembers = MembersGridList
         TextBox1.Focus()
+    End Sub
+
+    Private Sub PopulateMembersList()
+        FormOperationService = New MembersOperationService()
+        MembersGridList = FormOperationService.GetAll()
     End Sub
 End Class
