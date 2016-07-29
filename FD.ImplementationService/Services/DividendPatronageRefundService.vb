@@ -28,10 +28,10 @@ Public Class DividendPatronageRefundService : Implements IDividendPatronageRefun
                 If DividendRefundPh.CVNO.Trim <> String.Empty Or DividendRefundPh.POSTED = True Then
                     Return DividendProcessingValidationResult.Invalid
                 Else
-                    Return DividendProcessingValidationResult.NotFound
+                    Return DividendProcessingValidationResult.Valid
                 End If
             Else
-                Return DividendProcessingValidationResult.Valid
+                Return DividendProcessingValidationResult.NotFound
             End If
         End Using
     End Function

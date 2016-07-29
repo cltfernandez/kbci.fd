@@ -13,7 +13,7 @@ Public Class frmFixedDepositMain
         MainPasswordValidator = New UserService
         MainUserActionService = New UserService
         MainMessagePromptService = New MessagePromptService
-
+        dividendPatronageRefundSettingsSvc = New DividendPatronageRefundSettingService
         InitializeComponent()
     End Sub
 #Region " Windows Form Designer generated code "
@@ -479,12 +479,14 @@ Public Class frmFixedDepositMain
     Public frmFDS_Main_Arrange As frmSortOptionDialog
     Public frmDIVPAT As frmDividendPatronageRefundProcessing
     Public DividendPatronageSettingsForm As frmDividendPatronageSettings    
-    Public frmFDS_DVoucher As frmVoucherProcessing
+    Public VoucherProcessingForm As frmVoucherProcessing
     Public MainPasswordValidator As IPasswordValidator
     Private MainUserActionService As IUserService
     Private MainMessagePromptService As ILoginMessagePromptService
 
     Private CashDividendSettingsService As ICashDividendSettingsService
+
+    Private dividendPatronageRefundSettingsSvc As IDividendPatronageRefundSettingService
     Private LatestDivRefPostingDefinition As DivrefPostingViewModel
     Public CurrentUser As UserViewModel
     Private SystemCtrl As CtrlViewModel
@@ -498,22 +500,19 @@ Public Class frmFixedDepositMain
 
 
     Private Sub frmFDS_Main_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Using rsCtrlDAO As New CtrlDAO
-            Dim param As New LUNA.LunaSearchParameter("CTRL_ID", "1")
-            rsCTL = rsCtrlDAO.Find(param)
-        End Using
 
-        Using rsTrancodeDAO As New TrancodeDAO
-            LoginPrompt()
-            If CurrentUser Is Nothing Then End : Exit Sub
-            cn.ConnectionString = "Provider=SQLOLEDB.1;Password=" & Utilities.GetConfig("WP") & ";Persist Security Info=True;User ID=" & Utilities.GetConfig("CL") & ";Initial Catalog=" & Utilities.GetConfig("DB") & ";Data Source=" & Utilities.GetConfig("SV")
-            cn.Open()
-            rCN = "Password=" & Utilities.GetConfig("WP") & ";User ID=" & Utilities.GetConfig("CL") & ";Initial Catalog=" & Utilities.GetConfig("DB") & ";Data Source=" & Utilities.GetConfig("SV")
-            DEFPRINTER = Utilities.GetConfig("PT")
+        FormOperationService = New ApplicationSettingsService()
+        rsCTL = FormOperationService.GetAll()
 
-            If Not rsCTL Is Nothing Then SYSDATE = rsCTL.SYSDATE Else MsgBox("CTRL Configuration Not found! Please Contact your system administrator.", MsgBoxStyle.Critical, "Critical Error") : End
-            fillStatbar()
-        End Using
+        LoginPrompt()
+        If CurrentUser Is Nothing Then End : Exit Sub
+        cn.ConnectionString = "Provider=SQLOLEDB.1;Password=" & Utilities.GetConfig("WP") & ";Persist Security Info=True;User ID=" & Utilities.GetConfig("CL") & ";Initial Catalog=" & Utilities.GetConfig("DB") & ";Data Source=" & Utilities.GetConfig("SV")
+        cn.Open()
+        rCN = "Password=" & Utilities.GetConfig("WP") & ";User ID=" & Utilities.GetConfig("CL") & ";Initial Catalog=" & Utilities.GetConfig("DB") & ";Data Source=" & Utilities.GetConfig("SV")
+        DEFPRINTER = Utilities.GetConfig("PT")
+
+        If Not rsCTL Is Nothing Then SYSDATE = rsCTL.SYSDATE Else MsgBox("CTRL Configuration Not found! Please Contact your system administrator.", MsgBoxStyle.Critical, "Critical Error") : End
+        fillStatbar()        
     End Sub
 
     Private Sub frmFDS_Main_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
@@ -720,8 +719,8 @@ Public Class frmFixedDepositMain
                 postingYr = ProcessingViewOptionDialogForm.SelectedYear
                 postingQtr = ProcessingViewOptionDialogForm.SelectedQuarter
 
-                frmFDS_DVoucher = New frmVoucherProcessing(CurrentUser)
-                frmFDS_DVoucher.ShowDialog()
+                VoucherProcessingForm = New frmVoucherProcessing(CurrentUser, dividendPatronageRefundSettingsSvc, New MessagePromptService)
+                VoucherProcessingForm.ShowDialog()
                 If SW = True Then
                     PRTVOUCHER(postingYr, postingQtr)
                 End If
@@ -819,26 +818,15 @@ Public Class frmFixedDepositMain
                 postingYr = ProcessingViewOptionDialogForm.SelectedYear
                 postingQtr = ProcessingViewOptionDialogForm.SelectedQuarter
 
-                Using rsDIVDao As New DivrefphDAO
-                    Dim param1 As New LUNA.LunaSearchParameter("YEAR", postingYr)
-                    Dim param2 As New LUNA.LunaSearchParameter("QUARTER", postingQtr)
+                Dim validationResult As DivRefSettingsValidationResult = dividendPatronageRefundSettingsSvc.ValidateSettings(postingYr, postingQtr)
 
-
-                    rsDIV = rsDIVDao.Find(param1, param2)
-                    If rsDIV Is Nothing Then
-                        MsgBox(String.Format(GetGlobalResourceString("DivRefRecordNotFound"), postingYr, postingQtr), MsgBoxStyle.Information, GetGlobalResourceString("DividendPatronageRefund"))
-                        Exit Sub
-                    End If
-                    PRTVOUCHER(postingYr, postingQtr)
-
-                End Using
+                If validationResult = DivRefSettingsValidationResult.NotFound Then
+                    MsgBox(String.Format(GetGlobalResourceString("DivRefRecordNotFound"), postingYr, postingQtr), MsgBoxStyle.Information, GetGlobalResourceString("DividendPatronageRefund"))
+                    Exit Sub
+                End If
+                PRTVOUCHER(postingYr, postingQtr)
             End If
         End Using
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
-
     End Sub
 
     Private Sub MenuItem25_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem25.Click

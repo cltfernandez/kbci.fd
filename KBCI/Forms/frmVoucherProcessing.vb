@@ -2,9 +2,15 @@ Imports FD.DataAccessObject
 Imports FD.Common
 Imports FD.Common.Utilities
 Imports FD.ViewModels
+Imports FD.BusinessLogic
 Public Class frmVoucherProcessing
     Inherits System.Windows.Forms.Form
 
+    Public Sub New(ByVal _CurrentUser As UserViewModel, ByVal _dividendRefundSettings As IDividendPatronageRefundSettingService, ByVal _messagingService As IDividendPatronageMessagePromptService)
+        CurrentUser = _CurrentUser
+        dividendRefundSettings = _dividendRefundSettings
+        InitializeComponent()
+    End Sub
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -16,10 +22,7 @@ Public Class frmVoucherProcessing
         'Add any initialization after the InitializeComponent() call
 
     End Sub
-    Public Sub New(ByVal _CurrentUser As UserViewModel)
-        CurrentUser = _CurrentUser
-        InitializeComponent()
-    End Sub
+
 
     'Form overrides dispose to clean up the component list.
     Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -351,6 +354,10 @@ Public Class frmVoucherProcessing
 
 #End Region
     Dim CDT, SVG, TREFAMT, TDIVAMT As Decimal
+
+    Private dividendRefundSettings As IDividendPatronageRefundSettingService
+    Private messagingService As IDividendPatronageMessagePromptService
+
     Private _CurrentUser As UserViewModel
     Public Property CurrentUser() As UserViewModel
         Get
@@ -395,24 +402,16 @@ Public Class frmVoucherProcessing
         Dim rsDV As New ADODB.Recordset
         Dim sqlQ As String
         Dim i As Integer
-        Using rsDIVDao As New DivrefphDAO
-            Dim param1 As New LUNA.LunaSearchParameter("YEAR", SELYR)
-            Dim param2 As New LUNA.LunaSearchParameter("QUARTER", SELQTR)
 
-            rsDIV = rsDIVDao.Find(param1, param2)
-            If Not rsDIV Is Nothing Then
-                If rsDIV.CVNO.Trim <> String.Empty Or rsDIV.POSTED = True Then
-                    MsgBox(String.Format(GetGlobalResourceString("UnableToProcessDivref"), SELYR, SELQTR), MsgBoxStyle.Information, GetGlobalResourceString("DividendPatronageRefund"))
-                    SW = False                    
-                    Me.Close()
-                    Exit Sub
-                End If
-            Else
-                MsgBox(String.Format(GetGlobalResourceString("DivRefRecordNotFound"), SELYR, SELQTR), MsgBoxStyle.Information, GetGlobalResourceString("DividendPatronageRefund"))
-                Me.Close()
-                Exit Sub
-            End If            
-        End Using
+        Dim result As DivRefSettingsValidationResult = dividendRefundSettings.ValidateSettings(SELYR, SELQTR)
+
+        messagingService.GetMessageFromDivRefSettingsValidation(result, SELYR, SELQTR)
+
+        If result <> DivRefSettingsValidationResult.Valid Then
+            SW = False
+            Me.Close()
+            Exit Sub
+        End If
 
         sqlQ = "SELECT ISNULL([P_APL],0) P_APL,ISNULL([P_EDL],0) P_EDL,ISNULL([P_EML],0) P_EML,ISNULL([P_RGL],0) P_RGL,ISNULL([P_RSL],0) P_RSL,ISNULL([P_SPL],0) P_SPL,ISNULL([P_STL],0) P_STL," & _
                 "ISNULL([P_PTL],0) P_PTL,ISNULL([PD_APL],0) PD_APL,ISNULL([PD_EDL],0) PD_EDL,ISNULL([PD_EML],0) PD_EML,ISNULL([PD_RGL],0) PD_RGL,ISNULL([PD_RSL],0) PD_RSL,ISNULL([PD_SPL],0) PD_SPL,ISNULL([PD_STL],0) PD_STL," & _
