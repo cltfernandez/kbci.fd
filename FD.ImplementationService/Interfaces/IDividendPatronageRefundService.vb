@@ -12,4 +12,7 @@ Public Interface IDividendPatronageRefundService
     Sub PostPatronageRefund(ByVal divrefParameter As DivrefPostingParameters, ByVal IncludeSTL As Boolean)
 
     Function GetLatestDivrefPostingHistory() As DivrefPostingViewModel
+
+    Function GetDivrefPostingHistory(ByVal processingYear As String, ByVal processingQuarter As String) As DivrefPostingViewModel
+
 End Interface

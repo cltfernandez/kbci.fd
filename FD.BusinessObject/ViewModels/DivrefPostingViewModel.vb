@@ -35,4 +35,13 @@
         End Set
     End Property
 
+    Private _CVNO As String
+    Public Property CVNO() As String
+        Get
+            Return _CVNO
+        End Get
+        Set(ByVal value As String)
+            _CVNO = value
+        End Set
+    End Property
 End Class

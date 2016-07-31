@@ -296,20 +296,7 @@ ErrorHandler:
             listViewControl.Items.AddRange(TempArr)
         End If
     End Sub
-    Public Function GetData(ByVal QRYStr As String, ByVal FLTR As String, ByRef DG As DataGridView) As DataGridView
-        Dim DT As New DataTable
-        Dim cnn As New SqlConnection(rCN)
-        Dim sqlCMD As New SqlCommand(QRYStr, cnn)
-        Dim ad As New SqlDataAdapter(sqlCMD)
-        sqlCMD.CommandType = CommandType.Text
-        cnn.Open()
-        ad.Fill(DT)
-        cnn.Close()
-        Dim DV As New DataView(DT)
-        DV.RowFilter = FLTR
-        DG.DataSource = DV
-        Return DG
-    End Function
+
     Public Function GetGridViewDataFromObject(Of T)(ByVal items As List(Of T), ByRef DG As DataGridView) As DataGridView
         DG.DataSource = items
         Return DG

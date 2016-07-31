@@ -126,4 +126,61 @@ Public Class DivrefphDAO
             ManageError(ex)
         End Try
     End Sub
+
+    Public Function GetVoucherDetails(ByVal postingYear As Integer, _
+                                      ByVal postingQurater As Integer) As DataTable
+        Dim Sql As String
+        Dim resultDataTable As New DataTable
+        Try
+            Sql = "SELECT 'APPLIANCE LOAN' AS [DESC], P_APL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'EDUCATIONAL LOAN' AS [DESC], P_EDL AS CDT, null AS DBT  FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'EMERGENCY LOAN' AS [DESC], P_EML AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'REGULAR LOAN' AS [DESC], P_RGL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'SPECIAL LOAN' AS [DESC], P_SPL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'RESTRUCTURED LOAN' AS [DESC], P_RSL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'SHORT TERM LOAN' AS [DESC], P_STL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'PROVIDENT LOAN' AS [DESC], P_PTL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'PAST DUE APL' AS [DESC], PD_APL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'PAST DUE EDL' AS [DESC], PD_EDL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'PAST DUE EML' AS [DESC], PD_EmL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'PAST DUE RGL' AS [DESC], PD_RGL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'PAST DUE SPL' AS [DESC], PD_SPL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'PAST DUE RSL' AS [DESC], PD_RSL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'PAST DUE STL' AS [DESC], PD_STL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'PAST DUE PTL' AS [DESC], PD_PTL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'INTEREST ON LOANS' AS [DESC], INTEREST AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'PENALTY ON LOANS' AS [DESC], PENALTY AS CDT,null as DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT 'SAVINGS DEPOSIT' AS [DESC], SAVINGS AS CDT,null as DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT TDEBDESC1 AS [DESC], null AS CDT,CAST(TDEBAMT1 AS CHAR(12)) AS DBT  FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT TDEBDESC2  AS [DESC], null AS CDT,CAST(TDEBAMT2 AS CHAR(12)) AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter " & _
+                "UNION ALL SELECT TDEBDESC3 AS [DESC], null AS CDT, CAST(TDEBAMT3 AS CHAR(12)) AS DBT FROM DIVREFPH WHERE [YEAR]=@PostingYear AND [QUARTER]=@PostingQuarter"
+
+            Using myCommand As DbCommand = _Cn.CreateCommand
+                myCommand.CommandText = Sql
+                Dim paramPostingYear = myCommand.CreateParameter
+                With paramPostingYear
+                    .ParameterName = "@PostingYear"
+                    .Value = postingYear
+                End With
+                Dim paramPostingQuarter = myCommand.CreateParameter
+                With paramPostingQuarter
+                    .ParameterName = "@PostingQuarter"
+                    .Value = postingQurater
+                End With
+
+                myCommand.Parameters.Add(paramPostingYear)
+                myCommand.Parameters.Add(paramPostingQuarter)
+
+                If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
+                Using myReader As DbDataReader = myCommand.ExecuteReader()
+                    resultDataTable.Load(myReader)
+                End Using
+            End Using
+        Catch ex As Exception
+            ManageError(ex)
+        End Try
+
+        Return resultDataTable
+
+    End Function
 End Class

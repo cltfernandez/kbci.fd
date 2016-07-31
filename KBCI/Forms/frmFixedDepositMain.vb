@@ -1,4 +1,3 @@
-Imports System.Data.SqlClient
 Imports FD.Common
 Imports FD.Common.Utilities
 Imports FD.BusinessLogic
@@ -501,17 +500,17 @@ Public Class frmFixedDepositMain
 
     Private Sub frmFDS_Main_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
+        LoginPrompt()
+
         FormOperationService = New ApplicationSettingsService()
         rsCTL = FormOperationService.GetAll()
 
-        LoginPrompt()
         If CurrentUser Is Nothing Then End : Exit Sub
         cn.ConnectionString = "Provider=SQLOLEDB.1;Password=" & Utilities.GetConfig("WP") & ";Persist Security Info=True;User ID=" & Utilities.GetConfig("CL") & ";Initial Catalog=" & Utilities.GetConfig("DB") & ";Data Source=" & Utilities.GetConfig("SV")
-        cn.Open()
-        rCN = "Password=" & Utilities.GetConfig("WP") & ";User ID=" & Utilities.GetConfig("CL") & ";Initial Catalog=" & Utilities.GetConfig("DB") & ";Data Source=" & Utilities.GetConfig("SV")
+        cn.Open()        
         DEFPRINTER = Utilities.GetConfig("PT")
 
-        If Not rsCTL Is Nothing Then SYSDATE = rsCTL.SYSDATE Else MsgBox("CTRL Configuration Not found! Please Contact your system administrator.", MsgBoxStyle.Critical, "Critical Error") : End
+        If Not rsCTL Is Nothing Then SYSDATE = rsCTL.SYSDATE Else MsgBox(GetGlobalResourceString("CtrlError"), MsgBoxStyle.Critical, GetGlobalResourceString("FixedDepositSystem")) : End
         fillStatbar()        
     End Sub
 
@@ -874,59 +873,21 @@ Public Class frmFixedDepositMain
 #Region "Private Methods"
     Private Sub PRTVOUCHER(ByVal Year As Integer, ByVal Quarter As Integer)
         Dim rsRPT As New ADODB.Recordset
-        Dim dst As New DataTable("dstFD_Member")
-        Dim ds As New DataSet
-        Dim rpt As New rptPRVOUCHER
-        Dim divrefph As New ADODB.Recordset
-        Dim sQRY As String
+        Dim reportObject As New DividendVoucherReport
+        Dim processingHistoryModel As DivrefPostingViewModel        
 
         ReportViewerForm = New frmReportViewer
         ReportViewerForm.MdiParent = Me
 
-
-        sQRY = "SELECT 'APPLIANCE LOAN' AS [DESC], P_APL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'EDUCATIONAL LOAN' AS [DESC], P_EDL AS CDT, null AS DBT  FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'EMERGENCY LOAN' AS [DESC], P_EML AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'REGULAR LOAN' AS [DESC], P_RGL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'SPECIAL LOAN' AS [DESC], P_SPL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'RESTRUCTURED LOAN' AS [DESC], P_RSL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'SHORT TERM LOAN' AS [DESC], P_STL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'PROVIDENT LOAN' AS [DESC], P_PTL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'PAST DUE APL' AS [DESC], PD_APL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'PAST DUE EDL' AS [DESC], PD_EDL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'PAST DUE EML' AS [DESC], PD_EmL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'PAST DUE RGL' AS [DESC], PD_RGL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'PAST DUE SPL' AS [DESC], PD_SPL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'PAST DUE RSL' AS [DESC], PD_RSL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'PAST DUE STL' AS [DESC], PD_STL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'PAST DUE PTL' AS [DESC], PD_PTL AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'INTEREST ON LOANS' AS [DESC], INTEREST AS CDT, null AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'PENALTY ON LOANS' AS [DESC], PENALTY AS CDT,null as DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT 'SAVINGS DEPOSIT' AS [DESC], SAVINGS AS CDT,null as DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT TDEBDESC1 AS [DESC], null AS CDT,CAST(TDEBAMT1 AS CHAR(12)) AS DBT  FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT TDEBDESC2  AS [DESC], null AS CDT,CAST(TDEBAMT2 AS CHAR(12)) AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' " & _
-                "UNION ALL SELECT TDEBDESC3 AS [DESC], null AS CDT, CAST(TDEBAMT3 AS CHAR(12)) AS DBT FROM DIVREFPH WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "' "
-
-        rsRPT.Open(sQRY, cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-        If rsRPT.RecordCount > 0 Then
-            divrefph.Open("select  ISNULL(CVNO,'XXXXXXX') CVNO FROM divrefph WHERE [YEAR]='" & Year & "' AND [QUARTER]='" & Quarter & "'", cn, CursorTypeEnum.adOpenKeyset, LockTypeEnum.adLockReadOnly)
-            Dim CVNO As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section2.ReportObjects("Text4")
-            Dim USR As CrystalDecisions.CrystalReports.Engine.TextObject = rpt.Section4.ReportObjects("Text10")
-            USR.Text = "Prepared by : " & CurrentUser.UserName
-            CVNO.Text = CStr(divrefph.Fields("cvno").Value)
-            divrefph.Close()
-            PopulateReportData(rsRPT, dst, ReportViewerForm.crvMainViewer, rpt, 0, "3:2:2")
-            ReportViewerForm.Show()
-        Else
-            MsgBox("No transactions found on the specified date.", MsgBoxStyle.Information, "Daily Transaction Register")
-        End If
-        SW = False
-        If rsRPT.State = 1 Then rsRPT.Close()
-errHand:
-        If Err.Number <> 0 Then
-            LogError(Err.Number, Err.Description, "frmDIVPAT_Load", CurrentUser.UserName)
-        End If
-
+        Dim DivRefPostingHistory As IDividendPatronageRefundService = New DividendPatronageRefundService()
+        processingHistoryModel = DivRefPostingHistory.GetDivrefPostingHistory(Year, Quarter)
+        Dim CVNO As TextObject = reportObject.Section2.ReportObjects("Text4")
+        Dim USR As TextObject = reportObject.Section4.ReportObjects("Text10")
+        USR.Text = String.Format("Prepared by : {0}", CurrentUser.UserName)
+        CVNO.Text = processingHistoryModel.CVNO        
+        ReportViewerForm.ReportService = New DividendVoucherReportService(Year, Quarter)
+        ReportViewerForm.ReportModel = reportObject
+        ReportViewerForm.Show()
     End Sub
 
     Private Sub GeneratePatronageRefundReport(ByVal memberStatus As String, ByVal reportTitle As String)

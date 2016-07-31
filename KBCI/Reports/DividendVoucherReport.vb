@@ -18,7 +18,7 @@ Imports System
 Imports System.ComponentModel
 
 
-Public Class rptPRVOUCHER
+Public Class DividendVoucherReport
     Inherits ReportClass
     
     Public Sub New()
@@ -27,7 +27,7 @@ Public Class rptPRVOUCHER
     
     Public Overrides Property ResourceName() As String
         Get
-            Return "rptPRVOUCHER.rpt"
+            Return "DividendVoucherReport.rpt"
         End Get
         Set
             'Do nothing
@@ -45,7 +45,7 @@ Public Class rptPRVOUCHER
     
     Public Overrides Property FullResourceName() As String
         Get
-            Return "KBCI.rptPRVOUCHER.rpt"
+            Return "KBCI.DividendVoucherReport.rpt"
         End Get
         Set
             'Do nothing
@@ -94,7 +94,7 @@ Public Class rptPRVOUCHER
 End Class
 
 <System.Drawing.ToolboxBitmapAttribute(GetType(CrystalDecisions.[Shared].ExportOptions), "report.bmp")>  _
-Public Class CachedrptPRVOUCHER
+Public Class CachedDividendVoucherReport
     Inherits Component
     Implements ICachedReport
     
@@ -136,7 +136,7 @@ Public Class CachedrptPRVOUCHER
     End Property
     
     Public Overridable Function CreateReport() As CrystalDecisions.CrystalReports.Engine.ReportDocument Implements CrystalDecisions.ReportSource.ICachedReport.CreateReport
-        Dim rpt As rptPRVOUCHER = New rptPRVOUCHER
+        Dim rpt As DividendVoucherReport = New DividendVoucherReport
         rpt.Site = Me.Site
         Return rpt
     End Function

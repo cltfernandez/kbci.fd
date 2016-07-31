@@ -342,4 +342,10 @@
   <data name="ResignedMembers" xml:space="preserve">
     <value>Resigned Members</value>
   </data>
+  <data name="CtrlError" xml:space="preserve">
+    <value>Application Settings Error. Please Contact your system administrator.</value>
+  </data>
+  <data name="FixedDepositSystem" xml:space="preserve">
+    <value>Fixed Deposit System</value>
+  </data>
 </root>

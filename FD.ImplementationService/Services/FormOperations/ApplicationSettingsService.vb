@@ -8,7 +8,7 @@ Public Class ApplicationSettingsService : Implements IFormOperations
         Mapper.CreateMap(Of Ctrl, CtrlViewModel)()
     End Sub
     Public Function GetAll() As Object Implements IFormOperations.GetAll
-        Dim ctrlObject As CtrlViewModel
+        Dim ctrlObject As New CtrlViewModel
         Dim ctrlEntity As Ctrl
         Using rsCtrlDAO As New CtrlDAO
             Dim param As New LUNA.LunaSearchParameter("CTRL_ID", "1")

@@ -340,8 +340,8 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Reports\rptPRVOUCHER.vb">
-      <DependentUpon>rptPRVOUCHER.rpt</DependentUpon>
+    <Compile Include="Reports\DividendVoucherReport.vb">
+      <DependentUpon>DividendVoucherReport.rpt</DependentUpon>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -473,9 +473,9 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>PatronageRefundSummaryReport.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptPRVOUCHER.rpt">
+    <EmbeddedResource Include="Reports\DividendVoucherReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptPRVOUCHER.vb</LastGenOutput>
+      <LastGenOutput>DividendVoucherReport.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\ResignedMembersReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

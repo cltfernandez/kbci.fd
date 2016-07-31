@@ -105,6 +105,7 @@
     <Compile Include="Services\Reports\CashDividendRegisterPerRegionReportService.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\Reports\DividendVoucherReportService.vb" />
     <Compile Include="Services\Reports\DivdendRefundReportService.vb" />
     <Compile Include="Services\Reports\PatronageRefundDetailedReportService.vb" />
     <Compile Include="Services\Reports\PatronageRefundSummaryReportService.vb" />

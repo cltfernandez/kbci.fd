@@ -146,6 +146,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Application Settings Error. Please Contact your system administrator..
+        '''</summary>
+        Friend Shared ReadOnly Property CtrlError() As String
+            Get
+                Return ResourceManager.GetString("CtrlError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Current Members/Investors As of {0}.
         '''</summary>
         Friend Shared ReadOnly Property CurrentMembersHeader() As String
@@ -295,6 +304,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property FixedDepositRunupPrompt() As String
             Get
                 Return ResourceManager.GetString("FixedDepositRunupPrompt", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Fixed Deposit System.
+        '''</summary>
+        Friend Shared ReadOnly Property FixedDepositSystem() As String
+            Get
+                Return ResourceManager.GetString("FixedDepositSystem", resourceCulture)
             End Get
         End Property
         

@@ -124,4 +124,17 @@ Public Class DividendPatronageRefundService : Implements IDividendPatronageRefun
         Return model
     End Function
 
+    Public Function GetDivrefPostingHistory(ByVal processingYear As String, ByVal processingQuarter As String) As DivrefPostingViewModel Implements IDividendPatronageRefundService.GetDivrefPostingHistory
+        Dim model As DivrefPostingViewModel
+        Dim param1 As New LUNA.LunaSearchParameter("YEAR", processingYear)
+        Dim param2 As New LUNA.LunaSearchParameter("QUARTER", processingQuarter)
+
+        Using rsDivrefPh As New DivrefphDAO
+            Dim src As Divrefph = rsDivrefPh.Find(param1, param2)
+            model = Mapper.Map(Of Divrefph, DivrefPostingViewModel)(src)
+            model.Id = src.DIVREFPH_ID
+        End Using
+        Return model
+    End Function
+
 End Class
