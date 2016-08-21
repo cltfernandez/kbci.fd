@@ -73,7 +73,7 @@ Public Class FdDAO
         Dim Sql As String
         Dim resultDataTable As New DataTable
         Try
-            Sql = "SELECT MM.KBCI_NO,MM.LNAME + ', ' + MM.FNAME + ' ' NAME,TC.TR_CODE AS CODE,FD.AMOUNT AS DEBIT,FD.AMOUNT AS CREDIT," & _
+            Sql = "SELECT MM.KBCI_NO,MM.LNAME + ', ' + MM.FNAME + ' ' NAME,TC.TR_CODE AS CODE,CASE WHEN FD.DRCR ='DR' THEN FD.AMOUNT ELSE 0.00 END AS DEBIT,CASE WHEN FD.DRCR ='CR' THEN FD.AMOUNT ELSE 0.00 END AS CREDIT," & _
                            "FD.BALANCE,FD.REF,FD.RMK, FD.DRCR FROM FD INNER JOIN MEMBERS AS MM ON FD.KBCI_NO= MM.KBCI_NO INNER JOIN TRANCODE AS TC ON FD.TRAN_CODE=TC.TR_ID " & _
                            "WHERE [DATE] = @TransactionDate ORDER BY MM.LNAME,MM.FNAME"
             Using myCommand As DbCommand = _Cn.CreateCommand
