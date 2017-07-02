@@ -84,6 +84,8 @@ Public Class frmFixedDepositMain
     Friend WithEvents ToolStripStatusLabel8 As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents MenuItem37 As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItem38 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem39 As System.Windows.Forms.MenuItem
+    Friend WithEvents mnuAbout As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItem36 As System.Windows.Forms.MenuItem
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -138,12 +140,14 @@ Public Class frmFixedDepositMain
         Me.ToolStripStatusLabel11 = New System.Windows.Forms.ToolStripStatusLabel
         Me.ToolStripStatusLabel7 = New System.Windows.Forms.ToolStripStatusLabel
         Me.ToolStripStatusLabel8 = New System.Windows.Forms.ToolStripStatusLabel
+        Me.MenuItem39 = New System.Windows.Forms.MenuItem
+        Me.mnuAbout = New System.Windows.Forms.MenuItem
         Me.StatusStrip2.SuspendLayout()
         Me.SuspendLayout()
         '
         'MainMenu1
         '
-        Me.MainMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem24, Me.MenuItem1, Me.MenuItem9, Me.MenuItem14, Me.MenuItem37})
+        Me.MainMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem24, Me.MenuItem1, Me.MenuItem9, Me.MenuItem14, Me.MenuItem37, Me.MenuItem39})
         '
         'MenuItem24
         '
@@ -444,6 +448,17 @@ Public Class frmFixedDepositMain
         Me.ToolStripStatusLabel8.Size = New System.Drawing.Size(4, 17)
         Me.ToolStripStatusLabel8.ToolTipText = "System Time"
         '
+        'MenuItem39
+        '
+        Me.MenuItem39.Index = 5
+        Me.MenuItem39.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.mnuAbout})
+        Me.MenuItem39.Text = "&Help"
+        '
+        'mnuAbout
+        '
+        Me.mnuAbout.Index = 0
+        Me.mnuAbout.Text = "About "
+        '
         'frmFixedDepositMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(7, 14)
@@ -469,7 +484,7 @@ Public Class frmFixedDepositMain
 
     End Sub
 
-#End Region    
+#End Region
     Private FixedDepositTransactionMembersListForm As frmMembersList
     Public MembersMaintenanceForm As frmMembersMaintenance
     Public SystemConfigurationForm As frmAppConfiguration
@@ -477,7 +492,7 @@ Public Class frmFixedDepositMain
     Public ReportViewerForm As frmReportViewer
     Public frmFDS_Main_Arrange As frmSortOptionDialog
     Public frmDIVPAT As frmDividendPatronageRefundProcessing
-    Public DividendPatronageSettingsForm As frmDividendPatronageSettings    
+    Public DividendPatronageSettingsForm As frmDividendPatronageSettings
     Public VoucherProcessingForm As frmVoucherProcessing
     Public MainPasswordValidator As IPasswordValidator
     Private MainUserActionService As IUserService
@@ -507,11 +522,11 @@ Public Class frmFixedDepositMain
 
         If CurrentUser Is Nothing Then End : Exit Sub
         cn.ConnectionString = "Provider=SQLOLEDB.1;Password=" & Utilities.GetConfig("WP") & ";Persist Security Info=True;User ID=" & Utilities.GetConfig("CL") & ";Initial Catalog=" & Utilities.GetConfig("DB") & ";Data Source=" & Utilities.GetConfig("SV")
-        cn.Open()        
+        cn.Open()
         DEFPRINTER = Utilities.GetConfig("PT")
 
         If Not rsCTL Is Nothing Then SYSDATE = rsCTL.SYSDATE Else MsgBox(GetGlobalResourceString("CtrlError"), MsgBoxStyle.Critical, GetGlobalResourceString("FixedDepositSystem")) : End
-        fillStatbar()        
+        fillStatbar()
     End Sub
 
     Private Sub frmFDS_Main_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
@@ -874,7 +889,7 @@ Public Class frmFixedDepositMain
     Private Sub PRTVOUCHER(ByVal Year As Integer, ByVal Quarter As Integer)
         Dim rsRPT As New ADODB.Recordset
         Dim reportObject As New DividendVoucherReport
-        Dim processingHistoryModel As DivrefPostingViewModel        
+        Dim processingHistoryModel As DivrefPostingViewModel
 
         ReportViewerForm = New frmReportViewer
         ReportViewerForm.MdiParent = Me
@@ -884,7 +899,7 @@ Public Class frmFixedDepositMain
         Dim CVNO As TextObject = reportObject.Section2.ReportObjects("Text4")
         Dim USR As TextObject = reportObject.Section4.ReportObjects("Text10")
         USR.Text = String.Format("Prepared by : {0}", CurrentUser.UserName)
-        CVNO.Text = processingHistoryModel.CVNO        
+        CVNO.Text = processingHistoryModel.CVNO
         ReportViewerForm.ReportService = New DividendVoucherReportService(Year, Quarter)
         ReportViewerForm.ReportModel = reportObject
         ReportViewerForm.Show()
@@ -1006,4 +1021,9 @@ Public Class frmFixedDepositMain
     End Sub
 #End Region
 
+    Private Sub MenuItem40_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuAbout.Click
+        Using aboutDialog As New frmAboutDialog
+            aboutDialog.ShowDialog()
+        End Using
+    End Sub
 End Class

@@ -222,6 +222,12 @@
     <Compile Include="Dataset\dstFD_Member.vb">
       <DependentUpon>dstFD_Member.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmAboutDialog.Designer.vb">
+      <DependentUpon>frmAboutDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmAboutDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\frmAppConfiguration.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -366,6 +372,9 @@
     </None>
     <Content Include="KBCI.ico" />
     <Content Include="KBCIFDSetup.vdproj" />
+    <EmbeddedResource Include="Forms\frmAboutDialog.resx">
+      <DependentUpon>frmAboutDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAppConfiguration.resx">
       <DependentUpon>frmAppConfiguration.vb</DependentUpon>
     </EmbeddedResource>

@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("")> 
-<Assembly: AssemblyCopyright("")> 
+<Assembly: AssemblyTitle("DSE KBCI - Fixed Deposit System")> 
+<Assembly: AssemblyDescription("DSE KBCI - Fixed Deposit System")> 
+<Assembly: AssemblyCompany("DSE BSP Credit Cooperative")> 
+<Assembly: AssemblyProduct("KBCI.FDS")> 
+<Assembly: AssemblyCopyright("Chris Fernandez - Copyright©  2009")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: CLSCompliant(True)> 
 
@@ -30,3 +30,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 
 <Assembly: AssemblyVersion("1.0.*")> 
+
+<Assembly: AssemblyFileVersionAttribute("1.0.0.0")> 
