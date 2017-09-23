@@ -2,7 +2,7 @@
 Imports FD.Common
 Imports FD.ViewModels
 Imports AutoMapper
-Public Class MembersOperationService : Implements IFormOperations
+Public Class MembersOperationService : Implements IFormOperations, IFormOperationUpdates
 
     Sub New()
     End Sub
@@ -18,6 +18,11 @@ Public Class MembersOperationService : Implements IFormOperations
                                                                           .MEM_STAT = x.MEM_STAT, _
                                                                           .DATE = x.MEM_DATE, _
                                                                           .FD_AMOUNT = x.FD_AMOUNT}).ToList
+        End Using
+    End Function
+    Public Function Save(ByVal memberData As MembersBOVM) As Integer Implements IFormOperationUpdates.Save
+        Using rsMemberSearchDao As New MembersDAO
+
         End Using
     End Function
 End Class

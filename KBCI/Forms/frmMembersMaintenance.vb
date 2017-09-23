@@ -1508,8 +1508,7 @@ Public Class frmMembersMaintenance
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.Close()
     End Sub
-    Private Sub ToolBar1_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles ToolBar1.ButtonClick
-
+    Private Sub ToolBar1_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles ToolBar1.ButtonClick        
         Dim IDX As Integer = Val(ToolBar1.Buttons.IndexOf(e.Button).ToString)
 
         With ToolBar1
@@ -1542,7 +1541,7 @@ Public Class frmMembersMaintenance
                                     cn.Execute(CleanSTR("INSERT INTO FD([KBCI_NO],[TRAN_CODE],[DATE],[REF],[AMOUNT],[BALANCE],[RMK],[ADD_DATE],[USER] ,[LPOSTED],[DRCR],[BANK_CODE],[CHECKNO],[TPOSTED],[TREVERSED])" & _
                                              "VALUES('" & KBCINUM & "','1','" & SYSDATE & "','INITIAL'," & Round(CDec(TextBox25.Text), 2) & "," & Round(CDec(TextBox25.Text), 2) & ",'INITIAL SETUP','" & SYSDATE & "','" & CurrentUser.UserName & "',0,'CR','','','True','False')"))
                                 End If
-                                cn.Execute("UPDATE CTRL SET KBCI_NO='" & KBCINUM & "'")                                
+                                cn.Execute("UPDATE CTRL SET KBCI_NO='" & KBCINUM & "'")
                                 MemberUpdates = True
                                 .Buttons(6).Text = "EXIT"
                             End If
@@ -1566,16 +1565,12 @@ Public Class frmMembersMaintenance
                                 EDTool(ToolBar1, True)
                                 .Buttons(IDX).Text = "EDIT"
                                 GroupBox1.Enabled = False
-                                cn.Execute("UPDATE MEMBERS SET [LNAME]='" & TextBox1.Text.ToUpper & "',[FNAME]='" & TextBox4.Text.ToUpper & "',[MI]='" & TextBox5.Text.ToUpper & "',[MEM_CODE]='" & Mid(ComboBox3.Text.ToUpper, 1, 1) & _
-                                                            "',[CB_EMPNO]='" & TextBox10.Text.ToUpper & "',[CB_HIRE]='" & DateValue(DateTimePicker2.Value.ToString) & "',[DEPT]='" & ComboBox6.Text.ToUpper & "',[REGION]='" & TextBox16.Text.ToUpper & "',[OFF_TEL]='" & Trim(MaskedTextBox2.Text.ToUpper.Replace("-", "") & MaskedTextBox4.Text) & _
-                                                            "',[DORI]='" & CheckBox1.Checked.ToString & "',[REA_DORI]='" & TextBox13.Text.ToUpper & "',[SEX]='" & Mid(ComboBox1.Text.ToUpper, 1, 1) & "',[B_DATE]='" & DateValue(DateTimePicker1.Value.ToString) & "',[CIV_STAT]='" & Mid(ComboBox2.Text.ToUpper, 1, 1) & "',[MEM_ADDR]='" & TextBox2.Text.ToUpper & _
-                                                            "',[RES_TEL]='" & Trim(MaskedTextBox1.Text.Replace("-", "")) & "',[POSITION]='" & ComboBox4.Text.ToUpper & "',[SAL_BAS]=" & Round(CDbl(TextBox15.Text), 2) & ",[SAL_ALL]=" & Round(CDbl(TextBox17.Text), 2) & _
-                                                             ",[OTH_INC]=" & Round(CDbl(TextBox28.Text), 2) & ",[FEBTC_SA]='" & TextBox12.Text.Replace("-", "") & "',[FEBTC_CA]='" & TextBox14.Text.Replace("-", "") & "',[REM_VALUE]=" & Round(CDbl(TextBox7.Text), 2) & _
-                                                             ",[NO_DEPEND]=" & Val(NumericUpDown1.Text) & ",[SP_NAME]='" & TextBox19.Text.ToUpper & "',[SP_EMPLOY]='" & TextBox20.Text.ToUpper & "',[SP_OFFTEL]='" & Trim(MaskedTextBox3.Text.Replace("-", "") & MaskedTextBox5.Text) & _
-                                                            "',[SP_CBEMPNO]='" & TextBox21.Text.ToUpper & "',[SP_KBCINO]='" & TextBox18.Text.ToUpper & "',[SP_SALARY]=" & Round(CDbl(TextBox22.Text), 2) & ",[CHG_DATE]='" & SYSDATE & "',[USER]='" & CurrentUser.UserName & "',[REC_STAT]='False',[FD_CNTR]=0 WHERE KBCI_NO ='" & TextBox3.Text.Replace("-", "") & "'")
+                                MapFields()
                                 .Buttons(6).Text = "EXIT"
                                 KBCINUM = TextBox3.Text.Replace("-", "")
-                                MemberUpdates = True
+                                If Save(_memberData) > 0 Then
+                                    MemberUpdates = True
+                                End If
                             End If
                         Else
                             shwReq(True)
@@ -1585,11 +1580,12 @@ Public Class frmMembersMaintenance
                 Case 2
 
                 Case 4
-                    Dim MemberSearchForm As New frmMemberSearchDialog
-                    MemberSearchForm.ShowDialog()
-                    If SW = True Then
-                        FillField()
-                    End If
+                    Using MemberSearchForm As New frmMemberSearchDialog
+                        If MemberSearchForm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                            _memberData = rsMEMBERS.Find(Function(x) x.KBCI_NO = SEL_KBCI_NO)
+                            FillField()
+                        End If
+                    End Using
                 Case 6
                     If .Buttons(IDX).Text = "CANCEL" Then
                         If .Buttons(0).Text = "SAVE" Then RstFrm()
@@ -1922,5 +1918,48 @@ errHand:
         FormOperationService = New MembersOperationService()
         MembersGridList = FormOperationService.GetAll()
     End Sub
+    Private Sub MapFields()
+        With _memberData
+            .LNAME = TextBox1.Text.ToUpper
+            .FNAME = TextBox4.Text.ToUpper
+            .MI = TextBox5.Text.ToUpper
+            .MEM_CODE = Mid(ComboBox3.Text.ToUpper, 1, 1)
+            .CB_EMPNO = TextBox10.Text.ToUpper
+            .CB_HIRE = DateValue(DateTimePicker2.Value.ToString)
+            .DEPT = ComboBox6.Text.ToUpper
+            .REGION = TextBox16.Text.ToUpper
+            .OFF_TEL = Trim(MaskedTextBox2.Text.ToUpper.Replace("-", "") & MaskedTextBox4.Text)
+            .DORI = CheckBox1.Checked.ToString
+            .REA_DORI = TextBox13.Text.ToUpper
+            .SEX = Mid(ComboBox1.Text.ToUpper, 1, 1)
+            .B_DATE = DateValue(DateTimePicker1.Value.ToString)
+            .CIV_STAT = Mid(ComboBox2.Text.ToUpper, 1, 1)
+            .MEM_ADDR = TextBox2.Text.ToUpper
+            .RES_TEL = Trim(MaskedTextBox1.Text.Replace("-", ""))
+            .POSITION = ComboBox4.Text.ToUpper
+            .SAL_BAS = Round(CDbl(TextBox15.Text), 2)
+            .SAL_ALL = Round(CDbl(TextBox17.Text), 2)
+            .OTH_INC = Round(CDbl(TextBox28.Text), 2)
+            .FEBTC_SA = TextBox12.Text.Replace("-", "")
+            .FEBTC_CA = TextBox14.Text.Replace("-", "")
+            .REM_VALUE = Round(CDbl(TextBox7.Text), 2)
+            .NO_DEPEND = Val(NumericUpDown1.Text)
+            .SP_NAME = TextBox19.Text.ToUpper
+            .SP_EMPLOY = TextBox20.Text.ToUpper
+            .SP_OFFTEL = Trim(MaskedTextBox3.Text.Replace("-", "") & MaskedTextBox5.Text)
+            .SP_CBEMPNO = TextBox21.Text.ToUpper
+            .SP_KBCINO = TextBox18.Text.ToUpper
+            .SP_SALARY = Round(CDbl(TextBox22.Text), 2)
+            .CHG_DATE = SYSDATE
+            .USER = CurrentUser.UserName
+            .REC_STAT = False
+            .FD_CNTR = 0
+        End With
+    End Sub
+    Private Function Save(ByVal membersEntity As Members) As Integer
+        Using rsMembersDAO As New MembersDAO
+            Return rsMembersDAO.Save(membersEntity)
+        End Using
+    End Function
 End Class
 

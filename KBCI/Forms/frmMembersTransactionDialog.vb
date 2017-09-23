@@ -36,7 +36,7 @@ Public Class frmMembersTransactionDialog
         End If
         MyBase.Dispose(disposing)
     End Sub
-    Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents btnCancel As System.Windows.Forms.Button
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
@@ -60,7 +60,7 @@ Public Class frmMembersTransactionDialog
     Friend WithEvents TextBox8 As System.Windows.Forms.TextBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents TextBox4 As System.Windows.Forms.Label
-    Friend WithEvents Button6 As System.Windows.Forms.Button
+    Friend WithEvents btnTransact As System.Windows.Forms.Button
 
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
@@ -69,8 +69,7 @@ Public Class frmMembersTransactionDialog
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMembersTransactionDialog))
-        Me.Button3 = New System.Windows.Forms.Button
+        Me.btnCancel = New System.Windows.Forms.Button
         Me.GroupBox2 = New System.Windows.Forms.GroupBox
         Me.RadioButton1 = New System.Windows.Forms.RadioButton
         Me.RadioButton2 = New System.Windows.Forms.RadioButton
@@ -94,21 +93,20 @@ Public Class frmMembersTransactionDialog
         Me.TextBox8 = New System.Windows.Forms.TextBox
         Me.Label8 = New System.Windows.Forms.Label
         Me.TextBox4 = New System.Windows.Forms.Label
-        Me.Button6 = New System.Windows.Forms.Button
+        Me.btnTransact = New System.Windows.Forms.Button
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Button3
+        'btnCancel
         '
-        Me.Button3.BackgroundImage = CType(resources.GetObject("Button3.BackgroundImage"), System.Drawing.Image)
-        Me.Button3.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button3.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button3.Location = New System.Drawing.Point(433, 103)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(163, 25)
-        Me.Button3.TabIndex = 14
-        Me.Button3.Text = "Ca&ncel"
+        Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnCancel.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCancel.Location = New System.Drawing.Point(361, 96)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(136, 23)
+        Me.btnCancel.TabIndex = 14
+        Me.btnCancel.Text = "Ca&ncel"
         '
         'GroupBox2
         '
@@ -117,9 +115,9 @@ Public Class frmMembersTransactionDialog
         Me.GroupBox2.Controls.Add(Me.RadioButton2)
         Me.GroupBox2.Controls.Add(Me.RadioButton3)
         Me.GroupBox2.Controls.Add(Me.RadioButton4)
-        Me.GroupBox2.Location = New System.Drawing.Point(13, 13)
+        Me.GroupBox2.Location = New System.Drawing.Point(63, 23)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(174, 116)
+        Me.GroupBox2.Size = New System.Drawing.Size(145, 108)
         Me.GroupBox2.TabIndex = 12
         Me.GroupBox2.TabStop = False
         '
@@ -127,9 +125,9 @@ Public Class frmMembersTransactionDialog
         '
         Me.RadioButton1.Checked = True
         Me.RadioButton1.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton1.Location = New System.Drawing.Point(10, 17)
+        Me.RadioButton1.Location = New System.Drawing.Point(8, 16)
         Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(151, 17)
+        Me.RadioButton1.Size = New System.Drawing.Size(126, 16)
         Me.RadioButton1.TabIndex = 0
         Me.RadioButton1.TabStop = True
         Me.RadioButton1.Text = "Cash Deposit"
@@ -137,27 +135,27 @@ Public Class frmMembersTransactionDialog
         'RadioButton2
         '
         Me.RadioButton2.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton2.Location = New System.Drawing.Point(10, 40)
+        Me.RadioButton2.Location = New System.Drawing.Point(8, 37)
         Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(151, 17)
+        Me.RadioButton2.Size = New System.Drawing.Size(126, 16)
         Me.RadioButton2.TabIndex = 0
         Me.RadioButton2.Text = "Check Deposit"
         '
         'RadioButton3
         '
         Me.RadioButton3.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton3.Location = New System.Drawing.Point(10, 62)
+        Me.RadioButton3.Location = New System.Drawing.Point(8, 58)
         Me.RadioButton3.Name = "RadioButton3"
-        Me.RadioButton3.Size = New System.Drawing.Size(151, 18)
+        Me.RadioButton3.Size = New System.Drawing.Size(126, 16)
         Me.RadioButton3.TabIndex = 0
         Me.RadioButton3.Text = "Closing of Account"
         '
         'RadioButton4
         '
         Me.RadioButton4.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton4.Location = New System.Drawing.Point(10, 86)
+        Me.RadioButton4.Location = New System.Drawing.Point(8, 80)
         Me.RadioButton4.Name = "RadioButton4"
-        Me.RadioButton4.Size = New System.Drawing.Size(151, 17)
+        Me.RadioButton4.Size = New System.Drawing.Size(126, 16)
         Me.RadioButton4.TabIndex = 0
         Me.RadioButton4.Text = "Adjustment"
         '
@@ -182,9 +180,9 @@ Public Class frmMembersTransactionDialog
         Me.GroupBox1.Controls.Add(Me.Label8)
         Me.GroupBox1.Controls.Add(Me.TextBox4)
         Me.GroupBox1.Enabled = False
-        Me.GroupBox1.Location = New System.Drawing.Point(13, 134)
+        Me.GroupBox1.Location = New System.Drawing.Point(63, 135)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(585, 146)
+        Me.GroupBox1.Size = New System.Drawing.Size(487, 136)
         Me.GroupBox1.TabIndex = 11
         Me.GroupBox1.TabStop = False
         '
@@ -192,9 +190,9 @@ Public Class frmMembersTransactionDialog
         '
         Me.Textbox1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Textbox1.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.Textbox1.Location = New System.Drawing.Point(451, 15)
+        Me.Textbox1.Location = New System.Drawing.Point(376, 14)
         Me.Textbox1.Name = "Textbox1"
-        Me.Textbox1.Size = New System.Drawing.Size(125, 21)
+        Me.Textbox1.Size = New System.Drawing.Size(104, 21)
         Me.Textbox1.TabIndex = 15
         '
         'ComboBox1
@@ -203,10 +201,10 @@ Public Class frmMembersTransactionDialog
         Me.ComboBox1.Enabled = False
         Me.ComboBox1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComboBox1.Items.AddRange(New Object() {"DR", "CR"})
-        Me.ComboBox1.Location = New System.Drawing.Point(154, 42)
+        Me.ComboBox1.Location = New System.Drawing.Point(128, 39)
         Me.ComboBox1.MaxLength = 2
         Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(124, 21)
+        Me.ComboBox1.Size = New System.Drawing.Size(104, 21)
         Me.ComboBox1.TabIndex = 14
         '
         'TextBox3
@@ -214,9 +212,9 @@ Public Class frmMembersTransactionDialog
         Me.TextBox3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TextBox3.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox3.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.TextBox3.Location = New System.Drawing.Point(154, 17)
+        Me.TextBox3.Location = New System.Drawing.Point(128, 16)
         Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(124, 17)
+        Me.TextBox3.Size = New System.Drawing.Size(104, 16)
         Me.TextBox3.TabIndex = 13
         Me.TextBox3.Text = "Label10"
         Me.TextBox3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -225,9 +223,9 @@ Public Class frmMembersTransactionDialog
         '
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(19, 17)
+        Me.Label1.Location = New System.Drawing.Point(16, 16)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(125, 17)
+        Me.Label1.Size = New System.Drawing.Size(104, 16)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Deposit Code :"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -236,9 +234,9 @@ Public Class frmMembersTransactionDialog
         '
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(298, 17)
+        Me.Label2.Location = New System.Drawing.Point(248, 16)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(134, 17)
+        Me.Label2.Size = New System.Drawing.Size(112, 16)
         Me.Label2.TabIndex = 2
         Me.Label2.Text = "Transaction Date :"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -247,9 +245,9 @@ Public Class frmMembersTransactionDialog
         '
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(298, 43)
+        Me.Label3.Location = New System.Drawing.Point(248, 40)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(134, 17)
+        Me.Label3.Size = New System.Drawing.Size(112, 16)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Reference No :"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -258,9 +256,9 @@ Public Class frmMembersTransactionDialog
         '
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(19, 43)
+        Me.Label4.Location = New System.Drawing.Point(16, 40)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(125, 17)
+        Me.Label4.Size = New System.Drawing.Size(104, 16)
         Me.Label4.TabIndex = 2
         Me.Label4.Text = "DR/CR Code :"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -269,9 +267,9 @@ Public Class frmMembersTransactionDialog
         '
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(298, 110)
+        Me.Label5.Location = New System.Drawing.Point(248, 102)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(76, 17)
+        Me.Label5.Size = New System.Drawing.Size(64, 16)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "Amount :"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -279,10 +277,10 @@ Public Class frmMembersTransactionDialog
         'TextBox5
         '
         Me.TextBox5.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox5.Location = New System.Drawing.Point(451, 109)
+        Me.TextBox5.Location = New System.Drawing.Point(376, 101)
         Me.TextBox5.MaxLength = 0
         Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.Size = New System.Drawing.Size(125, 21)
+        Me.TextBox5.Size = New System.Drawing.Size(104, 21)
         Me.TextBox5.TabIndex = 3
         Me.TextBox5.Text = "0.00"
         Me.TextBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
@@ -291,9 +289,9 @@ Public Class frmMembersTransactionDialog
         '
         Me.Label6.BackColor = System.Drawing.Color.Transparent
         Me.Label6.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(19, 110)
+        Me.Label6.Location = New System.Drawing.Point(16, 102)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(106, 17)
+        Me.Label6.Size = New System.Drawing.Size(88, 16)
         Me.Label6.TabIndex = 2
         Me.Label6.Text = "Remarks :"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -301,19 +299,19 @@ Public Class frmMembersTransactionDialog
         'TextBox6
         '
         Me.TextBox6.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox6.Location = New System.Drawing.Point(154, 110)
+        Me.TextBox6.Location = New System.Drawing.Point(128, 102)
         Me.TextBox6.MaxLength = 50
         Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.Size = New System.Drawing.Size(124, 21)
+        Me.TextBox6.Size = New System.Drawing.Size(104, 21)
         Me.TextBox6.TabIndex = 4
         '
         'Label7
         '
         Me.Label7.BackColor = System.Drawing.Color.Transparent
         Me.Label7.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(19, 84)
+        Me.Label7.Location = New System.Drawing.Point(16, 78)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(106, 17)
+        Me.Label7.Size = New System.Drawing.Size(88, 16)
         Me.Label7.TabIndex = 2
         Me.Label7.Text = "Bank Code :"
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -321,39 +319,39 @@ Public Class frmMembersTransactionDialog
         'TextBox7
         '
         Me.TextBox7.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox7.Location = New System.Drawing.Point(154, 83)
+        Me.TextBox7.Location = New System.Drawing.Point(128, 77)
         Me.TextBox7.MaxLength = 5
         Me.TextBox7.Name = "TextBox7"
-        Me.TextBox7.Size = New System.Drawing.Size(124, 21)
+        Me.TextBox7.Size = New System.Drawing.Size(104, 21)
         Me.TextBox7.TabIndex = 1
         Me.TextBox7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'TextBox2
         '
         Me.TextBox2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.Location = New System.Drawing.Point(451, 43)
+        Me.TextBox2.Location = New System.Drawing.Point(376, 40)
         Me.TextBox2.MaxLength = 10
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(125, 21)
+        Me.TextBox2.Size = New System.Drawing.Size(104, 21)
         Me.TextBox2.TabIndex = 2
         Me.TextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'TextBox8
         '
         Me.TextBox8.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox8.Location = New System.Drawing.Point(451, 82)
+        Me.TextBox8.Location = New System.Drawing.Point(376, 76)
         Me.TextBox8.MaxLength = 10
         Me.TextBox8.Name = "TextBox8"
-        Me.TextBox8.Size = New System.Drawing.Size(125, 21)
+        Me.TextBox8.Size = New System.Drawing.Size(104, 21)
         Me.TextBox8.TabIndex = 2
         '
         'Label8
         '
         Me.Label8.BackColor = System.Drawing.Color.Transparent
         Me.Label8.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(298, 83)
+        Me.Label8.Location = New System.Drawing.Point(248, 77)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(105, 17)
+        Me.Label8.Size = New System.Drawing.Size(88, 16)
         Me.Label8.TabIndex = 2
         Me.Label8.Text = "Check No :"
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -363,34 +361,33 @@ Public Class frmMembersTransactionDialog
         Me.TextBox4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TextBox4.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox4.ForeColor = System.Drawing.SystemColors.ActiveCaption
-        Me.TextBox4.Location = New System.Drawing.Point(173, 43)
+        Me.TextBox4.Location = New System.Drawing.Point(144, 40)
         Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(105, 17)
+        Me.TextBox4.Size = New System.Drawing.Size(88, 16)
         Me.TextBox4.TabIndex = 13
         Me.TextBox4.Text = "Label10"
         Me.TextBox4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Button6
+        'btnTransact
         '
-        Me.Button6.BackgroundImage = CType(resources.GetObject("Button6.BackgroundImage"), System.Drawing.Image)
-        Me.Button6.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button6.Location = New System.Drawing.Point(434, 68)
-        Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(162, 24)
-        Me.Button6.TabIndex = 13
-        Me.Button6.Text = "&Transact"
+        Me.btnTransact.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnTransact.Location = New System.Drawing.Point(362, 63)
+        Me.btnTransact.Name = "btnTransact"
+        Me.btnTransact.Size = New System.Drawing.Size(135, 22)
+        Me.btnTransact.TabIndex = 13
+        Me.btnTransact.Text = "&Transact"
         '
         'frmMembersTransactionDialog
         '
-        Me.AcceptButton = Me.Button6
-        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 14)
-        Me.CancelButton = Me.Button3
+        Me.AcceptButton = Me.btnTransact
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+        Me.CancelButton = Me.btnCancel
         Me.ClientSize = New System.Drawing.Size(616, 288)
         Me.ControlBox = False
-        Me.Controls.Add(Me.Button3)
+        Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.Button6)
+        Me.Controls.Add(Me.btnTransact)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Name = "frmMembersTransactionDialog"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
@@ -502,7 +499,7 @@ Public Class frmMembersTransactionDialog
         TextBox6.Text = TextBox6.Text.ToUpper
     End Sub
 
-    Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
+    Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTransact.Click
 
         Dim ValidationResult As FixedDepositTransactionValidationResult
         PopulateViewModel()
@@ -512,7 +509,7 @@ Public Class frmMembersTransactionDialog
         If ValidationResult = FixedDepositTransactionValidationResult.Valid Then
             Dim TxnResult As RecordUpdateResult = FixedDepositTransactionService.Save(FdViewModel)
             If TxnResult = RecordUpdateResult.Unsuccessful Then
-                Me.DialogResult = Windows.Forms.DialogResult.Abort                
+                Me.DialogResult = Windows.Forms.DialogResult.Abort
                 Exit Sub
             End If
             SelectedMember.FD_AMOUNT = FdViewModel.Balance
@@ -568,7 +565,7 @@ Public Class frmMembersTransactionDialog
 
     End Sub
 
-    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
         Me.Close()
     End Sub
 

@@ -447,8 +447,16 @@ Public Class frmMembersTransactionList
                     End If
                 End With
                 Dim TxnResult As RecordUpdateResult = FixedDepositTxnSvc.Save(ReversalTransaction)
-                RefreshTransactionList()
-                RefreshFormData()
+                If TxnResult = RecordUpdateResult.UpdateSuccessful Then
+                    _MemberData.FD_AMOUNT = ReversalTransaction.Balance
+                    RefreshTransactionList()
+                    RefreshFormData()
+                Else
+                    MsgBox(GetGlobalResourceString("Unsuccessful"), MsgBoxStyle.Critical, GetGlobalResourceString("FixedDeposit"))
+                    Me.Close()
+                End If
+
+
             End If
         Else
             MsgBox(GetGlobalResourceString("NoTransactionForReversal"), MsgBoxStyle.Information, GetGlobalResourceString("FixedDepositTransaction"))
