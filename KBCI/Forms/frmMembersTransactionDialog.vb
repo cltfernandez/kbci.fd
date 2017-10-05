@@ -547,16 +547,17 @@ Public Class frmMembersTransactionDialog
     End Sub
     Private Sub RefreshFormData()
         Dim SYDATE As Date = SYSDATE
-
+        clrTXT(Me)
         If FdViewModel.TransactionCode = TransactionCode.CheckDeposit Then
             TextBox7.Enabled = True : TextBox8.Enabled = True : TextBox6.Enabled = False
         Else
             TextBox7.Enabled = False : TextBox8.Enabled = False : TextBox6.Enabled = True
         End If
-        If FdViewModel.TransactionCode = TransactionCode.CloseAccount Then TextBox5.Enabled = False Else TextBox5.Enabled = True : FormatNumber(Val(SelectedMember.FD_AMOUNT), 2)
-        If FdViewModel.TransactionCode = TransactionCode.Adjustment Then ComboBox1.Enabled = True : Textbox1.Enabled = True Else ComboBox1.Enabled = False : Textbox1.Enabled = False
-        clrTXT(Me)
+
         TextBox5.Text = "0.00"
+        If FdViewModel.TransactionCode = TransactionCode.CloseAccount Then TextBox5.Text = FormatNumber(Val(SelectedMember.FD_AMOUNT), 2) : TextBox5.Enabled = False Else TextBox5.Enabled = True
+        If FdViewModel.TransactionCode = TransactionCode.Adjustment Then ComboBox1.Enabled = True : Textbox1.Enabled = True Else ComboBox1.Enabled = False : Textbox1.Enabled = False
+
         GroupBox1.Enabled = True
         ComboBox1.Text = FdViewModel.TransactionType
         TextBox3.Text = TxnCodeList.Find(Function(x) x.TransactionID = FdViewModel.TransactionCode).TransactionCode
