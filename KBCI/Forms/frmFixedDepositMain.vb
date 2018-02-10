@@ -793,7 +793,7 @@ Public Class frmFixedDepositMain
     End Sub
 
     Private Sub MenuItem30_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem30.Click
-        GeneratePatronageRefundReport(MemberStatusEnum.Active, GetGlobalResourceString("ActiveMembers"))
+        GeneratePatronageRefundReport(MemberStatusEnum.Resigned, GetGlobalResourceString("ResignedMembers"))
 
     End Sub
 

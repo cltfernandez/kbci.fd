@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9B92C364-EC8A-42FF-98CC-81F7800B9962}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -92,6 +92,8 @@
     <Compile Include="LunaEngine\ClassDAO\_RefDAO.vb" />
     <Compile Include="LunaEngine\ClassDAO\_Rnterest.vb" />
     <Compile Include="LunaEngine\ClassDAO\_RnterestDAO.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_Sdmaster.vb" />
+    <Compile Include="LunaEngine\ClassDAO\_SdmasterDAO.vb" />
     <Compile Include="LunaEngine\ClassDAO\_Snterest.vb" />
     <Compile Include="LunaEngine\ClassDAO\_SnterestDAO.vb" />
     <Compile Include="LunaEngine\ClassDAO\_Trancode.vb" />
@@ -112,6 +114,7 @@
     <Compile Include="LunaUserClass\ClassDAO\Pat_refDAO.vb" />
     <Compile Include="LunaUserClass\ClassDAO\RefDAO.vb" />
     <Compile Include="LunaUserClass\ClassDAO\RnterestDAO.vb" />
+    <Compile Include="LunaUserClass\ClassDAO\SdmasterDAO.vb" />
     <Compile Include="LunaUserClass\ClassDAO\SnterestDAO.vb" />
     <Compile Include="LunaUserClass\ClassDAO\TrancodeDAO.vb" />
     <Compile Include="LunaUserClass\ClassDAO\UserDAO.vb" />
@@ -128,6 +131,7 @@
     <Compile Include="LunaUserClass\ClassEntity\Pat_ref.vb" />
     <Compile Include="LunaUserClass\ClassEntity\Ref.vb" />
     <Compile Include="LunaUserClass\ClassEntity\Rnterest.vb" />
+    <Compile Include="LunaUserClass\ClassEntity\Sdmaster.vb" />
     <Compile Include="LunaUserClass\ClassEntity\Snterest.vb" />
     <Compile Include="LunaUserClass\ClassEntity\Trancode.vb" />
     <Compile Include="LunaUserClass\ClassEntity\User.vb" />

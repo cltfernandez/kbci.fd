@@ -38,7 +38,7 @@ Public Class RefDAO
     Public Sub PopulateRefundRegister(ByVal PatronageRefundProcessingDate As Date, ByVal PatronageRefundPercentage As Decimal)
 
         Dim Sql As String = "INSERT INTO REF([DATE],[KBCI_NO],[INT_PAID],[REFUND]) " & _
-                               "SELECT @PatronageRefundProcessingDate DATE,KBCI_NO,YTD_DIVAMT,ROUND(YTD_DIVAMT * @PatronageRefundPercentage,0) REFUND FROM MEMBERS WHERE YTD_DIVAMT>0"
+                               "SELECT @PatronageRefundProcessingDate DATE,KBCI_NO,YTD_DIVAMT,ROUND(YTD_DIVAMT * (@PatronageRefundPercentage / 100),0) REFUND FROM MEMBERS WHERE YTD_DIVAMT>0"
 
         Try
 

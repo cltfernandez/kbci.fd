@@ -42,13 +42,13 @@ Public Class MemberSearchBovm
         End Set
     End Property
 
-    Private _MI As String
-    Public Property MI() As String
+    Private _MEM_STAT As String
+    Public Property MEM_STAT() As String
         Get
-            Return _MI
+            Return _MEM_STAT
         End Get
         Set(ByVal value As String)
-            _MI = value
+            _MEM_STAT = value
         End Set
     End Property
     Private _FEBTC_SA As String
@@ -68,6 +68,15 @@ Public Class MemberSearchBovm
         End Get
         Set(ByVal value As String)
             _FEBTC_CA = value
+        End Set
+    End Property
+    Private _FULLNAME As String
+    Public Property FULLNAME() As String
+        Get
+            Return _FULLNAME
+        End Get
+        Set(ByVal value As String)
+            _FULLNAME = value
         End Set
     End Property
 End Class

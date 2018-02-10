@@ -144,6 +144,9 @@ Public Class frmMembersMaintenance
     Friend WithEvents MaskedTextBox4 As System.Windows.Forms.MaskedTextBox
     Friend WithEvents MaskedTextBox5 As System.Windows.Forms.MaskedTextBox
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents lblStatus As System.Windows.Forms.Label
+    Friend WithEvents Label55 As System.Windows.Forms.Label
+    Friend WithEvents Button8 As System.Windows.Forms.Button
     Friend WithEvents Label54 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -252,6 +255,9 @@ Public Class frmMembersMaintenance
         Me.TextBox25 = New System.Windows.Forms.TextBox
         Me.Label29 = New System.Windows.Forms.Label
         Me.Label52 = New System.Windows.Forms.Label
+        Me.Label55 = New System.Windows.Forms.Label
+        Me.lblStatus = New System.Windows.Forms.Label
+        Me.Button8 = New System.Windows.Forms.Button
         Me.GroupBox1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
@@ -391,6 +397,8 @@ Public Class frmMembersMaintenance
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.lblStatus)
+        Me.GroupBox2.Controls.Add(Me.Label55)
         Me.GroupBox2.Controls.Add(Me.NumericUpDown1)
         Me.GroupBox2.Controls.Add(Me.MaskedTextBox1)
         Me.GroupBox2.Controls.Add(Me.Label32)
@@ -445,7 +453,7 @@ Public Class frmMembersMaintenance
         Me.MaskedTextBox1.Mask = "000-0000"
         Me.MaskedTextBox1.Name = "MaskedTextBox1"
         Me.MaskedTextBox1.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.MaskedTextBox1.Size = New System.Drawing.Size(72, 21)
+        Me.MaskedTextBox1.Size = New System.Drawing.Size(72, 20)
         Me.MaskedTextBox1.TabIndex = 6
         Me.MaskedTextBox1.Tag = " Enter Home Telephone Number"
         '
@@ -782,6 +790,7 @@ Public Class frmMembersMaintenance
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.Button8)
         Me.GroupBox3.Controls.Add(Me.MaskedTextBox4)
         Me.GroupBox3.Controls.Add(Me.MaskedTextBox2)
         Me.GroupBox3.Controls.Add(Me.ComboBox4)
@@ -829,7 +838,7 @@ Public Class frmMembersMaintenance
         Me.MaskedTextBox4.Mask = "0000"
         Me.MaskedTextBox4.Name = "MaskedTextBox4"
         Me.MaskedTextBox4.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.MaskedTextBox4.Size = New System.Drawing.Size(50, 21)
+        Me.MaskedTextBox4.Size = New System.Drawing.Size(50, 20)
         Me.MaskedTextBox4.TabIndex = 22
         Me.MaskedTextBox4.Tag = " Office Local"
         '
@@ -840,7 +849,7 @@ Public Class frmMembersMaintenance
         Me.MaskedTextBox2.Mask = "000-0000"
         Me.MaskedTextBox2.Name = "MaskedTextBox2"
         Me.MaskedTextBox2.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.MaskedTextBox2.Size = New System.Drawing.Size(77, 21)
+        Me.MaskedTextBox2.Size = New System.Drawing.Size(77, 20)
         Me.MaskedTextBox2.TabIndex = 21
         Me.MaskedTextBox2.Tag = "*Enter Office Telephone Number w/ Local number"
         '
@@ -1266,7 +1275,7 @@ Public Class frmMembersMaintenance
         Me.MaskedTextBox5.Mask = "0000"
         Me.MaskedTextBox5.Name = "MaskedTextBox5"
         Me.MaskedTextBox5.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.MaskedTextBox5.Size = New System.Drawing.Size(50, 21)
+        Me.MaskedTextBox5.Size = New System.Drawing.Size(50, 20)
         Me.MaskedTextBox5.TabIndex = 31
         Me.MaskedTextBox5.Tag = " Office Local"
         '
@@ -1277,7 +1286,7 @@ Public Class frmMembersMaintenance
         Me.MaskedTextBox3.Mask = "000-0000"
         Me.MaskedTextBox3.Name = "MaskedTextBox3"
         Me.MaskedTextBox3.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.MaskedTextBox3.Size = New System.Drawing.Size(86, 21)
+        Me.MaskedTextBox3.Size = New System.Drawing.Size(86, 20)
         Me.MaskedTextBox3.TabIndex = 30
         Me.MaskedTextBox3.Tag = " Enter spouse office telephone no."
         '
@@ -1459,13 +1468,49 @@ Public Class frmMembersMaintenance
         Me.Label52.Text = "loc."
         Me.Label52.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'frmFDS_Main_NMem
+        'Label55
+        '
+        Me.Label55.BackColor = System.Drawing.Color.Transparent
+        Me.Label55.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label55.Location = New System.Drawing.Point(222, 16)
+        Me.Label55.Name = "Label55"
+        Me.Label55.Size = New System.Drawing.Size(82, 16)
+        Me.Label55.TabIndex = 40
+        Me.Label55.Text = "Status: "
+        Me.Label55.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblStatus
+        '
+        Me.lblStatus.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblStatus.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblStatus.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.lblStatus.Location = New System.Drawing.Point(284, 16)
+        Me.lblStatus.Name = "lblStatus"
+        Me.lblStatus.Size = New System.Drawing.Size(124, 16)
+        Me.lblStatus.TabIndex = 41
+        Me.lblStatus.Text = "Label10"
+        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Button8
+        '
+        Me.Button8.BackgroundImage = CType(resources.GetObject("Button8.BackgroundImage"), System.Drawing.Image)
+        Me.Button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.Button8.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button8.Location = New System.Drawing.Point(686, 137)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(20, 20)
+        Me.Button8.TabIndex = 43
+        Me.Button8.Text = "        INSERT"
+        Me.Button8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Button8.Visible = False
+        '
+        'frmMembersMaintenance
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.ClientSize = New System.Drawing.Size(770, 607)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.ToolBar1)
-        Me.Name = "frmFDS_Main_NMem"
+        Me.Name = "frmMembersMaintenance"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Members"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
@@ -1508,7 +1553,7 @@ Public Class frmMembersMaintenance
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.Close()
     End Sub
-    Private Sub ToolBar1_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles ToolBar1.ButtonClick        
+    Private Sub ToolBar1_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles ToolBar1.ButtonClick
         Dim IDX As Integer = Val(ToolBar1.Buttons.IndexOf(e.Button).ToString)
 
         With ToolBar1
@@ -1522,6 +1567,7 @@ Public Class frmMembersMaintenance
                         EDTool(ToolBar1, False)
                         .Buttons(IDX).Text = "SAVE" : .Buttons(6).Text = "CANCEL"
                         .Buttons(IDX).Enabled = True
+                        Button8.Visible = True
                         TextBox3.Text = Mid(KBCINUM, 1, 2) & "-" & Mid(KBCINUM, 3, 4) & "-" & Mid(KBCINUM, 7, 1)
                         TextBox1.Focus()
                     Else
@@ -1544,6 +1590,7 @@ Public Class frmMembersMaintenance
                                 cn.Execute("UPDATE CTRL SET KBCI_NO='" & KBCINUM & "'")
                                 MemberUpdates = True
                                 .Buttons(6).Text = "EXIT"
+                                Button8.Visible = False
                             End If
                         Else
                             shwReq(True)
@@ -1556,6 +1603,7 @@ Public Class frmMembersMaintenance
                         .Buttons(IDX).Text = "SAVE" : .Buttons(6).Text = "CANCEL"
                         .Buttons(IDX).Enabled = True
                         GroupBox1.Enabled = True
+                        Button8.Visible = True
                         TextBox1.Focus()
                     Else
                         If valTXT() Then
@@ -1567,6 +1615,7 @@ Public Class frmMembersMaintenance
                                 GroupBox1.Enabled = False
                                 MapFields()
                                 .Buttons(6).Text = "EXIT"
+                                Button8.Visible = False
                                 KBCINUM = TextBox3.Text.Replace("-", "")
                                 If Save(_memberData) > 0 Then
                                     MemberUpdates = True
@@ -1729,6 +1778,7 @@ errHand:
         'On Error Resume Next
         With _memberData
             If Not .KBCI_NO Is Nothing Then TextBox3.Text = FormatKBCINo(.KBCI_NO)
+            If Not .MEM_STAT Is Nothing Then lblStatus.Text = GetMemberStatus(.MEM_STAT)
             If Not .LNAME Is Nothing Then TextBox1.Text = .LNAME Else TextBox1.Text = ""
             If Not .FNAME Is Nothing Then TextBox4.Text = .FNAME Else TextBox4.Text = ""
             If Not .MI Is Nothing Then TextBox5.Text = .MI Else TextBox5.Text = ""
@@ -1961,5 +2011,15 @@ errHand:
             Return rsMembersDAO.Save(membersEntity)
         End Using
     End Function
+
+    Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
+        Dim data As Members
+        Using MemberSearchForm As New frmMemberSearchDialog(MemberSearchType.SavingsMasterData)
+            If MemberSearchForm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                data = rsMEMBERS.Find(Function(x) x.KBCI_NO = SEL_KBCI_NO)
+                TextBox12.Text = FormatAccountNumber(data.FEBTC_SA)
+            End If
+        End Using
+    End Sub
 End Class
 

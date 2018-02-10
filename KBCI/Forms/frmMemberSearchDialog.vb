@@ -5,6 +5,11 @@ Imports System.Collections.Generic
 Public Class frmMemberSearchDialog
     Inherits System.Windows.Forms.Form
 
+    Public Sub New(ByVal searchType As MemberSearchType)
+        MyBase.New()
+        InitializeComponent()
+        _searchType = searchType
+    End Sub
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -14,8 +19,11 @@ Public Class frmMemberSearchDialog
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
-
+        _searchType = MemberSearchType.MembersData
     End Sub
+
+    Private _searchType As MemberSearchType
+
 
     'Form overrides dispose to clean up the component list.
     Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -263,6 +271,7 @@ Public Class frmMemberSearchDialog
     Dim SRCH, fField As String
     Dim mTXT As TextBox
     Private rsMemberSearch As New List(Of MemberSearchBovm)
+    Private sdMasterSearch As New List(Of MembersAccountSearchBovm)
     Private svc As IFormOperations
     Private _SelectedMember As MemberSearchBovm
     Public Property SelectedMember() As MemberSearchBovm
@@ -288,9 +297,12 @@ Public Class frmMemberSearchDialog
     End Sub
 
     Private Sub frmFDS_Main_PrntFDL_Srch_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        svc = New MembersSearchOperationService()
-        rsMemberSearch = svc.GetAll()
-        PopulateListView(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
+        GetData()
+        If _searchType = MemberSearchType.MembersData Then
+            PopulateListView(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
+        Else
+            PopulateListView(ListView1, GetGridViewDataFromObject(sdMasterSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
+        End If
     End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
@@ -320,6 +332,7 @@ Public Class frmMemberSearchDialog
 
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+
         If SRCH <> "" Then
             Dim FoundMembers As List(Of MemberSearchBovm) = rsMemberSearch.Where(Function(x) x.KBCI_NO.Contains(SRCH.ToUpper) Or x.LNAME.Contains(SRCH.ToUpper) Or x.FNAME.Contains(SRCH.ToUpper)).ToList
             PopulateListView(ListView1, GetGridViewDataFromObject(FoundMembers, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
@@ -327,5 +340,19 @@ Public Class frmMemberSearchDialog
             PopulateListView(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
         End If
         If DataGridView1.Rows.Count > 0 Then ListView1.Focus()
+    End Sub
+
+    Private Sub GetData()
+
+        svc = New MembersSearchOperationService(_searchType)
+        rsMemberSearch = svc.GetAll()
+        Dim sdMasterSearch As List(Of MembersAccountSearchBovm) = rsMemberSearch.Select(Function(x) New MembersAccountSearchBovm() With {.SDMASTER_ID = x.KBCI_ID, _
+                                                                                      .KBCI_NO = x.KBCI_NO, _
+                                                                                      .ACCTNAME = x.FULLNAME, _
+                                                                                      .ACCTSTAT = x.MEM_STAT}).OrderBy(Function(y) y.ACCTNAME)
+
+    End Sub
+    Private Sub PopulateGrid()
+
     End Sub
 End Class

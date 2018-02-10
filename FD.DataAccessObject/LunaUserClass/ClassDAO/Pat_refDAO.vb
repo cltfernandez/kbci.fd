@@ -31,7 +31,7 @@ Public Class Pat_refDAO
     Public Sub LogPatronageRefundProcessing(ByVal PatronageRefundProcessingDate As Date, ByVal SystemDate As String, ByVal CurrentUser As String, ByVal PatronageRefundPercentage As Decimal)
 
         Dim Sql As String = "INSERT INTO PAT_REF([PERCENT],[PROC_DATE],[ADD_DATE],[CHG_DATE],[USER]) " & _
-                           "VALUES(@PatronageRefundPercentage * 100,@PatronageRefundProcessingDate,@SystemDate,@SystemDate,@CurrentUser)"
+                           "VALUES(@PatronageRefundPercentage,@PatronageRefundProcessingDate,@SystemDate,@SystemDate,@CurrentUser)"
 
         Try
 

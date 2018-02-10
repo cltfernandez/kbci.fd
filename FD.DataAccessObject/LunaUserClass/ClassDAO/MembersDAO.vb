@@ -75,7 +75,7 @@ Public Class MembersDAO
             Sql = "SELECT M.[KBCI_NO],M.[LNAME]+', '+M.[FNAME]+' '+COALESCE(M.[MI]+'.','') AS NAME,M.[MEM_STAT]," & _
                         "FDA.[DATE] CHG_DATE,FDA.AMOUNT FD_AMOUNT FROM MEMBERS M LEFT JOIN(SELECT*from FD WHERE FD_ID IN(" & _
                         "select MAX(FD_ID)from fd group by KBCI_NO))FDA ON M.KBCI_NO=FDA.KBCI_NO WHERE M.MEM_STAT=" & _
-                        "'R'AND CHG_DATE BETWEEN @StartDate AND @EndDate ORDER BY M.KBCI_NO"
+                        "'R' AND CHG_DATE BETWEEN @StartDate AND @EndDate ORDER BY M.KBCI_NO"
 
             Using myCommand As DbCommand = _Cn.CreateCommand
                 myCommand.CommandText = Sql

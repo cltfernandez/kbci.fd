@@ -279,8 +279,10 @@ ErrorHandler:
                         ElseIf CInt(frSet(colCTR)) = 3 Then
                             TempNode.SubItems.Add(FormatNumber(CStr(gridView.Rows(i).Cells(gridView.Columns(colCTR).Name).Value), 2))
                         Else
-                            Dim itemValue As String = CStr(gridView.Rows(i).Cells(gridView.Columns(colCTR).Name).Value)
-                            If itemValue.StartsWith("12:00:00 AM") Then
+                            Dim itemValue As String = CStr(gridView.Rows(i).Cells(gridView.Columns(colCTR).Name).Value)                            
+                            If itemValue Is Nothing Then
+                                itemValue = "--"
+                            ElseIf itemValue.StartsWith("12:00:00 AM") Then
                                 itemValue = "--"
                             End If
                             TempNode.SubItems.Add(itemValue)
@@ -345,7 +347,25 @@ ErrorHandler:
     Public Function FormatKBCINo(ByVal rawKBCINo As String) As String
         Return String.Format("{0}-{1}-{2}", Mid(rawKBCINo, 1, 2), Mid(rawKBCINo, 3, 4), Mid(rawKBCINo, 7, 1))
     End Function
+
+    Public Function FormatAccountNumber(ByVal rawAccountNumber As String) As String
+        Return String.Format("{0}-{1}-{2}", Mid(rawAccountNumber, 1, 4), Mid(rawAccountNumber, 5, 5), Mid(rawAccountNumber, 10, 1))
+    End Function
     Public Function GenerateReferenceNumber(ByVal systemDate As Date) As String
         Return String.Format("{0}{1}", systemDate.ToString("yyyyMMdd"), Now.ToString("HHmmss"))
+    End Function
+
+    Public Function GetMemberStatus(ByVal memberStatus As String) As String
+        Dim result As String = String.Empty
+
+        Select memberStatus.Trim
+            Case "A"
+                result = "Active"
+            Case "S"
+                result = "Staff"
+            Case "R"
+                result = "Resigned"
+        End Select
+        Return result
     End Function
 End Module

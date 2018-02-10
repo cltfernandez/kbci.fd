@@ -142,7 +142,7 @@ Public Structure DivrefSaveParameters
 End Structure
 
 Public Class InterestPostinSqlStringEnum
-    Public Const MembersPostingCommand As String = "INSERT INTO {0}([ACCTNO],[APLINT],[EDLINT],[EMLINT],[RGLINT],[RSLINT],[SPLINT],[LHLINT],[STLINT],[CMLINT],[MPLINT],[FALINT]) " & _
+    Public Const MembersPostingCommand As String = "INSERT INTO {0}([ACCTNO],[APLINT],[EDLINT],[EMLINT],[RGLINT],[RSLINT],[SPLINT],[LHLINT],[STLINT],[CMLINT],[MPLINT],[FALINT],[BFLINT]) " & _
                                                     "SELECT LN.KBCI_NO," & _
                                                     "SUM(CASE WHEN LN.LOAN_TYPE ='APL' THEN LT.AMOUNT ELSE 0 END) APLINT," & _
                                                     "SUM(CASE WHEN LN.LOAN_TYPE ='EDL' THEN LT.AMOUNT ELSE 0 END) EDLINT," & _
@@ -154,7 +154,8 @@ Public Class InterestPostinSqlStringEnum
                                                     "SUM(CASE WHEN LN.LOAN_TYPE ='STL' THEN LT.AMOUNT ELSE 0 END) STLINT," & _
                                                     "SUM(CASE WHEN LN.LOAN_TYPE ='CML' THEN LT.AMOUNT ELSE 0 END) CMLINT," & _
                                                     "SUM(CASE WHEN LN.LOAN_TYPE ='MPL' THEN LT.AMOUNT ELSE 0 END) MPLINT," & _
-                                                    "SUM(CASE WHEN LN.LOAN_TYPE ='FAL' THEN LT.AMOUNT ELSE 0 END) FALINT " & _
+                                                    "SUM(CASE WHEN LN.LOAN_TYPE ='FAL' THEN LT.AMOUNT ELSE 0 END) FALINT," & _
+                                                    "SUM(CASE WHEN LN.LOAN_TYPE ='BFL' THEN LT.AMOUNT ELSE 0 END) BFLINT " & _
                                                     "FROM (SELECT DISTINCT LG.PN_NO, SUM(ISNULL(LG.CR,0.00)) - SUM(ISNULL(LG.DR,0.00)) AMOUNT  FROM  LEDGER LG WHERE ACCT_CODE='INT' " & _
                                                     "AND (ACCT_TYPE='PAY' OR ACCT_TYPE='ADJ' OR ACCT_TYPE='TER' OR ACCT_TYPE='INT') AND  DATE BETWEEN @PatronageRefundInterestStartDate AND @PatronageRefundInterestEndDate " & _
                                                     "GROUP BY LG.PN_NO) LT RIGHT OUTER JOIN LOANS LN ON LT.PN_NO=LN.PN_NO LEFT JOIN MEMBERS MM ON MM.KBCI_NO=LN.KBCI_NO WHERE MM.MEM_STAT=@MemberStatus {1} GROUP BY LN.KBCI_NO"
@@ -182,10 +183,10 @@ End Class
 
 Public Class MembersPostingSqlStringEnum
     Public Const UpdateMembersYtdDividendCommand As String = "UPDATE MEMBERS SET MEMBERS.YTD_DIVAMT=PATREF.PR FROM  " & _
-                                                            "(SELECT [ACCTNO], ([APLINT]+[EDLINT]+[EMLINT]+[RGLINT]+[RSLINT]+[SPLINT]+[LHLINT]+[STLINT]) PR FROM {0}) " & _
+                                                            "(SELECT [ACCTNO], ([APLINT]+[EDLINT]+[EMLINT]+[RGLINT]+[RSLINT]+[SPLINT]+[LHLINT]+[STLINT]+[FALINT]+[MPLINT]+[BFLINT]) PR FROM {0}) " & _
                                                             "PATREF WHERE MEMBERS.KBCI_NO=PATREF.ACCTNO"
     Public Const UpdateStaffYtdDividendCommand As String = "UPDATE MEMBERS SET MEMBERS.YTD_DIVAMT=PATREF.PR FROM  " & _
-                                                            "(SELECT [ACCTNO], ([APLINT]+[EDLINT]+[EMLINT]+[RGLINT]+[RSLINT]+[SPLINT]+[LHLINT]+[STLINT]+[PTLINT]) PR FROM {0}) " & _
+                                                            "(SELECT [ACCTNO], ([APLINT]+[EDLINT]+[EMLINT]+[RGLINT]+[RSLINT]+[SPLINT]+[LHLINT]+[STLINT]+[PTLINT]+[FALINT]+[MPLINT]) PR FROM {0}) " & _
                                                             "PATREF WHERE MEMBERS.KBCI_NO=PATREF.ACCTNO"
 
 End Class
@@ -209,6 +210,10 @@ Public Class CustomQueryString
                                                             "ORDER BY CASE @SortBy WHEN 'KBCI_NO' THEN MM.KBCI_NO WHEN 'NAME' THEN DR.LNAME WHEN 'REGION' THEN MM.REGION END"
 End Class
 
+Public Enum MemberSearchType
+    SavingsMasterData = 0
+    MembersData = 1
+End Enum
 
 
 

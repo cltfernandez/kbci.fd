@@ -1,0 +1,20 @@
+﻿IF NOT EXISTS(SELECT 1
+          FROM   INFORMATION_SCHEMA.COLUMNS
+          WHERE  TABLE_NAME = 'INTEREST'
+                 AND COLUMN_NAME = 'BFLINT') 
+BEGIN
+	alter table INTEREST
+	add  BFLINT NUMERIC(8,2) NULL
+END                 
+GO
+
+
+IF NOT EXISTS(SELECT 1
+          FROM   INFORMATION_SCHEMA.COLUMNS
+          WHERE  TABLE_NAME = 'RNTEREST'
+                 AND COLUMN_NAME = 'BFLINT') 
+BEGIN
+	alter table RNTEREST
+	add  BFLINT NUMERIC(8,2) NULL
+END                 
+GO

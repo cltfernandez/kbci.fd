@@ -9,6 +9,7 @@ Public Class frmVoucherProcessing
     Public Sub New(ByVal _CurrentUser As UserViewModel, ByVal _dividendRefundSettings As IDividendPatronageRefundSettingService, ByVal _messagingService As IDividendPatronageMessagePromptService)
         CurrentUser = _CurrentUser
         dividendRefundSettings = _dividendRefundSettings
+        messagingService = New MessagePromptService()
         InitializeComponent()
     End Sub
 #Region " Windows Form Designer generated code "
