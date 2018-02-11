@@ -41,8 +41,7 @@ Public Class InterestDAO
 
         Dim STLFilter As String = String.Empty
 
-        If IncludeSTL Then STLFilter = InterestPostinSqlStringEnum.STLFilter
-
+        If Not IncludeSTL Then STLFilter = InterestPostinSqlStringEnum.STLFilter
         Dim Sql As String = String.Format(InterestPostinSqlStringEnum.MembersPostingCommand, _Table, STLFilter)
 
         Try
@@ -84,6 +83,15 @@ Public Class InterestDAO
     Public Sub PostMembersRefund()
         Using myCommand As DbCommand = _Cn.CreateCommand
             myCommand.CommandText = String.Format(MembersPostingSqlStringEnum.UpdateMembersYtdDividendCommand, _Table)
+
+            Dim paramMemberStatus = myCommand.CreateParameter
+            With paramMemberStatus
+                .ParameterName = "@MemberStatus"
+                .Value = MemberStatusEnum.Active
+            End With
+
+            myCommand.Parameters.Add(paramMemberStatus)
+
             If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
             myCommand.ExecuteNonQuery()
         End Using

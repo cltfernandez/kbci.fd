@@ -69,14 +69,5 @@ Public Class MemberSearchBovm
         Set(ByVal value As String)
             _FEBTC_CA = value
         End Set
-    End Property
-    Private _FULLNAME As String
-    Public Property FULLNAME() As String
-        Get
-            Return _FULLNAME
-        End Get
-        Set(ByVal value As String)
-            _FULLNAME = value
-        End Set
-    End Property
+    End Property 
 End Class

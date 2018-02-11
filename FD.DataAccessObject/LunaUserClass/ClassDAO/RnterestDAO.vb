@@ -40,9 +40,8 @@ Public Class RnterestDAO
 
         Dim STLFilter As String = String.Empty
 
-        If IncludeSTL Then STLFilter = InterestPostinSqlStringEnum.STLFilter
-
-        Dim Sql As String = String.Format(InterestPostinSqlStringEnum.StaffPostingCommand, _Table, STLFilter)
+        If Not IncludeSTL Then STLFilter = InterestPostinSqlStringEnum.STLFilter
+        Dim Sql As String = String.Format(InterestPostinSqlStringEnum.MembersPostingCommand, _Table, STLFilter)
 
         Try
 
@@ -64,7 +63,7 @@ Public Class RnterestDAO
                 Dim paramMemberStatus = myCommand.CreateParameter
                 With paramMemberStatus
                     .ParameterName = "@MemberStatus"
-                    .Value = MemberStatusEnum.Active
+                    .Value = MemberStatusEnum.Resigned
                 End With
 
 
@@ -82,7 +81,16 @@ Public Class RnterestDAO
     End Sub
     Public Sub PostMembersRefund()
         Using myCommand As DbCommand = _Cn.CreateCommand
-            myCommand.CommandText = String.Format(MembersPostingSqlStringEnum.UpdateStaffYtdDividendCommand, _Table)
+            myCommand.CommandText = String.Format(MembersPostingSqlStringEnum.UpdateMembersYtdDividendCommand, _Table)
+
+            Dim paramMemberStatus = myCommand.CreateParameter
+            With paramMemberStatus
+                .ParameterName = "@MemberStatus"
+                .Value = MemberStatusEnum.Resigned
+            End With
+
+            myCommand.Parameters.Add(paramMemberStatus)
+
             If Not LUNA.LunaContext.TransactionBox Is Nothing Then myCommand.Transaction = LUNA.LunaContext.TransactionBox.Transaction
             myCommand.ExecuteNonQuery()
         End Using

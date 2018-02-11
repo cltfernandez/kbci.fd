@@ -301,7 +301,7 @@ Public Class frmMemberSearchDialog
         If _searchType = MemberSearchType.MembersData Then
             PopulateListView(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
         Else
-            PopulateListView(ListView1, GetGridViewDataFromObject(sdMasterSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
+            PopulateListView(ListView1, GetGridViewDataFromObject(sdMasterSearch, DataGridView1), ColumnWidthDefinition.SdMasterSearchList, ColumnAlignmentDefinition.SdMasterSearchList)
         End If
     End Sub
 
@@ -310,7 +310,7 @@ Public Class frmMemberSearchDialog
             SW = True
             SEL_KBCI_NO = ListView1.Items(ListView1.SelectedIndices(0)).SubItems(1).Text
             SEL_FNAME = TextBox1.Text
-            SEL_FEBTC = ListView1.Items(ListView1.SelectedIndices(0)).SubItems(5).Text            
+            SEL_FEBTC = If(_searchType = MemberSearchType.MembersData, ListView1.Items(ListView1.SelectedIndices(0)).SubItems(5).Text, ListView1.Items(ListView1.SelectedIndices(0)).SubItems(3).Text)
             SelectedMember = rsMemberSearch.Find(Function(x) x.KBCI_NO = SEL_KBCI_NO)
             Me.DialogResult = Windows.Forms.DialogResult.OK
         End If
@@ -332,13 +332,14 @@ Public Class frmMemberSearchDialog
 
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
-
-        If SRCH <> "" Then
-            Dim FoundMembers As List(Of MemberSearchBovm) = rsMemberSearch.Where(Function(x) x.KBCI_NO.Contains(SRCH.ToUpper) Or x.LNAME.Contains(SRCH.ToUpper) Or x.FNAME.Contains(SRCH.ToUpper)).ToList
+        If _searchType = MemberSearchType.MembersData Then
+            Dim FoundMembers As List(Of MemberSearchBovm) = If(SRCH <> "", rsMemberSearch.Where(Function(x) x.KBCI_NO.Contains(SRCH.ToUpper) Or x.LNAME.Contains(SRCH.ToUpper) Or x.FNAME.Contains(SRCH.ToUpper)).ToList, rsMemberSearch)
             PopulateListView(ListView1, GetGridViewDataFromObject(FoundMembers, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
         Else
-            PopulateListView(ListView1, GetGridViewDataFromObject(rsMemberSearch, DataGridView1), ColumnWidthDefinition.MembersSearchList, ColumnAlignmentDefinition.MembersSearchList)
+            Dim FoundMembers As List(Of MembersAccountSearchBovm) = If(SRCH <> "", sdMasterSearch.Where(Function(x) x.ACCTNO.Contains(SRCH.ToUpper) Or x.ACCTNAME.Contains(SRCH.ToUpper)).ToList(), sdMasterSearch)
+            PopulateListView(ListView1, GetGridViewDataFromObject(FoundMembers, DataGridView1), ColumnWidthDefinition.SdMasterSearchList, ColumnAlignmentDefinition.SdMasterSearchList)
         End If
+
         If DataGridView1.Rows.Count > 0 Then ListView1.Focus()
     End Sub
 
@@ -346,11 +347,14 @@ Public Class frmMemberSearchDialog
 
         svc = New MembersSearchOperationService(_searchType)
         rsMemberSearch = svc.GetAll()
-        Dim sdMasterSearch As List(Of MembersAccountSearchBovm) = rsMemberSearch.Select(Function(x) New MembersAccountSearchBovm() With {.SDMASTER_ID = x.KBCI_ID, _
-                                                                                      .KBCI_NO = x.KBCI_NO, _
-                                                                                      .ACCTNAME = x.FULLNAME, _
-                                                                                      .ACCTSTAT = x.MEM_STAT}).OrderBy(Function(y) y.ACCTNAME)
+        If _searchType = MemberSearchType.SavingsMasterData Then
+            sdMasterSearch = rsMemberSearch.Select(Function(x) New MembersAccountSearchBovm() With {.SDMASTER_ID = x.KBCI_ID, _
+                                                                                          .KBCI_NO = x.KBCI_NO, _
+                                                                                          .ACCTNO = x.FEBTC_SA, _
+                                                                                          .ACCTNAME = x.FNAME, _
+                                                                                          .ACCTSTAT = x.MEM_STAT}).ToList
 
+        End If
     End Sub
     Private Sub PopulateGrid()
 

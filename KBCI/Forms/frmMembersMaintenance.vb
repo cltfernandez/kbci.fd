@@ -2012,12 +2012,10 @@ errHand:
         End Using
     End Function
 
-    Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
-        Dim data As Members
+    Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click        
         Using MemberSearchForm As New frmMemberSearchDialog(MemberSearchType.SavingsMasterData)
             If MemberSearchForm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                data = rsMEMBERS.Find(Function(x) x.KBCI_NO = SEL_KBCI_NO)
-                TextBox12.Text = FormatAccountNumber(data.FEBTC_SA)
+                TextBox12.Text = FormatAccountNumber(SEL_KBCI_NO)
             End If
         End Using
     End Sub

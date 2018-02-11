@@ -3,13 +3,14 @@ Public Class ColumnWidthDefinition
     Public Const MembersGridList As String = "0:100:222:241:38:136:100:0"
     Public Const MembersSearchList As String = "0:100:222:241:38:0"
     Public Const TransactionList As String = "0:0:125:125:110:100:100:210:0:0:60"
-
+    Public Const SdMasterSearchList As String = "0:100:100:361:40"
 End Class
 
 Public Class ColumnAlignmentDefinition
     Public Const MemberGridList As String = "1:2:1:1:1:1:1:1"
     Public Const MembersSearchList As String = "1:1:1:1:1:1"
     Public Const TransactionList As String = "1:1:2:2:1:3:3:1:1:1:2"
+    Public Const SdMasterSearchList As String = "1:1:1:1:2"
 End Class
 Public Class TransactionType
     Public Const Debit As String = "DR"
@@ -119,6 +120,7 @@ Public Class MemberStatusEnum
     Public Const Active As String = "A"
     Public Const Resigned As String = "R"
     Public Const Staff As String = "S"
+    Public Const All As String = ""
 End Class
 
 Public Class SortOptions
@@ -182,13 +184,13 @@ Public Class InterestPostinSqlStringEnum
 End Class
 
 Public Class MembersPostingSqlStringEnum
-    Public Const UpdateMembersYtdDividendCommand As String = "UPDATE MEMBERS SET MEMBERS.YTD_DIVAMT=PATREF.PR FROM  " & _
-                                                            "(SELECT [ACCTNO], ([APLINT]+[EDLINT]+[EMLINT]+[RGLINT]+[RSLINT]+[SPLINT]+[LHLINT]+[STLINT]+[FALINT]+[MPLINT]+[BFLINT]) PR FROM {0}) " & _
-                                                            "PATREF WHERE MEMBERS.KBCI_NO=PATREF.ACCTNO"
-    Public Const UpdateStaffYtdDividendCommand As String = "UPDATE MEMBERS SET MEMBERS.YTD_DIVAMT=PATREF.PR FROM  " & _
-                                                            "(SELECT [ACCTNO], ([APLINT]+[EDLINT]+[EMLINT]+[RGLINT]+[RSLINT]+[SPLINT]+[LHLINT]+[STLINT]+[PTLINT]+[FALINT]+[MPLINT]) PR FROM {0}) " & _
-                                                            "PATREF WHERE MEMBERS.KBCI_NO=PATREF.ACCTNO"
+    Public Const UpdateMembersYtdDividendCommand As String = "UPDATE M SET M.YTD_DIVAMT=" & _
+                                                              "(I.[APLINT]+I.[EDLINT]+I.[EMLINT]+I.[RGLINT]+I.[RSLINT]+I.[SPLINT]+I.[LHLINT]+I.[STLINT]+I.[CMLINT]+I.[MPLINT]+I.[FALINT]+I.[BFLINT]) " & _
+                                                              "FROM {0} I INNER JOIN MEMBERS M ON I.ACCTNO=M.KBCI_NO WHERE M.MEM_STAT=@MemberStatus"
 
+    Public Const UpdateStaffYtdDividendCommand As String = "UPDATE M SET M.YTD_DIVAMT=" & _
+                                                              "(I.[APLINT]+I.[EDLINT]+I.[EMLINT]+I.[RGLINT]+I.[RSLINT]+I.[SPLINT]+I.[LHLINT]+I.[STLINT]+I.[PTLINT]+I.[CMLINT]+I.[MPLINT]+I.[FALINT]) " & _
+                                                              "FROM {0} I INNER JOIN MEMBERS M ON I.ACCTNO=M.KBCI_NO WHERE M.MEM_STAT=@MemberStatus"
 End Class
 
 Public Class CustomQueryString

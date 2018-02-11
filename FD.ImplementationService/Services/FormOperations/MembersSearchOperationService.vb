@@ -33,13 +33,14 @@ Public Class MembersSearchOperationService : Implements IFormOperations
 
     Private Function GetSdMaster() As List(Of MemberSearchBovm)
         Using sdmasterDao As New SdmasterDAO
-            Dim sdMasterList = sdmasterDao.GetAll()
+            Dim param1 As New LUNA.LunaSearchParameter("ACCTSTAT", "A")
+            Dim sdMasterList = sdmasterDao.FindAll(param1)
 
             Return sdMasterList.Select(Function(x) New MemberSearchBovm() With {.KBCI_ID = x.SDMASTER_ID, _
                                                                                   .KBCI_NO = x.KBCI_NO, _
-                                                                                  .LNAME = x.ACCTNAME, _
+                                                                                  .FNAME = x.ACCTNAME, _
                                                                                   .MEM_STAT = x.ACCTSTAT, _
-                                                                                  .FEBTC_SA = x.ACCTNO}).OrderBy(Function(y) y.LNAME).ToList
+                                                                                  .FEBTC_SA = x.ACCTNO}).OrderBy(Function(y) y.FNAME).ToList
         End Using
     End Function
 End Class
